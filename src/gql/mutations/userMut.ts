@@ -23,7 +23,7 @@ const CODE_TO_USER = gql`
       #   timeRole {
       #     id
       #   }
-      }
+      #}
     }
   }
 
