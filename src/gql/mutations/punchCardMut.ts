@@ -1,6 +1,5 @@
 import gql from "graphql-tag";
-import timeCard from "../fragments/timeCardFrags";
-import timeRole from "../fragments/timeRoleFrags";
+// import timeRole from "../fragments/timeRoleFrags";
 import punchCard from "../fragments/punchCardFrags";
 
 const NEW_PUNCHCARD = gql`

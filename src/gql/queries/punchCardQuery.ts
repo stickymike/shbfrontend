@@ -1,5 +1,4 @@
 import gql from "graphql-tag";
-import timeCard from "../fragments/timeCardFrags";
 import user from "../fragments/userFrags";
 
 import timeRole from "../fragments/timeRoleFrags";
@@ -40,7 +39,7 @@ const PUNCHCARDS_BY_ID = gql`
 `;
 
 const PUNCHCARDS_WHEREQ = gql`
-  query PunchCardsWhereQ($query: QueryFindManyPunchCardWhereInput!) {
+  query PunchCardsWhereQ($query: PunchCardWhereInput!) {
     punchCards(where: $query) {
       ...allPunchCardFields
 

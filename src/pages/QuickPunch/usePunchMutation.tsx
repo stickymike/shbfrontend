@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation } from "react-apollo";
 import moment, { Moment } from "moment";
 
-import { TIMECLOCKS_FOR_USER } from "../../gql/mutations/timeCardMut";
+import { PUNCHCARDS_USERID_DATE } from "../../gql/queries/punchCardQuery";
 
 import { NEW_GET_ME } from "../../gql/queries/userQuery";
 import { Me_me } from "../../generated/Me";
@@ -27,7 +27,7 @@ const usePunchMutation = (user: Me_me, date: Moment) => {
     },
     refetchQueries: [
       {
-        query: TIMECLOCKS_FOR_USER,
+        query: PUNCHCARDS_USERID_DATE,
         variables: { id: user.id, date }
       },
       {
@@ -44,7 +44,7 @@ const usePunchMutation = (user: Me_me, date: Moment) => {
     },
     refetchQueries: [
       {
-        query: TIMECLOCKS_FOR_USER,
+        query: PUNCHCARDS_USERID_DATE,
         variables: { id: user.id, date }
       },
       {

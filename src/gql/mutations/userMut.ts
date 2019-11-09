@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import user from "../fragments/userFrags";
 import timeRole from "../fragments/timeRoleFrags";
-import timeCard from "../fragments/timeCardFrags";
+// import timeCard from "../fragments/timeCardFrags";
 
 const SIGN_IN = gql`
   mutation SignIn($email: String!, $password: String!) {
@@ -18,18 +18,17 @@ const CODE_TO_USER = gql`
       timeRoles {
         ...allTimeRoleFields
       }
-      timeCards(orderBy: { punchTime: desc }, first: 1) {
-        ...allTimeCardFields
-        timeRole {
-          id
-        }
+      # timeCards(orderBy: { punchTime: desc }, first: 1) {
+      #   ...allTimeCardFields
+      #   timeRole {
+      #     id
+      #   }
       }
     }
   }
 
   ${user.fragments.allUserFields}
   ${timeRole.fragments.allTimeRoleFields}
-  ${timeCard.fragments.allTimeCardFields}
 `;
 
 const DELETE_USER = gql`

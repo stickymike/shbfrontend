@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import user from "../fragments/userFrags";
 import timeRole from "../fragments/timeRoleFrags";
-import timeCard from "../fragments/timeCardFrags";
+// import timeCard from "../fragments/timeCardFrags";
 
 // const GET_ME = gql`
 //   query {
@@ -31,18 +31,17 @@ const GET_ME = gql`
       timeRoles {
         ...allTimeRoleFields
       }
-      timeCards(orderBy: { punchTime: desc }, first: 1) {
-        ...allTimeCardFields
-        timeRole {
-          id
-        }
-      }
+      # timeCards(orderBy: { punchTime: desc }, first: 1) {
+      #   ...allTimeCardFields
+      #   timeRole {
+      #     id
+      #   }
+      # }
     }
   }
 
   ${user.fragments.allUserFields}
   ${timeRole.fragments.allTimeRoleFields}
-  ${timeCard.fragments.allTimeCardFields}
 `;
 
 const GET_USERS = gql`
