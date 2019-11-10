@@ -10,6 +10,11 @@ import Box from "@material-ui/core/Box";
 import MyDivider from "./MyDivider";
 
 const useStyles = makeStyles(() => ({
+  "@keyframes myspin": {
+    from: { transform: "rotate(0deg)" },
+    to: { transform: "rotate(360deg)" }
+  },
+
   root: {
     flexGrow: 1
   },
@@ -40,6 +45,12 @@ const useStyles = makeStyles(() => ({
   },
   grow: {
     flexGrow: 1
+  },
+  spin: {
+    animationName: "$myspin",
+    animationDuration: "1000ms",
+    animationIterationCount: "infinite",
+    animationTimingFunction: "linear"
   }
 }));
 
@@ -54,6 +65,7 @@ interface IProps {
   menuOptions?: string[];
   menuChange?: Function;
   size?: any;
+  spinnerLoading?: boolean;
 }
 
 const PaperWrapper: React.FC<IProps> = ({
@@ -66,7 +78,8 @@ const PaperWrapper: React.FC<IProps> = ({
   menuCurrent,
   menuOptions,
   menuChange = undefined,
-  size = 5
+  size = 5,
+  spinnerLoading = false
 }) => {
   //@ts-ignore
   const classes = useStyles();
@@ -78,7 +91,13 @@ const PaperWrapper: React.FC<IProps> = ({
       </Typography>
       <div className={classes.grow} />
       {action ? (
-        <IconButton className={classes.actionButton} onClick={actionFnc}>
+        <IconButton
+          className={[
+            classes.actionButton,
+            spinnerLoading ? classes.spin : null
+          ].join(" ")}
+          onClick={actionFnc}
+        >
           <Icon fontSize="small" />
         </IconButton>
       ) : null}

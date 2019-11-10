@@ -11,7 +11,7 @@ import moment from "moment";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
 import { Chip } from "@material-ui/core";
-import { fontWeight } from "@material-ui/system";
+// import { fontWeight } from "@material-ui/system";
 
 const useStyles = makeStyles((theme: Theme) => ({
   table: {
@@ -38,13 +38,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     margin: theme.spacing(1),
     verticalAlign: "middle",
-    transform: " translateY(-2px)",
+    transform: " translateY(-2px) rotate(180deg)",
     transition: theme.transitions.create("transform", {
       duration: "200ms"
     })
   },
   iconOpen: {
-    transform: "translateY(-2px) rotate(180deg)"
+    transform: "translateY(-2px) "
   }
 }));
 
@@ -131,19 +131,6 @@ const NewTable: React.FC<IProps> = ({ header, data, totals }) => {
               className={classes.noRightPadding}
             >
               <div
-                style={{ fontWeight: 500, cursor: "pointer" }}
-                onClick={() => setOpen(!open)}
-              >
-                {`Total Worked: ${moment.duration(total).format("HH:mm")}`}
-                <ExpandMore
-                  className={[
-                    classes.icon,
-                    open ? classes.iconOpen : null
-                  ].join(" ")}
-                  fontSize="small"
-                />
-              </div>
-              <div
                 className={classes.item}
                 style={{
                   maxHeight:
@@ -155,6 +142,7 @@ const NewTable: React.FC<IProps> = ({ header, data, totals }) => {
               >
                 {Object.keys(totals).map(key => (
                   <div
+                    key={key}
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
@@ -162,14 +150,29 @@ const NewTable: React.FC<IProps> = ({ header, data, totals }) => {
                       fontWeight: "initial"
                     }}
                   >
-                    {`Worked as ${key}: ${moment
+                    {`As ${key}: ${moment
                       .duration(totals[key])
-                      .format("HH:mm")}`}
+                      .format("HH:mm", { trim: false })}`}
                     <div
                       style={{ width: "20px", height: "20px", margin: "8px" }}
                     />
                   </div>
                 ))}
+              </div>
+              <div
+                style={{ fontWeight: 500, cursor: "pointer" }}
+                onClick={() => setOpen(!open)}
+              >
+                {`Total Worked: ${moment
+                  .duration(total)
+                  .format("hh:mm", { trim: false })}`}
+                <ExpandMore
+                  className={[
+                    classes.icon,
+                    open ? classes.iconOpen : null
+                  ].join(" ")}
+                  fontSize="small"
+                />
               </div>
             </TableCell>
           </TableRow>

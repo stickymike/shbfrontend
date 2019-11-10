@@ -71,17 +71,31 @@ const header = [
   { id: "hours", numeric: true, disablePadding: false, label: "Hours" }
 ];
 
-const TimeViewer: React.FC = () => {
+interface IProps {
+  refresh: boolean;
+  setRefresh: (arg: boolean) => void;
+  loading: any;
+}
+
+const TimeViewer: React.FC<IProps> = ({ refresh, setRefresh, loading }) => {
   const { qParams } = useCtx();
 
-  const { data, loading } = useQuery(PUNCHCARDS_WHEREQ, {
-    variables: { query: query(qParams) }
+  const { data, refetch, networkStatus } = useQuery(PUNCHCARDS_WHEREQ, {
+    variables: { query: query(qParams) },
+    notifyOnNetworkStatusChange: true
   });
+
+  if (refresh) {
+    refetch();
+    setRefresh(!refresh);
+  }
+
+  if (networkStatus === 1) return <MyLoading />;
+  if (networkStatus === 4) loading(true);
+  else loading(false);
 
   let timeCards: morphData[] = [];
   if (data) timeCards = morphData(data.punchCards);
-
-  if (loading) return <MyLoading />;
 
   return (
     <NewTable header={header} data={timeCards} totals={totals(timeCards)} />

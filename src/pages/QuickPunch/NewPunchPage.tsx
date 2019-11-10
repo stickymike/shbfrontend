@@ -37,6 +37,7 @@ const NewPunchPage: React.FC<RouterProps> = () => {
   }
 
   const isDisabled = () => {
+    if (user === undefined) return true;
     if (screen === "signin") return false;
     if (user && user.timeRoles && user.timeRoles[0]) return false;
     return true;
@@ -44,7 +45,7 @@ const NewPunchPage: React.FC<RouterProps> = () => {
 
   const handleSubmitMyForm = () => {
     if (submitMyForm) {
-      setUser(null);
+      me ? setUser(undefined) : setUser(null);
       submitMyForm();
     }
   };
@@ -58,7 +59,9 @@ const NewPunchPage: React.FC<RouterProps> = () => {
   };
 
   const buttonText = () => {
+    if (user === undefined) return "Loading";
     if (user && user.clockedIn) return "Punch Out";
+    if (screen === "signin") return "Access";
     else return "Punch In";
   };
 
@@ -97,7 +100,7 @@ const NewPunchPage: React.FC<RouterProps> = () => {
         style={{ width: "225px" }}
         disabled={isDisabled()}
       >
-        {screen === "signin" ? "Access" : buttonText()}
+        {buttonText()}
       </Button>
     </PaperWrapper>
   );
