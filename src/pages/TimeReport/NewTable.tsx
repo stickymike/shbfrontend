@@ -10,9 +10,6 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import moment from "moment";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
-import { Chip } from "@material-ui/core";
-// import { fontWeight } from "@material-ui/system";
-
 const useStyles = makeStyles((theme: Theme) => ({
   table: {
     minWidth: 500
@@ -20,8 +17,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     overflowX: "auto"
   },
+  leaveSpace: {
+    width: "20px",
+    height: "20px",
+    margin: "8px"
+  },
   noRightPadding: {
     paddingRight: "0px"
+  },
+  noLeftPadding: {
+    paddingLeft: "0px"
   },
   hover: {
     backgroundColor: "unset",
@@ -29,11 +34,16 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: " rgba(127, 127, 127, 1)"
     }
   },
-  item: {
+  expand: {
     overflow: "hidden",
     transition: theme.transitions.create("max-height", {
       duration: "200ms"
     })
+  },
+  flexRight: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end"
   },
   icon: {
     margin: theme.spacing(1),
@@ -58,36 +68,29 @@ const NewTable: React.FC<IProps> = ({ header, data, totals }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [checked, setChecked] = React.useState(false);
-  const [open, setOpen] = useState(false);
-  const maxHeight = useRef<HTMLDivElement | null>(null);
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("");
 
   const handleRequestSort = (event: any, property: any) => {
     const isDesc = orderBy === property && order === "desc";
     setOrder(isDesc ? "asc" : "desc");
     setOrderBy(property);
     setChecked(!checked);
-    setOpen(!open);
   };
 
   const handleClick = (event: any, name: string) => {
     console.dir(event.currentTarget);
   };
 
-  const total = data
-    ? data.reduce((total: any, num: any) => total + num.workedMS, 0)
-    : null;
-
   return (
     <div className={classes.wrapper}>
       <Table className={classes.table} size={"medium"}>
-        <colgroup>
+        {/* <colgroup>
           <col width="25%" />
           <col width="25%" />
           <col width="25%" />
           <col width="10%" />
           <col width="15%" />
-        </colgroup>
+        </colgroup> */}
         <EnhancedTableHead
           order={order}
           orderBy={orderBy}
@@ -97,88 +100,84 @@ const NewTable: React.FC<IProps> = ({ header, data, totals }) => {
         />
         <TableBody>
           {stableSort(data, getSorting(order, orderBy)).map(
-            (row: any, index: number) => {
-              return (
-                <TableRow
-                  onClick={event => handleClick(event, row.id)}
-                  key={row.id}
-                >
-                  <TableCell component="th" scope="row" padding="none">
-                    {row.date}
-                  </TableCell>
-                  <TableCell align="right">{row.punchIn}</TableCell>
-                  <TableCell align="right">{row.punchOut}</TableCell>
-                  <TableCell align="right">
-                    <Chip label={row.timeRole} className={classes.hover} />
-                  </TableCell>
-                  <TableCell
-                    data-id="hi"
-                    align="right"
-                    className={classes.noRightPadding}
-                    onClick={event => handleClick(event, row.id)}
-                  >
-                    {row.hours}
-                  </TableCell>
-                </TableRow>
-              );
-            }
-          )}
-
-          <TableRow>
-            <TableCell
-              colSpan={5}
-              align="right"
-              className={classes.noRightPadding}
-            >
-              <div
-                className={classes.item}
-                style={{
-                  maxHeight:
-                    open && maxHeight.current
-                      ? `${maxHeight.current.scrollHeight}px`
-                      : 0
-                }}
-                ref={maxHeight}
+            (row: any, index: number) => (
+              <TableRow
+                onClick={event => handleClick(event, row.id)}
+                key={row.id}
               >
-                {Object.keys(totals).map(key => (
-                  <div
-                    key={key}
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "center",
-                      fontWeight: "initial"
-                    }}
-                  >
-                    {`As ${key}: ${moment
-                      .duration(totals[key])
-                      .format("HH:mm", { trim: false })}`}
-                    <div
-                      style={{ width: "20px", height: "20px", margin: "8px" }}
-                    />
-                  </div>
+                {header.map((info: any, index: number) => (
+                  <TableCell key={`${info.id}-1`} {...info.props}>
+                    {row[info.id]}
+                  </TableCell>
                 ))}
-              </div>
-              <div
-                style={{ fontWeight: 500, cursor: "pointer" }}
-                onClick={() => setOpen(!open)}
-              >
-                {`Total Worked: ${moment
-                  .duration(total)
-                  .format("hh:mm", { trim: false })}`}
-                <ExpandMore
-                  className={[
-                    classes.icon,
-                    open ? classes.iconOpen : null
-                  ].join(" ")}
-                  fontSize="small"
-                />
-              </div>
-            </TableCell>
-          </TableRow>
+              </TableRow>
+            )
+          )}
+          <TotalRow totals={totals} />
         </TableBody>
       </Table>
     </div>
+  );
+};
+
+interface IIProps {
+  totals: any;
+}
+
+export const TotalRow: React.FC<IIProps> = ({ totals }) => {
+  const classes = useStyles();
+  const maxHeight = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState(false);
+
+  const total = totals
+    ? Object.keys(totals).reduce(
+        (total: any, num: any) => total + totals[num],
+        0
+      )
+    : null;
+
+  return (
+    <TableRow>
+      <TableCell colSpan={5} className={classes.noRightPadding}>
+        <div className={classes.flexRight}>
+          <div
+            className={[classes.expand, classes.flexRight].join(" ")}
+            style={{
+              maxHeight:
+                open && maxHeight.current
+                  ? `${maxHeight.current.scrollHeight}px`
+                  : 0
+            }}
+            ref={maxHeight}
+          >
+            {Object.keys(totals).map(key => (
+              <div key={key} style={{ display: "flex" }}>
+                <div>
+                  {`As ${key}: ${moment
+                    .duration(totals[key])
+                    .format("HH:mm", { trim: false })}`}
+                </div>
+                <div className={classes.leaveSpace} />
+              </div>
+            ))}
+          </div>
+          <div
+            style={{ fontWeight: 500, cursor: "pointer" }}
+            onClick={() => setOpen(!open)}
+          >
+            {`Total Worked: ${moment
+              .duration(total)
+              .format("hh:mm", { trim: false })}`}
+            <ExpandMore
+              className={[classes.icon, open ? classes.iconOpen : null].join(
+                " "
+              )}
+              fontSize="small"
+            />
+          </div>
+        </div>
+      </TableCell>
+    </TableRow>
   );
 };
 
@@ -220,12 +219,12 @@ const EnhancedTableHead: React.FC<any> = props => {
         {header.map((headCell: any, i: any) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "default"}
+            align={headCell.props && headCell.props.align}
             sortDirection={orderBy === headCell.id ? order : false}
-            className={
-              header.length === i + 1 ? classes.noRightPadding : undefined
-            }
+            className={[
+              header.length === i + 1 ? classes.noRightPadding : "",
+              i === 0 ? classes.noLeftPadding : ""
+            ].join(" ")}
             style={{ paddingTop: "0px" }}
           >
             <TableSortLabel

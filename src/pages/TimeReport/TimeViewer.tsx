@@ -62,13 +62,38 @@ const header = [
     id: "date",
     numeric: false,
     disablePadding: true,
-    label: "Date"
+    label: "Date",
+    props: { padding: "none" }
   },
-  { id: "punchIn", numeric: true, disablePadding: false, label: "Clock In" },
-  { id: "punchOut", numeric: true, disablePadding: false, label: "Clock Out" },
-  { id: "timeRole", numeric: true, disablePadding: false, label: "Role" },
+  {
+    id: "punchIn",
+    numeric: true,
+    disablePadding: false,
+    label: "Clock In",
+    props: { align: "right" }
+  },
+  {
+    id: "punchOut",
+    numeric: true,
+    disablePadding: false,
+    label: "Clock Out",
+    props: { align: "right" }
+  },
+  {
+    id: "timeRole",
+    numeric: true,
+    disablePadding: false,
+    label: "Role",
+    props: { align: "right" }
+  },
 
-  { id: "hours", numeric: true, disablePadding: false, label: "Hours" }
+  {
+    id: "hours",
+    numeric: true,
+    disablePadding: false,
+    label: "Hours",
+    props: { align: "right", padding: "none" }
+  }
 ];
 
 interface IProps {
