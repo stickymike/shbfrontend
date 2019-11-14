@@ -13,12 +13,7 @@ export enum Permissions {
   USER = "USER",
 }
 
-export enum Punchtype {
-  CLOCKIN = "CLOCKIN",
-  CLOCKOUT = "CLOCKOUT",
-}
-
-export interface QueryFindManyPunchCardFilter {
+export interface DateTimeFilter {
   equals?: MyDateTime | null;
   not?: MyDateTime | null;
   in?: MyDateTime[] | null;
@@ -29,41 +24,48 @@ export interface QueryFindManyPunchCardFilter {
   gte?: MyDateTime | null;
 }
 
-export interface QueryFindManyPunchCardWhereInput {
-  id?: StringFilter | null;
-  punchIn?: QueryFindManyPunchCardFilter | null;
-  punchOut?: QueryFindManyPunchCardFilter | null;
-  updatedAt?: QueryFindManyPunchCardFilter | null;
-  createdAt?: QueryFindManyPunchCardFilter | null;
-  AND?: QueryFindManyPunchCardWhereInput[] | null;
-  OR?: QueryFindManyPunchCardWhereInput[] | null;
-  NOT?: QueryFindManyPunchCardWhereInput[] | null;
-  user?: QueryFindManyPunchCardWhereInput | null;
-  timeRole?: QueryFindManyPunchCardWhereInput | null;
+export interface IntFilter {
+  equals?: number | null;
+  not?: number | null;
+  in?: number[] | null;
+  notIn?: number[] | null;
+  lt?: number | null;
+  lte?: number | null;
+  gt?: number | null;
+  gte?: number | null;
 }
 
-export interface QueryFindManyTimeCardFilter {
-  equals?: MyDateTime | null;
-  not?: MyDateTime | null;
-  in?: MyDateTime[] | null;
-  notIn?: MyDateTime[] | null;
-  lt?: MyDateTime | null;
-  lte?: MyDateTime | null;
-  gt?: MyDateTime | null;
-  gte?: MyDateTime | null;
+export interface NullableStringFilter {
+  equals?: string | null;
+  not?: string | null;
+  in?: string[] | null;
+  notIn?: string[] | null;
+  lt?: string | null;
+  lte?: string | null;
+  gt?: string | null;
+  gte?: string | null;
+  contains?: string | null;
+  startsWith?: string | null;
+  endsWith?: string | null;
 }
 
-export interface QueryFindManyTimeCardWhereInput {
+export interface PunchCardFilter {
+  every?: PunchCardWhereInput | null;
+  some?: PunchCardWhereInput | null;
+  none?: PunchCardWhereInput | null;
+}
+
+export interface PunchCardWhereInput {
   id?: StringFilter | null;
-  punchTime?: QueryFindManyTimeCardFilter | null;
-  punchType?: QueryFindManyTimeCardFilter | null;
-  updatedAt?: QueryFindManyTimeCardFilter | null;
-  createdAt?: QueryFindManyTimeCardFilter | null;
-  AND?: QueryFindManyTimeCardWhereInput[] | null;
-  OR?: QueryFindManyTimeCardWhereInput[] | null;
-  NOT?: QueryFindManyTimeCardWhereInput[] | null;
-  user?: QueryFindManyTimeCardWhereInput | null;
-  timeRole?: QueryFindManyTimeCardWhereInput | null;
+  punchIn?: DateTimeFilter | null;
+  punchOut?: DateTimeFilter | null;
+  updatedAt?: DateTimeFilter | null;
+  createdAt?: DateTimeFilter | null;
+  AND?: PunchCardWhereInput[] | null;
+  OR?: PunchCardWhereInput[] | null;
+  NOT?: PunchCardWhereInput[] | null;
+  user?: UserWhereInput | null;
+  timeRole?: TimeRoleWhereInput | null;
 }
 
 export interface StringFilter {
@@ -80,8 +82,52 @@ export interface StringFilter {
   endsWith?: string | null;
 }
 
+export interface TimeRoleFilter {
+  every?: TimeRoleWhereInput | null;
+  some?: TimeRoleWhereInput | null;
+  none?: TimeRoleWhereInput | null;
+}
+
+export interface TimeRoleWhereInput {
+  id?: StringFilter | null;
+  name?: StringFilter | null;
+  shortName?: StringFilter | null;
+  description?: StringFilter | null;
+  payRate?: IntFilter | null;
+  users?: UserFilter | null;
+  punchCards?: PunchCardFilter | null;
+  updatedAt?: DateTimeFilter | null;
+  createdAt?: DateTimeFilter | null;
+  AND?: TimeRoleWhereInput[] | null;
+  OR?: TimeRoleWhereInput[] | null;
+  NOT?: TimeRoleWhereInput[] | null;
+}
+
 export interface TimeRoleWhereUniqueInput {
   id?: string | null;
+}
+
+export interface UserFilter {
+  every?: UserWhereInput | null;
+  some?: UserWhereInput | null;
+  none?: UserWhereInput | null;
+}
+
+export interface UserWhereInput {
+  id?: StringFilter | null;
+  code?: IntFilter | null;
+  email?: StringFilter | null;
+  password?: StringFilter | null;
+  firstName?: StringFilter | null;
+  lastName?: StringFilter | null;
+  title?: NullableStringFilter | null;
+  createdAt?: DateTimeFilter | null;
+  updatedAt?: DateTimeFilter | null;
+  timeRoles?: TimeRoleFilter | null;
+  punchCards?: PunchCardFilter | null;
+  AND?: UserWhereInput[] | null;
+  OR?: UserWhereInput[] | null;
+  NOT?: UserWhereInput[] | null;
 }
 
 export interface UserWhereUniqueInput {

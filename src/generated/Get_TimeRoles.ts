@@ -32,9 +32,9 @@ export interface Get_TimeRoles_timeRoles {
   payRate: number;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  users: Get_TimeRoles_timeRoles_users[] | null;
+  users: Get_TimeRoles_timeRoles_users[];
 }
 
 export interface Get_TimeRoles {
-  timeRoles: Get_TimeRoles_timeRoles[] | null;
+  timeRoles: Get_TimeRoles_timeRoles[];
 }

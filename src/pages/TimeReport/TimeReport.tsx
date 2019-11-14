@@ -3,10 +3,11 @@ import PaperWrapper from "../../components/PaperWrapper";
 import TimeReportFilter from "./TimeReportFilter";
 import Refresh from "@material-ui/icons/Refresh";
 
-import TimeViewer from "./TimeViewer";
 import { useQuery } from "react-apollo";
 import { NEW_GET_ME } from "../../gql/queries/userQuery";
 import MyLoading from "../../components/MyLoading";
+import TableReportWrapper from "./TableReportWrapper";
+import UserTableWrapper from "../User/UserTableWrapper";
 
 const TimeReport: React.FC = () => {
   const [refresh, setRefresh] = useState(false);
@@ -29,7 +30,12 @@ const TimeReport: React.FC = () => {
         <MyLoading />
       ) : (
         <TimeReportFilter id={id}>
-          <TimeViewer
+          <TableReportWrapper
+            refresh={refresh}
+            setRefresh={setRefresh}
+            loading={setSpinnerLoading}
+          />
+          <UserTableWrapper
             refresh={refresh}
             setRefresh={setRefresh}
             loading={setSpinnerLoading}

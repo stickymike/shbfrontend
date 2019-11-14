@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { QueryFindManyPunchCardWhereInput, Permissions } from "./globalTypes";
+import { PunchCardWhereInput, Permissions } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: PunchCardsWhereQ
@@ -46,9 +46,9 @@ export interface PunchCardsWhereQ_punchCards {
 }
 
 export interface PunchCardsWhereQ {
-  punchCards: PunchCardsWhereQ_punchCards[] | null;
+  punchCards: PunchCardsWhereQ_punchCards[];
 }
 
 export interface PunchCardsWhereQVariables {
-  query: QueryFindManyPunchCardWhereInput;
+  query: PunchCardWhereInput;
 }

@@ -2,13 +2,13 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { QueryFindManyTimeCardWhereInput, Punchtype, Permissions } from "./globalTypes";
+import { Permissions } from "./globalTypes";
 
 // ====================================================
-// GraphQL query operation: Get_TimeCards_WhereQ
+// GraphQL query operation: PunchCardById
 // ====================================================
 
-export interface Get_TimeCards_WhereQ_timeCards_user {
+export interface PunchCardById_punchCard_user {
   __typename: "User";
   id: string;
   firstName: string;
@@ -23,7 +23,7 @@ export interface Get_TimeCards_WhereQ_timeCards_user {
   recentTimeRoleId: string;
 }
 
-export interface Get_TimeCards_WhereQ_timeCards_timeRole {
+export interface PunchCardById_punchCard_timeRole {
   __typename: "TimeRole";
   id: string;
   name: string;
@@ -34,21 +34,21 @@ export interface Get_TimeCards_WhereQ_timeCards_timeRole {
   createdAt: MyDateTime;
 }
 
-export interface Get_TimeCards_WhereQ_timeCards {
-  __typename: "TimeCard";
+export interface PunchCardById_punchCard {
+  __typename: "PunchCard";
   id: string;
-  punchTime: MyDateTime;
-  punchType: Punchtype;
+  punchIn: MyDateTime;
+  punchOut: MyDateTime;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  user: Get_TimeCards_WhereQ_timeCards_user;
-  timeRole: Get_TimeCards_WhereQ_timeCards_timeRole;
+  user: PunchCardById_punchCard_user;
+  timeRole: PunchCardById_punchCard_timeRole;
 }
 
-export interface Get_TimeCards_WhereQ {
-  timeCards: Get_TimeCards_WhereQ_timeCards[] | null;
+export interface PunchCardById {
+  punchCard: PunchCardById_punchCard | null;
 }
 
-export interface Get_TimeCards_WhereQVariables {
-  query: QueryFindManyTimeCardWhereInput;
+export interface PunchCardByIdVariables {
+  id: string;
 }

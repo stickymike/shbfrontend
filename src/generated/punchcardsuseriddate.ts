@@ -28,7 +28,7 @@ export interface punchcardsuseriddate_punchCards {
 }
 
 export interface punchcardsuseriddate {
-  punchCards: punchcardsuseriddate_punchCards[] | null;
+  punchCards: punchcardsuseriddate_punchCards[];
 }
 
 export interface punchcardsuseriddateVariables {

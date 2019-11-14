@@ -8,7 +8,7 @@ import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
 import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 
 import MyLoading from "../../components/MyLoading";
-import NewTable from "./NewTable";
+import TimeReportTable from "./TimeReportTable";
 
 interface morphData {
   id: string;
@@ -26,7 +26,11 @@ const morphData = (punchCards: PunchCardsWhereQ_punchCards[]) => {
     return punchCards.map(({ id, user, punchIn, punchOut, timeRole }) => {
       const workedMS = moment(punchOut).diff(moment(punchIn));
       const currentMS = moment().diff(moment(punchIn));
-      const hours = moment.utc(workedMS ? workedMS : currentMS).format("HH:mm");
+      const hours = moment
+        .duration(workedMS ? workedMS : currentMS)
+        .format("HH:mm", {
+          trim: false
+        });
 
       return {
         id,
@@ -36,7 +40,14 @@ const morphData = (punchCards: PunchCardsWhereQ_punchCards[]) => {
         punchOut: workedMS ? moment(punchOut).format("h:mm a") : "n/a",
         timeRole: timeRole.shortName,
         hours,
-        workedMS
+        workedMS,
+        dateMS: moment(punchIn).valueOf(),
+        startSort: moment(punchIn)
+          .diff(moment(punchIn).startOf("day"))
+          .valueOf(),
+        endSort: moment(punchOut)
+          .diff(moment(punchOut).startOf("day"))
+          .valueOf()
       };
     });
   }
@@ -63,21 +74,24 @@ const header = [
     numeric: false,
     disablePadding: true,
     label: "Date",
-    props: { padding: "none" }
+    props: { padding: "none" },
+    orderBy: "dateMS"
   },
   {
     id: "punchIn",
     numeric: true,
     disablePadding: false,
     label: "Clock In",
-    props: { align: "right" }
+    props: { align: "right" },
+    orderBy: "startSort"
   },
   {
     id: "punchOut",
     numeric: true,
     disablePadding: false,
     label: "Clock Out",
-    props: { align: "right" }
+    props: { align: "right" },
+    orderBy: "endSort"
   },
   {
     id: "timeRole",
@@ -102,7 +116,11 @@ interface IProps {
   loading: any;
 }
 
-const TimeViewer: React.FC<IProps> = ({ refresh, setRefresh, loading }) => {
+const TableReportWrapper: React.FC<IProps> = ({
+  refresh,
+  setRefresh,
+  loading
+}) => {
   const { qParams } = useCtx();
 
   const { data, refetch, networkStatus } = useQuery(PUNCHCARDS_WHEREQ, {
@@ -123,8 +141,12 @@ const TimeViewer: React.FC<IProps> = ({ refresh, setRefresh, loading }) => {
   if (data) timeCards = morphData(data.punchCards);
 
   return (
-    <NewTable header={header} data={timeCards} totals={totals(timeCards)} />
+    <TimeReportTable
+      header={header}
+      data={timeCards}
+      totals={totals(timeCards)}
+    />
   );
 };
 
-export default TimeViewer;
+export default TableReportWrapper;

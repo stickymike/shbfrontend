@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Permissions, Punchtype } from "./globalTypes";
+import { Permissions } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: Me
@@ -19,21 +19,6 @@ export interface Me_me_timeRoles {
   createdAt: MyDateTime;
 }
 
-export interface Me_me_timeCards_timeRole {
-  __typename: "TimeRole";
-  id: string;
-}
-
-export interface Me_me_timeCards {
-  __typename: "TimeCard";
-  id: string;
-  punchTime: MyDateTime;
-  punchType: Punchtype;
-  updatedAt: MyDateTime;
-  createdAt: MyDateTime;
-  timeRole: Me_me_timeCards_timeRole;
-}
-
 export interface Me_me {
   __typename: "User";
   id: string;
@@ -47,8 +32,7 @@ export interface Me_me {
   permissions: Permissions[];
   clockedIn: string;
   recentTimeRoleId: string;
-  timeRoles: Me_me_timeRoles[] | null;
-  timeCards: Me_me_timeCards[] | null;
+  timeRoles: Me_me_timeRoles[];
 }
 
 export interface Me {

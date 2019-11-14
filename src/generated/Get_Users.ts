@@ -32,9 +32,9 @@ export interface Get_Users_users {
   permissions: Permissions[];
   clockedIn: string;
   recentTimeRoleId: string;
-  timeRoles: Get_Users_users_timeRoles[] | null;
+  timeRoles: Get_Users_users_timeRoles[];
 }
 
 export interface Get_Users {
-  users: Get_Users_users[] | null;
+  users: Get_Users_users[];
 }

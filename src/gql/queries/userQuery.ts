@@ -1,28 +1,6 @@
 import gql from "graphql-tag";
 import user from "../fragments/userFrags";
 import timeRole from "../fragments/timeRoleFrags";
-// import timeCard from "../fragments/timeCardFrags";
-
-// const GET_ME = gql`
-//   query {
-//     me {
-//       ...allUserFields
-//       timeRoles {
-//         ...allTimeRoleFields
-//       }
-//       timeCards(orderBy: punchTime_DESC, first: 1) {
-//         ...allTimeCardFields
-//         timeRole {
-//           id
-//         }
-//       }
-//     }
-//   }
-
-//   ${user.fragments.allUserFields}
-//   ${timeRole.fragments.allTimeRoleFields}
-//   ${timeCard.fragments.allTimeCardFields}
-// `;
 
 const GET_ME = gql`
   query Me {
@@ -58,6 +36,20 @@ const GET_USERS = gql`
   ${timeRole.fragments.allTimeRoleFields}
 `;
 
+const USERS_WHEREQ = gql`
+  query UsersWhereQ($query: UserWhereInput!) {
+    users(where: $query) {
+      ...allUserFields
+      timeRoles {
+        ...allTimeRoleFields
+      }
+    }
+  }
+
+  ${user.fragments.allUserFields}
+  ${timeRole.fragments.allTimeRoleFields}
+`;
+
 const NEW_GET_ME = gql`
   query NewGetMe {
     me {
@@ -72,4 +64,4 @@ const NEW_GET_ME = gql`
   ${timeRole.fragments.allTimeRoleFields}
 `;
 
-export { GET_ME, GET_USERS, NEW_GET_ME };
+export { GET_ME, GET_USERS, NEW_GET_ME, USERS_WHEREQ };

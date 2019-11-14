@@ -2,13 +2,13 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Permissions } from "./globalTypes";
+import { UserWhereInput, Permissions } from "./globalTypes";
 
 // ====================================================
-// GraphQL query operation: NewGetMe
+// GraphQL query operation: UsersWhereQ
 // ====================================================
 
-export interface NewGetMe_me_timeRoles {
+export interface UsersWhereQ_users_timeRoles {
   __typename: "TimeRole";
   id: string;
   name: string;
@@ -19,7 +19,7 @@ export interface NewGetMe_me_timeRoles {
   createdAt: MyDateTime;
 }
 
-export interface NewGetMe_me {
+export interface UsersWhereQ_users {
   __typename: "User";
   id: string;
   firstName: string;
@@ -32,9 +32,13 @@ export interface NewGetMe_me {
   permissions: Permissions[];
   clockedIn: string;
   recentTimeRoleId: string;
-  timeRoles: NewGetMe_me_timeRoles[];
+  timeRoles: UsersWhereQ_users_timeRoles[];
 }
 
-export interface NewGetMe {
-  me: NewGetMe_me | null;
+export interface UsersWhereQ {
+  users: UsersWhereQ_users[];
+}
+
+export interface UsersWhereQVariables {
+  query: UserWhereInput;
 }

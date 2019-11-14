@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Permissions, Punchtype } from "./globalTypes";
+import { Permissions } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: codetouser
@@ -19,21 +19,6 @@ export interface codetouser_clockcodetouser_timeRoles {
   createdAt: MyDateTime;
 }
 
-export interface codetouser_clockcodetouser_timeCards_timeRole {
-  __typename: "TimeRole";
-  id: string;
-}
-
-export interface codetouser_clockcodetouser_timeCards {
-  __typename: "TimeCard";
-  id: string;
-  punchTime: MyDateTime;
-  punchType: Punchtype;
-  updatedAt: MyDateTime;
-  createdAt: MyDateTime;
-  timeRole: codetouser_clockcodetouser_timeCards_timeRole;
-}
-
 export interface codetouser_clockcodetouser {
   __typename: "User";
   id: string;
@@ -47,8 +32,7 @@ export interface codetouser_clockcodetouser {
   permissions: Permissions[];
   clockedIn: string;
   recentTimeRoleId: string;
-  timeRoles: codetouser_clockcodetouser_timeRoles[] | null;
-  timeCards: codetouser_clockcodetouser_timeCards[] | null;
+  timeRoles: codetouser_clockcodetouser_timeRoles[];
 }
 
 export interface codetouser {
