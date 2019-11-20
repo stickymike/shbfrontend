@@ -1,10 +1,22 @@
-import React, { useRef } from "react";
+import React from "react";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import { Chip, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
+  chip: {
+    borderRadius: "4px",
+    backgroundColor: "rgba(0, 0, 0,0)",
+    border: "1px solid rgba(0, 0, 0, 1)",
+    maxWidth: "100%"
+  },
+  hover: {
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "rgba(0, 0, 0, .33)"
+    }
+  },
   test: {
     "& span": {
       display: "block",
@@ -12,12 +24,10 @@ const useStyles = makeStyles(() => ({
       overflow: "hidden",
       textOverflow: "ellipsis"
     }
-  },
-  hover: {
-    "& :hover": {
-      backgroundColor: "rgba(0, 0, 0, .33)",
-      cursor: "pointer"
-    }
+    // "& :hover": {
+    //   backgroundColor: "rgba(0, 0, 0, .33)",
+    //   cursor: "pointer"
+    // }
   }
 }));
 
@@ -26,6 +36,7 @@ interface Props {
   orderBy: string;
   data: any;
   header: any;
+  openMenu?: any;
 }
 
 const DerivedTableBody: React.FC<Props> = ({
@@ -33,29 +44,25 @@ const DerivedTableBody: React.FC<Props> = ({
   orderBy,
   data,
   header,
-  children
+  children,
+  openMenu = false
 }) => {
-  const { hover, test } = useStyles();
-  const myRef = useRef<HTMLDivElement>(null);
-  console.dir(myRef.current);
+  const { hover, test, chip } = useStyles();
   return (
     <TableBody>
       {stableSort(data, getSorting(order, orderBy)).map(
         (row: any, index: number) => (
-          <TableRow key={row.id}>
+          <TableRow
+            key={row.id}
+            hover={!!openMenu}
+            onClick={(e: any) => openMenu(e, row)}
+          >
             {header.map((info: any, index: number) => (
               <TableCell key={`${info.id}-1`} {...info.props}>
                 {info.optout ? (
                   <Chip
-                    style={{
-                      borderRadius: "4px",
-                      backgroundColor: "rgba(0, 0, 0,0)",
-                      border: "1px solid rgba(0, 0, 0, 1)",
-                      maxWidth: "100%"
-                      // maxWidth: "-webkit-fill-available"
-                    }}
                     label={row[info.id]}
-                    className={[hover, test].join(" ")}
+                    className={[hover, test, chip].join(" ")}
                   />
                 ) : (
                   row[info.id]

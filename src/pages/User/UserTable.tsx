@@ -7,9 +7,10 @@ import DerivedTableBody from "../../components/Table/DerivedTableBody";
 interface IProps {
   header: any;
   data: any;
+  openMenu: any;
 }
 
-const UserTable: React.FC<IProps> = ({ header, data }) => {
+const UserTable: React.FC<IProps> = ({ header, data, openMenu }) => {
   const [order, setOrder] = React.useState<false | "desc" | "asc">("asc");
   const [orderBy, setOrderBy] = React.useState("");
 
@@ -32,7 +33,8 @@ const UserTable: React.FC<IProps> = ({ header, data }) => {
         orderBy={orderBy}
         data={data}
         header={header}
-      ></DerivedTableBody>
+        openMenu={openMenu}
+      />
     </TableWrapper>
   );
 };

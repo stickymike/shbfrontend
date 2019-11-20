@@ -35,11 +35,6 @@ const TimeReport: React.FC = () => {
             setRefresh={setRefresh}
             loading={setSpinnerLoading}
           />
-          <UserTableWrapper
-            refresh={refresh}
-            setRefresh={setRefresh}
-            loading={setSpinnerLoading}
-          />
         </TimeReportFilter>
       )}
     </PaperWrapper>

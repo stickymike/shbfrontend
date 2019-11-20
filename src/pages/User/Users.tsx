@@ -255,7 +255,7 @@ interface IUserHandler {
   userScreen: string;
 }
 
-const UserHandler: React.FC<IUserHandler> = ({
+export const UserHandler: React.FC<IUserHandler> = ({
   open,
   handleClose,
   user,

@@ -3,16 +3,6 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import makeStyles from "@material-ui/styles/makeStyles";
-
-const useStyles = makeStyles(() => ({
-  noRightPadding: {
-    paddingRight: "0px"
-  },
-  noLeftPadding: {
-    paddingLeft: "0px"
-  }
-}));
 
 interface IProps {
   order: false | "desc" | "asc";
@@ -27,8 +17,6 @@ const EnhancedTableHead: React.FC<IProps> = ({
   onRequestSort,
   header
 }) => {
-  const classes = useStyles();
-
   const createSortHandler = (cell: any) => (event: any) => {
     if (cell.orderBy) onRequestSort(event, cell.orderBy);
     else onRequestSort(event, cell.id);
@@ -42,10 +30,6 @@ const EnhancedTableHead: React.FC<IProps> = ({
             key={headCell.id}
             align={headCell.props && headCell.props.align}
             sortDirection={orderBy === headCell.id ? order : false}
-            className={[
-              header.length === i + 1 ? classes.noRightPadding : "",
-              i === 0 ? classes.noLeftPadding : ""
-            ].join(" ")}
             style={{ paddingTop: "0px" }}
           >
             <TableSortLabel

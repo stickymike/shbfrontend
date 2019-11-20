@@ -104,7 +104,8 @@ const header = [
     disablePadding: false,
     label: "Permissions",
     props: { align: "right" },
-    optout: true
+    optout: true,
+    orderBy: "numPermissions"
   },
   {
     id: "allTimeRoles",
@@ -112,7 +113,8 @@ const header = [
     disablePadding: false,
     label: "Time Roles",
     props: { align: "right" },
-    optout: true
+    optout: true,
+    orderBy: "numTimeRoles"
   }
   // {
   //   id: "punchOut",
@@ -143,12 +145,17 @@ interface IProps {
   refresh: boolean;
   setRefresh: (arg: boolean) => void;
   loading: any;
+  openMenu: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    user?: any
+  ) => void;
 }
 
 const UserTableWrapper: React.FC<IProps> = ({
   refresh,
   setRefresh,
-  loading
+  loading,
+  openMenu
 }) => {
   const { data, refetch, networkStatus } = useQuery(USERS_WHEREQ, {
     variables: { query: {} },
@@ -168,7 +175,7 @@ const UserTableWrapper: React.FC<IProps> = ({
   if (data) users = morphData(data.users);
   console.log(users);
 
-  return <UserTable header={header} data={users} />;
+  return <UserTable header={header} data={users} openMenu={openMenu} />;
 };
 
 export default UserTableWrapper;

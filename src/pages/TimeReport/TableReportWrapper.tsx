@@ -72,15 +72,12 @@ const header = [
   {
     id: "date",
     numeric: false,
-    disablePadding: true,
     label: "Date",
-    props: { padding: "none" },
     orderBy: "dateMS"
   },
   {
     id: "punchIn",
     numeric: true,
-    disablePadding: false,
     label: "Clock In",
     props: { align: "right" },
     orderBy: "startSort"
@@ -88,7 +85,6 @@ const header = [
   {
     id: "punchOut",
     numeric: true,
-    disablePadding: false,
     label: "Clock Out",
     props: { align: "right" },
     orderBy: "endSort"
@@ -96,7 +92,6 @@ const header = [
   {
     id: "timeRole",
     numeric: true,
-    disablePadding: false,
     label: "Role",
     props: { align: "right" }
   },
@@ -104,9 +99,8 @@ const header = [
   {
     id: "hours",
     numeric: true,
-    disablePadding: false,
     label: "Hours",
-    props: { align: "right", padding: "none" }
+    props: { align: "right" }
   }
 ];
 
