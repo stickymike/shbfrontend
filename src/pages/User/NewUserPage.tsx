@@ -3,6 +3,9 @@ import PaperWrapper from "../../components/PaperWrapper";
 import Refresh from "@material-ui/icons/Refresh";
 import UserTableWrapper from "./UserTableWrapper";
 import { UserHandler } from "./Users";
+import createUserCtx from "./createUserCtx";
+
+const [useUserCtx, ContextProvider] = createUserCtx<any>();
 
 const NewUserPage: React.FC = () => {
   const [refresh, setRefresh] = useState(false);
@@ -34,22 +37,26 @@ const NewUserPage: React.FC = () => {
       actionIcon={Refresh}
       actionFnc={() => setRefresh(!refresh)}
     >
-      {/* <TimeReportFilter id={id}> */}
-      <UserTableWrapper
-        refresh={refresh}
-        setRefresh={setRefresh}
-        loading={setSpinnerLoading}
-        openMenu={handleOpen}
-      />
-      {/* </TimeReportFilter> */}
-      <UserHandler
-        handleClose={handleClose}
-        open={open}
-        user={formData}
-        userScreen={userScreen}
-      />
+      <ContextProvider value={{ func: handleOpen }}>
+        {/* <TimeReportFilter id={id}> */}
+        <UserTableWrapper
+          refresh={refresh}
+          setRefresh={setRefresh}
+          loading={setSpinnerLoading}
+          openMenu={handleOpen}
+        />
+        {/* </TimeReportFilter> */}
+        <UserHandler
+          handleClose={handleClose}
+          open={open}
+          user={formData}
+          userScreen={userScreen}
+        />
+      </ContextProvider>
     </PaperWrapper>
   );
 };
 
 export default NewUserPage;
+
+export { useUserCtx };
