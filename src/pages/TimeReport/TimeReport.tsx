@@ -1,42 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 import PaperWrapper from "../../components/PaperWrapper";
 import TimeReportFilter from "./TimeReportFilter";
-import Refresh from "@material-ui/icons/Refresh";
 
 import { useQuery } from "react-apollo";
 import { NEW_GET_ME } from "../../gql/queries/userQuery";
 import MyLoading from "../../components/MyLoading";
 import TableReportWrapper from "./TableReportWrapper";
-import UserTableWrapper from "../User/UserTableWrapper";
+import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
 
 const TimeReport: React.FC = () => {
-  const [refresh, setRefresh] = useState(false);
-  const [spinnerLoading, setSpinnerLoading] = useState(false);
+  const [refresh, setSpinnerLoading, loadingElement] = useLoadingTrigger();
 
   const { loading, data } = useQuery(NEW_GET_ME);
 
   const id: string = data && data.me ? data.me.id : "";
 
+  const content = () => {
+    if (loading) return <MyLoading />;
+    return (
+      <TimeReportFilter id={id}>
+        <TableReportWrapper refresh={refresh} loading={setSpinnerLoading} />
+      </TimeReportFilter>
+    );
+  };
+
   return (
     <PaperWrapper
       size={8}
       title="Time Report"
-      action={true}
-      spinnerLoading={spinnerLoading}
-      actionIcon={Refresh}
-      actionFnc={() => setRefresh(!refresh)}
+      action={false}
+      hookActionIcon={loadingElement}
     >
-      {loading ? (
-        <MyLoading />
-      ) : (
-        <TimeReportFilter id={id}>
-          <TableReportWrapper
-            refresh={refresh}
-            setRefresh={setRefresh}
-            loading={setSpinnerLoading}
-          />
-        </TimeReportFilter>
-      )}
+      {content()}
     </PaperWrapper>
   );
 };

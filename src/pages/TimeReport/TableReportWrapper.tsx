@@ -106,13 +106,12 @@ const header = [
 
 interface IProps {
   refresh: boolean;
-  setRefresh: (arg: boolean) => void;
   loading: any;
 }
 
 const TableReportWrapper: React.FC<IProps> = ({
   refresh,
-  setRefresh,
+
   loading
 }) => {
   const { qParams } = useCtx();
@@ -122,10 +121,7 @@ const TableReportWrapper: React.FC<IProps> = ({
     notifyOnNetworkStatusChange: true
   });
 
-  if (refresh) {
-    refetch();
-    setRefresh(!refresh);
-  }
+  if (refresh) refetch();
 
   if (networkStatus === 1) return <MyLoading />;
   if (networkStatus === 4) loading(true);

@@ -36,7 +36,6 @@ import getInnerText from "../../helpers/getInnerText";
 import useHighlightScrollandSreen from "../../helpers/hooks/useHighlightScrollandSreen";
 import { Theme } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
-import UserTableWrapper from "./UserTableWrapper";
 import NewUserPage from "./NewUserPage";
 
 const useStyles = makeStyles((theme: Theme) => ({

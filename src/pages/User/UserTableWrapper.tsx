@@ -1,24 +1,11 @@
 import React from "react";
-import moment from "moment";
 
 import { useQuery } from "react-apollo";
-import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
-
 import MyLoading from "../../components/MyLoading";
 import { USERS_WHEREQ } from "../../gql/queries/userQuery";
 import UserTable from "./UserTable";
 import { UsersWhereQ_users } from "../../generated/UsersWhereQ";
-
-// interface morphData {
-//   id: string;
-//   userName: string;
-//   date: string;
-//   punchIn: string;
-//   punchOut: string;
-//   timeRole: string;
-//   hours: string;
-//   workedMS: number;
-// }
+import number2Words from "../../helpers/number2Words";
 
 const formatTimeRoleText = (timeRoles: UsersWhereQ_users["timeRoles"]) => {
   switch (timeRoles.length) {
@@ -27,7 +14,7 @@ const formatTimeRoleText = (timeRoles: UsersWhereQ_users["timeRoles"]) => {
     case 1:
       return timeRoles[0].name;
     default:
-      const num = number2words(timeRoles.length);
+      const num = number2Words(timeRoles.length);
       return `${num.charAt(0).toUpperCase() +
         num.slice(1)} Roles: ${timeRoles
         .reduce((acc, timeRole) => `${acc} ${timeRole.name},`, "")
@@ -50,7 +37,7 @@ const formatPermissionText = (perms: UsersWhereQ_users["permissions"]) => {
     case 1:
       return newPerms[0];
     default:
-      const num = number2words(newPerms.length);
+      const num = number2Words(newPerms.length);
       return `${num.charAt(0).toUpperCase() +
         num.slice(1)} Perms: ${newPerms
         .reduce((acc, timeRole) => `${acc} ${timeRole},`, "")
@@ -143,29 +130,17 @@ const header = [
 
 interface IProps {
   refresh: boolean;
-  setRefresh: (arg: boolean) => void;
+  setRefresh?: (arg: boolean) => void;
   loading: any;
-  openMenu: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    user?: any
-  ) => void;
 }
 
-const UserTableWrapper: React.FC<IProps> = ({
-  refresh,
-  setRefresh,
-  loading,
-  openMenu
-}) => {
+const UserTableWrapper: React.FC<IProps> = ({ refresh, loading }) => {
   const { data, refetch, networkStatus } = useQuery(USERS_WHEREQ, {
     variables: { query: {} },
     notifyOnNetworkStatusChange: true
   });
 
-  if (refresh) {
-    refetch();
-    setRefresh(!refresh);
-  }
+  if (refresh) refetch();
 
   if (networkStatus === 1) return <MyLoading />;
   if (networkStatus === 4) loading(true);
@@ -173,31 +148,8 @@ const UserTableWrapper: React.FC<IProps> = ({
 
   let users: UsersWhereQ_users[] = [] as UsersWhereQ_users[];
   if (data) users = morphData(data.users);
-  console.log(users);
 
-  return <UserTable header={header} data={users} openMenu={openMenu} />;
+  return <UserTable header={header} data={users} />;
 };
 
 export default UserTableWrapper;
-
-var num = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split(
-  " "
-);
-var tens = "twenty thirty forty fifty sixty seventy e ighty ninety".split(" ");
-
-function number2words(n: number): string {
-  if (n < 20) return num[n];
-  var digit = n % 10;
-  if (n < 100) return tens[~~(n / 10) - 2] + (digit ? "-" + num[digit] : "");
-  if (n < 1000)
-    return (
-      num[~~(n / 100)] +
-      " hundred" +
-      (n % 100 == 0 ? "" : " " + number2words(n % 100))
-    );
-  return (
-    number2words(~~(n / 1000)) +
-    " thousand" +
-    (n % 1000 != 0 ? " " + number2words(n % 1000) : "")
-  );
-}

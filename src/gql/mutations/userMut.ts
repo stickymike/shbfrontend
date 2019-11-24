@@ -36,9 +36,10 @@ const DELETE_USER = gql`
     deleteUser(where: { id: $id }) {
       ...allUserFields
     }
+    ${user.fragments.allUserFields}
   }
-  ${user.fragments.allUserFields}
 `;
+
 const UPDATE_USER_PERMISSIONS = gql`
   mutation Update_User_Permissions($id: ID!, $permissions: [Permissions!]) {
     updateUser(

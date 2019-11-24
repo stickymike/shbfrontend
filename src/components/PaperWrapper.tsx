@@ -66,6 +66,7 @@ interface IProps {
   menuChange?: Function;
   size?: any;
   spinnerLoading?: boolean;
+  hookActionIcon?: any;
 }
 
 const PaperWrapper: React.FC<IProps> = ({
@@ -79,7 +80,8 @@ const PaperWrapper: React.FC<IProps> = ({
   menuOptions,
   menuChange = undefined,
   size = 5,
-  spinnerLoading = false
+  spinnerLoading = false,
+  hookActionIcon: HookIcon
 }) => {
   //@ts-ignore
   const classes = useStyles();
@@ -100,6 +102,8 @@ const PaperWrapper: React.FC<IProps> = ({
         >
           <Icon fontSize="small" />
         </IconButton>
+      ) : HookIcon ? (
+        <HookIcon />
       ) : null}
     </>
   );

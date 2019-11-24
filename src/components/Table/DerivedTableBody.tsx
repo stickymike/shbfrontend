@@ -61,6 +61,8 @@ const DerivedTableBody: React.FC<Props> = ({
               <TableCell key={`${info.id}-1`} {...info.props}>
                 {info.optout ? (
                   <Chip
+                    onClick={(e: any) => openMenu(e, row)}
+                    data-value={info.id}
                     label={row[info.id]}
                     className={[hover, test, chip].join(" ")}
                   />

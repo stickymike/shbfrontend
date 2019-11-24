@@ -8,13 +8,12 @@ import { useUserCtx } from "./NewUserPage";
 interface IProps {
   header: any;
   data: any;
-  openMenu: any;
 }
 
 const UserTable: React.FC<IProps> = ({ header, data }) => {
   const [order, setOrder] = React.useState<false | "desc" | "asc">("asc");
   const [orderBy, setOrderBy] = React.useState("");
-  const { fnc: openMenu } = useUserCtx();
+  const dispatch = useUserCtx();
 
   const handleRequestSort = (event: any, property: any) => {
     const isDesc = orderBy === property && order === "desc";
@@ -22,7 +21,16 @@ const UserTable: React.FC<IProps> = ({ header, data }) => {
     setOrderBy(property);
   };
 
-  console.log(openMenu);
+  const openMenu = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    user: any
+  ): void => {
+    const screen = e.currentTarget.getAttribute("data-value")
+      ? e.currentTarget.getAttribute("data-value")
+      : "EDIT";
+    dispatch({ type: "OPEN", payload: { user, screen } });
+    e.stopPropagation();
+  };
 
   return (
     <TableWrapper>

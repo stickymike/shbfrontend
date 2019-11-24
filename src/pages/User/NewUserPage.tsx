@@ -1,57 +1,102 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import PaperWrapper from "../../components/PaperWrapper";
-import Refresh from "@material-ui/icons/Refresh";
 import UserTableWrapper from "./UserTableWrapper";
-import { UserHandler } from "./Users";
 import createUserCtx from "./createUserCtx";
+
+import NewUserHandler from "./NewUserHandler";
+import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
+import AddIcon from "@material-ui/icons/Add";
+import Fab from "@material-ui/core/Fab";
+import Button from "@material-ui/core/Button";
 
 const [useUserCtx, ContextProvider] = createUserCtx<any>();
 
-const NewUserPage: React.FC = () => {
-  const [refresh, setRefresh] = useState(false);
-  const [spinnerLoading, setSpinnerLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [userScreen, setUserScreen] = useState("CREATE");
+type AppState = {
+  open: boolean;
+  formData: any;
+  userScreen: string;
+};
 
-  const handleOpen = (e: React.MouseEvent<HTMLButtonElement>, user?: any) => {
-    if (user) setUserScreen("EDIT");
-    setFormData(user);
-    setOpen(true);
-  };
+type Action =
+  | { type: "OPEN"; payload: { user?: any; screen?: any } }
+  | { type: "CLOSE" }
+  | { type: "CHANGE"; payload: { screen: any } };
+
+const initialState = {
+  open: false,
+  formData: null,
+  userScreen: "CREATE"
+};
+
+const reducer = (state: AppState, action: Action): AppState => {
+  switch (action.type) {
+    case "CLOSE":
+      return {
+        ...initialState
+      };
+    case "OPEN":
+      return {
+        userScreen: action.payload.screen,
+        open: true,
+        formData: action.payload.user
+      };
+    case "CHANGE":
+      return {
+        ...state,
+        open: true,
+        userScreen: action.payload.screen
+      };
+    default:
+      return state;
+  }
+};
+
+const NewUserPage: React.FC = () => {
+  const [refresh, setSpinnerLoading, loadingElement] = useLoadingTrigger();
+  const [{ open, formData, userScreen }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   const handleClose = () => {
-    setOpen(false);
-    setTimeout(function() {
-      setFormData({});
-      setUserScreen("CREATE");
-    }, 200);
+    dispatch({ type: "CLOSE" });
+  };
+  const changeScreen = (screen: string) => {
+    dispatch({ type: "CHANGE", payload: { screen } });
   };
 
   return (
     <PaperWrapper
       size={8}
       title="Users"
-      action={true}
-      spinnerLoading={spinnerLoading}
-      actionIcon={Refresh}
-      actionFnc={() => setRefresh(!refresh)}
+      action={false}
+      hookActionIcon={loadingElement}
     >
-      <ContextProvider value={{ func: handleOpen }}>
+      <ContextProvider value={dispatch}>
         {/* <TimeReportFilter id={id}> */}
-        <UserTableWrapper
-          refresh={refresh}
-          setRefresh={setRefresh}
-          loading={setSpinnerLoading}
-          openMenu={handleOpen}
-        />
+        <UserTableWrapper refresh={refresh} loading={setSpinnerLoading} />
         {/* </TimeReportFilter> */}
-        <UserHandler
+        <NewUserHandler
           handleClose={handleClose}
           open={open}
           user={formData}
           userScreen={userScreen}
+          changeScreen={changeScreen}
         />
+        <div
+          style={{
+            display: "flex",
+            marginTop: "16px"
+          }}
+        >
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => changeScreen("CREATE")}
+          >
+            Create New User
+          </Button>
+        </div>
       </ContextProvider>
     </PaperWrapper>
   );

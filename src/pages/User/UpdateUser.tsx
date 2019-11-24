@@ -38,7 +38,7 @@ const CreateUser: React.FC<IProps> = props => {
     lastName: user.lastName,
     code: user.code ? user.code : "",
     id: user.id,
-    title: user.title
+    title: user.title ? user.title : undefined
   };
 
   return (
