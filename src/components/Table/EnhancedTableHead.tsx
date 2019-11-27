@@ -2,13 +2,22 @@ import React from "react";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import TableCell, { TableCellProps } from "@material-ui/core/TableCell";
+import { ICProps } from "./MyChip";
 
 interface IProps {
   order: false | "desc" | "asc";
   orderBy: string;
   onRequestSort: (event: any, property: any) => void;
   header: any;
+}
+
+export interface headerCell<M> {
+  id: string;
+  label: string;
+  cellProps?: TableCellProps;
+  orderBy?: string;
+  renderComp?: React.FC<ICProps<M>>;
 }
 
 const EnhancedTableHead: React.FC<IProps> = ({
@@ -28,7 +37,7 @@ const EnhancedTableHead: React.FC<IProps> = ({
         {header.map((headCell: any, i: any) => (
           <TableCell
             key={headCell.id}
-            align={headCell.props && headCell.props.align}
+            align={headCell.cellProps && headCell.cellProps.align}
             sortDirection={orderBy === headCell.id ? order : false}
             style={{ paddingTop: "0px" }}
           >

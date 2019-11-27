@@ -1,12 +1,15 @@
 import React from "react";
 
 import TableWrapper from "../../components/Table/TableWrapper";
-import EnhancedTableHead from "../../components/Table/EnhancedTableHead";
+import EnhancedTableHead, {
+  headerCell
+} from "../../components/Table/EnhancedTableHead";
 import DerivedTableBody from "../../components/Table/DerivedTableBody";
 import { useUserCtx } from "./NewUserPage";
+import { morphData } from "./UserTableWrapper";
 
 interface IProps {
-  header: any;
+  header: headerCell<morphData>[];
   data: any;
 }
 

@@ -5,8 +5,7 @@ import createUserCtx from "./createUserCtx";
 
 import NewUserHandler from "./NewUserHandler";
 import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
-import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
+
 import Button from "@material-ui/core/Button";
 
 const [useUserCtx, ContextProvider] = createUserCtx<any>();
@@ -20,6 +19,7 @@ type AppState = {
 type Action =
   | { type: "OPEN"; payload: { user?: any; screen?: any } }
   | { type: "CLOSE" }
+  | { type: "RESET" }
   | { type: "CHANGE"; payload: { screen: any } };
 
 const initialState = {
@@ -31,6 +31,11 @@ const initialState = {
 const reducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
     case "CLOSE":
+      return {
+        ...state,
+        open: false
+      };
+    case "RESET":
       return {
         ...initialState
       };
@@ -60,6 +65,7 @@ const NewUserPage: React.FC = () => {
 
   const handleClose = () => {
     dispatch({ type: "CLOSE" });
+    setTimeout(dispatch, 200, { type: "RESET" });
   };
   const changeScreen = (screen: string) => {
     dispatch({ type: "CHANGE", payload: { screen } });

@@ -71,36 +71,31 @@ const totals = (data: any) => {
 const header = [
   {
     id: "date",
-    numeric: false,
     label: "Date",
     orderBy: "dateMS"
   },
   {
     id: "punchIn",
-    numeric: true,
     label: "Clock In",
-    props: { align: "right" },
+    cellProps: { align: "right" },
     orderBy: "startSort"
   },
   {
     id: "punchOut",
-    numeric: true,
     label: "Clock Out",
-    props: { align: "right" },
+    cellProps: { align: "right" },
     orderBy: "endSort"
   },
   {
     id: "timeRole",
-    numeric: true,
     label: "Role",
-    props: { align: "right" }
+    cellProps: { align: "right" }
   },
 
   {
     id: "hours",
-    numeric: true,
     label: "Hours",
-    props: { align: "right" }
+    cellProps: { align: "right" }
   }
 ];
 

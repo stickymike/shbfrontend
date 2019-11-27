@@ -6,6 +6,8 @@ import { USERS_WHEREQ } from "../../gql/queries/userQuery";
 import UserTable from "./UserTable";
 import { UsersWhereQ_users } from "../../generated/UsersWhereQ";
 import number2Words from "../../helpers/number2Words";
+import MyChip from "../../components/Table/MyChip";
+import { headerCell } from "../../components/Table/EnhancedTableHead";
 
 const formatTimeRoleText = (timeRoles: UsersWhereQ_users["timeRoles"]) => {
   switch (timeRoles.length) {
@@ -44,6 +46,13 @@ const formatPermissionText = (perms: UsersWhereQ_users["permissions"]) => {
         .slice(0, -1)}`;
   }
 };
+export interface morphData extends UsersWhereQ_users {
+  numPermissions: string;
+  numTimeRoles: string;
+  name: string;
+  allPermissions: string;
+  allTimeRoles: string;
+}
 
 const morphData = (users: UsersWhereQ_users[]) => {
   if (users) {
@@ -63,69 +72,31 @@ const morphData = (users: UsersWhereQ_users[]) => {
   return [];
 };
 
-const header = [
-  // {
-  //   id: "firstName",
-  //   numeric: false,
-  //   disablePadding: true,
-  //   label: "First Name",
-  //   props: { padding: "none" }
-  // },
+const header: headerCell<morphData>[] = [
   {
     id: "name",
-    numeric: true,
-    disablePadding: false,
     label: "Name",
-    props: { align: "left" }
+    cellProps: { align: "left" }
   },
   {
     id: "email",
-    numeric: true,
-    disablePadding: false,
     label: "Email",
-    props: { align: "center" }
+    cellProps: { align: "center" }
   },
   {
     id: "allPermissions",
-    numeric: true,
-    disablePadding: false,
     label: "Permissions",
-    props: { align: "right" },
-    optout: true,
-    orderBy: "numPermissions"
+    cellProps: { align: "right" },
+    orderBy: "numPermissions",
+    renderComp: MyChip
   },
   {
     id: "allTimeRoles",
-    numeric: true,
-    disablePadding: false,
     label: "Time Roles",
-    props: { align: "right" },
-    optout: true,
-    orderBy: "numTimeRoles"
+    cellProps: { align: "right" },
+    orderBy: "numTimeRoles",
+    renderComp: MyChip
   }
-  // {
-  //   id: "punchOut",
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: "Clock Out",
-  //   props: { align: "right" },
-  //   orderBy: "endSort"
-  // },
-  // {
-  //   id: "timeRole",
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: "Role",
-  //   props: { align: "right" }
-  // },
-
-  // {
-  //   id: "hours",
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: "Hours",
-  //   props: { align: "right", padding: "none" }
-  // }
 ];
 
 interface IProps {
