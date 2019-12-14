@@ -31,6 +31,7 @@ import Me from "./components/Me";
 import permhelper from "./helpers/permhelper";
 import NewPunchPage from "./pages/QuickPunch/NewPunchPage";
 import { NEW_GET_ME } from "./gql/queries/userQuery";
+import NewUserPage from "./pages/User/NewUserPage";
 
 class App extends Component {
   render() {
@@ -57,7 +58,7 @@ class App extends Component {
                     />
 
                     <Route exact path="/login" component={Login} />
-                    <Route exact path="/Admin/Users" component={Users} />
+                    <Route exact path="/Admin/Users" component={NewUserPage} />
 
                     <Route
                       exact

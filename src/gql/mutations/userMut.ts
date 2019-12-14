@@ -59,9 +59,13 @@ const UPDATE_USER_TIMEROLES = gql`
   ) {
     updateUser(data: { timeRoles: { set: $timeID } }, where: { id: $id }) {
       ...allUserFields
+      timeRoles {
+        ...allTimeRoleFields
+      }
     }
   }
   ${user.fragments.allUserFields}
+  ${timeRole.fragments.allTimeRoleFields}
 `;
 
 const CREATE_USER = gql`

@@ -33,7 +33,7 @@ export interface ICProps<M> {
   rowInfo: M;
 }
 
-export const MyChip: React.FC<ICProps<morphData>> = ({
+const MyChip: React.FC<ICProps<morphData>> = ({
   headerCell,
   openFunc,
   rowInfo,

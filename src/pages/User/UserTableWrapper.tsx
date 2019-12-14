@@ -8,6 +8,7 @@ import { UsersWhereQ_users } from "../../generated/UsersWhereQ";
 import number2Words from "../../helpers/number2Words";
 import MyChip from "../../components/Table/MyChip";
 import { headerCell } from "../../components/Table/EnhancedTableHead";
+import { NetworkStatus } from "apollo-client/core/networkStatus";
 
 const formatTimeRoleText = (timeRoles: UsersWhereQ_users["timeRoles"]) => {
   switch (timeRoles.length) {
@@ -106,15 +107,15 @@ interface IProps {
 }
 
 const UserTableWrapper: React.FC<IProps> = ({ refresh, loading }) => {
-  const { data, refetch, networkStatus } = useQuery(USERS_WHEREQ, {
+  const { data, ...qResults } = useQuery(USERS_WHEREQ, {
     variables: { query: {} },
     notifyOnNetworkStatusChange: true
   });
 
-  if (refresh) refetch();
+  if (refresh) qResults.refetch();
 
-  if (networkStatus === 1) return <MyLoading />;
-  if (networkStatus === 4) loading(true);
+  if (qResults.networkStatus === 1) return <MyLoading />;
+  if (qResults.networkStatus === 4) loading(true);
   else loading(false);
 
   let users: UsersWhereQ_users[] = [] as UsersWhereQ_users[];

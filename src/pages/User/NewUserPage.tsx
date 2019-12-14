@@ -7,6 +7,7 @@ import NewUserHandler from "./NewUserHandler";
 import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
 
 import Button from "@material-ui/core/Button";
+import ItemSquare from "../../components/ItemSquare";
 
 const [useUserCtx, ContextProvider] = createUserCtx<any>();
 
@@ -98,7 +99,9 @@ const NewUserPage: React.FC = () => {
           <Button
             color="primary"
             variant="outlined"
-            onClick={() => changeScreen("CREATE")}
+            onClick={e => {
+              changeScreen("CREATE");
+            }}
           >
             Create New User
           </Button>

@@ -1,9 +1,8 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import { headerCell } from "./EnhancedTableHead";
-import { morphData } from "../../pages/User/UserTableWrapper";
 
 interface Props<M> {
   order: false | "desc" | "asc";
@@ -12,15 +11,14 @@ interface Props<M> {
   header: headerCell<M>[];
   openMenu?: any;
 }
-
-const DerivedTableBody: React.FC<Props<morphData | any>> = ({
+const DerivedTableBody = <M,>({
   order,
   orderBy,
   data,
   header,
   children,
   openMenu = false
-}) => {
+}: Props<M> & { children?: ReactNode }) => {
   return (
     <TableBody>
       {stableSort(data, getSorting(order, orderBy)).map((row: any) => (

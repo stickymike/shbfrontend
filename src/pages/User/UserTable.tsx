@@ -29,7 +29,7 @@ const UserTable: React.FC<IProps> = ({ header, data }) => {
     user: any
   ): void => {
     const screen = e.currentTarget.getAttribute("data-value")
-      ? e.currentTarget.getAttribute("data-value")
+      ? (e.currentTarget.getAttribute("data-value") as string).toUpperCase()
       : "EDIT";
     dispatch({ type: "OPEN", payload: { user, screen } });
     e.stopPropagation();

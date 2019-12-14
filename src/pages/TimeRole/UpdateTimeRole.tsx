@@ -20,7 +20,7 @@ const SignupSchema = Yup.object().shape({
     .required("Required"),
   description: Yup.string()
     .min(2, "Too Short!")
-    .max(50, "Too Long!"),
+    .max(500, "Too Long!"),
   payRate: Yup.number()
     .integer("Must be Number")
     .strict(true)

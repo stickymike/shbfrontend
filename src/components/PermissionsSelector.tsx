@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import { Chip } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import AddIcon from "@material-ui/icons/Add";
+import ItemSquare from "./ItemSquare";
 
 const GET_PERMISSIONS = gql`
   query All_Permissions {
@@ -26,30 +27,29 @@ interface IProps {
   startedPerms: string[];
   onChange: Function;
   chipstyle: {};
+  selectedPerms?: string[];
+  setSelectedPerms?: React.Dispatch<any>;
 }
 
 const PermissionsSelector: React.FC<IProps> = ({
   startedPerms = [],
   onChange,
-  chipstyle
+  chipstyle,
+  selectedPerms = [],
+  setSelectedPerms = () => null
 }) => {
-  const [selectedPerms, setSelectedPerms] = useState(startedPerms);
-
-  const handleclick = (e: React.MouseEvent<HTMLDivElement>): void => {
+  const handleclick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    console.log("clicked");
     const perm = getInnerText(e.target);
-    const middlearray = selectedPerms;
+    const middlearray = [...selectedPerms];
     if (selectedPerms.includes(perm)) {
       const newarray = middlearray.filter(newperm => newperm !== perm);
       setSelectedPerms(newarray);
-      onChange(newarray);
     } else {
       middlearray.push(perm);
       setSelectedPerms(middlearray);
-      onChange(middlearray);
     }
   };
-
-  // TODO Fix Any
 
   return (
     <Query query={GET_PERMISSIONS}>
@@ -60,26 +60,31 @@ const PermissionsSelector: React.FC<IProps> = ({
           <>
             {names.map((name: string, i: number) => {
               return (
-                <Chip
-                  color={selectedPerms.includes(name) ? "primary" : "default"}
-                  avatar={
-                    selectedPerms.includes(name) ? (
-                      undefined
-                    ) : (
-                      <Avatar>
-                        <AddIcon />
-                      </Avatar>
-                    )
-                  }
-                  onDelete={
-                    selectedPerms.includes(name) ? handleclick : undefined
-                  }
-                  key={i}
+                // <Chip
+                //   color={selectedPerms.includes(name) ? "primary" : "default"}
+                //   avatar={
+                //     selectedPerms.includes(name) ? (
+                //       undefined
+                //     ) : (
+                //       <Avatar>
+                //         <AddIcon />
+                //       </Avatar>
+                //     )
+                //   }
+                //   onDelete={
+                //     selectedPerms.includes(name) ? handleclick : undefined
+                //   }
+                //   key={i}
+                //   label={name}
+                //   onClick={handleclick as any}
+                //   style={chipstyle}
+                // />
+
+                <ItemSquare
+                  onClick={handleclick}
                   label={name}
-                  onClick={
-                    selectedPerms.includes(name) ? undefined : handleclick
-                  }
-                  style={chipstyle}
+                  selected={selectedPerms.includes(name)}
+                  key={i}
                 />
               );
             })}
