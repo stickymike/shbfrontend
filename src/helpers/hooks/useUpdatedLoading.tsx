@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const useLoadingTrigger = () => {
+const useUpdatedLoading = () => {
   const [refresh, setRefresh] = useState(false);
   const [spinnerLoading, setSpinnerLoading] = useState(false);
   const classes = useStyles();
@@ -55,7 +55,7 @@ const useLoadingTrigger = () => {
     else setSpinnerLoading(false);
   };
 
-  return [refresh, setSpinnerLoading, loadingElement, returnFunction] as const;
+  return [returnFunction, loadingElement] as const;
 };
 
 type qResults = {
@@ -64,4 +64,4 @@ type qResults = {
   refetch: any;
 };
 
-export default useLoadingTrigger;
+export default useUpdatedLoading;

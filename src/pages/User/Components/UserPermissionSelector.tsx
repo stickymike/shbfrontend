@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "react-apollo";
-import { UPDATE_USER_PERMISSIONS } from "../../gql/mutations/userMut";
+import { UPDATE_USER_PERMISSIONS } from "../../../gql/mutations/userMut";
 import makeStyles from "@material-ui/styles/makeStyles";
 import gql from "graphql-tag";
-import MyLoading from "../../components/MyLoading";
-import getInnerText from "../../helpers/getInnerText";
-import ItemSquare from "../../components/ItemSquare";
-import AddRemoveField from "../../components/AddRemoveField";
+import MyLoading from "../../../components/MyLoading";
+import getInnerText from "../../../helpers/getInnerText";
+import AddRemoveField from "../../../components/CustomFields/AddRemoveField";
+import { GET_PERMISSIONS } from "../../../gql/queries/miscQuery";
 
 const useStyles = makeStyles(() => ({
   wrapper: {
@@ -16,16 +16,6 @@ const useStyles = makeStyles(() => ({
     minWidth: "300px"
   }
 }));
-
-const GET_PERMISSIONS = gql`
-  query All_Permissions {
-    __type(name: "Permissions") {
-      enumValues {
-        name
-      }
-    }
-  }
-`;
 
 interface IProps {
   handleClose: (data: any) => void;

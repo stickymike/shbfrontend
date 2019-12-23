@@ -1,13 +1,13 @@
 import React from "react";
 import { Mutation } from "react-apollo";
 import { Formik, Form } from "formik";
-import { GET_USERS } from "../../gql/queries/userQuery";
-import { CREATE_USER } from "../../gql/mutations/userMut";
+import { GET_USERS } from "../../../gql/queries/userQuery";
+import { UPDATE_USER } from "../../../gql/mutations/userMut";
 
 import * as Yup from "yup";
-import { Grid } from "@material-ui/core";
 
-import FormikTextField from "../../components/FormikTextField";
+import Grid from "@material-ui/core/Grid";
+import FormikTextField from "../../../components/FormikTextField";
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -18,14 +18,6 @@ const SignupSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  password: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  confirmpassword: Yup.string().oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match"
-  ),
   email: Yup.string()
     .email("Invalid email")
     .required("Required")
@@ -34,25 +26,26 @@ const SignupSchema = Yup.object().shape({
 interface IProps {
   handleClose: Function;
   formHandle: Function;
-  user?: any;
+  user: any;
 }
 
-const CreateUser: React.FC<IProps> = ({ handleClose, formHandle }) => {
-  const createuser = {
-    email: "",
-    firstName: "",
-    lastName: "",
-    title: "",
-    code: "",
-    password: "",
-    confirmpassword: ""
+const CreateUser: React.FC<IProps> = props => {
+  const { user } = props;
+
+  const updateuser = {
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    code: user.code ? user.code : "",
+    id: user.id,
+    title: user.title ? user.title : undefined
   };
 
   return (
-    <Mutation mutation={CREATE_USER} refetchQueries={[{ query: GET_USERS }]}>
+    <Mutation mutation={UPDATE_USER} refetchQueries={[{ query: GET_USERS }]}>
       {(submit: (a: {}) => Promise<any>) => (
         <Formik
-          initialValues={createuser}
+          initialValues={updateuser}
           onSubmit={async (values, actions) => {
             const rtn = await submit({
               variables: {
@@ -67,12 +60,12 @@ const CreateUser: React.FC<IProps> = ({ handleClose, formHandle }) => {
               }
             });
             actions.setSubmitting(false);
-            if (rtn) handleClose();
+            if (rtn) props.handleClose();
           }}
           validationSchema={SignupSchema}
         >
           {payload => {
-            formHandle(payload.submitForm);
+            props.formHandle(payload.submitForm);
             return (
               <>
                 <Form>
@@ -104,23 +97,6 @@ const CreateUser: React.FC<IProps> = ({ handleClose, formHandle }) => {
                       />
                     </Grid>
 
-                    <Grid item xs={6}>
-                      <FormikTextField
-                        id="password"
-                        payload={payload}
-                        label="Password*"
-                        type="password"
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <FormikTextField
-                        id="confirmpassword"
-                        payload={payload}
-                        label="Confirm Password*"
-                        type="password"
-                      />
-                    </Grid>
                     <Grid item xs={3}>
                       <FormikTextField
                         id="code"

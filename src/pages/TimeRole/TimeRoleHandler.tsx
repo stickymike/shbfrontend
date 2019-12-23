@@ -1,11 +1,6 @@
 import React from "react";
-import UpdateUser from "./Components/UpdateUser";
-import CreateUser from "./Components/CreateUser";
-import ResetPassUser from "./Components/ResetPassUser";
 
 import { Mutation } from "react-apollo";
-import { DELETE_USER } from "../../gql/mutations/userMut";
-import { GET_USERS } from "../../gql/queries/userQuery";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -16,17 +11,21 @@ import IconButton from "@material-ui/core/IconButton";
 import MoreVert from "@material-ui/icons/MoreVert";
 
 import useSubmitPassBack from "../../helpers/hooks/useSubmitPassBack";
-import UserPermissionSelector from "./Components/UserPermissionSelector";
-import UserTimeRoleSelector from "./Components/UserTimeRoleSelector";
+
 import SimpleMenu from "../../components/Menu/SimpleMenu";
 import useSimpleMenuProps from "../../components/Menu/useSimpleMenuProps";
+import CreateTimeRole from "./CreateTimeRole";
+import UpdateTimeRole from "./UpdateTimeRole";
+import { GET_TIMEROLES } from "../../gql/queries/timeRoleQuery";
+import { DELETE_TIMEROLE } from "../../gql/mutations/timeRoleMut";
+import TimeRoleUserSelector from "./TimeRoleUserSelector";
 
 interface IUserHandler {
   open: boolean;
   handleClose: () => void;
   changeScreen: (a: string) => void;
-  user: any;
-  userScreen: string;
+  timeRole: any;
+  timeRoleScreen: string;
 }
 
 const createMenu = (
@@ -38,22 +37,21 @@ const createMenu = (
 };
 
 const menuItems = [
-  createMenu("Edit User", "EDIT", "primary"),
-  createMenu("Reset Password", "RESET PASSWORD", "secondary"),
-  createMenu("Delete User", "DELETE", "secondary")
+  createMenu("Edit Time Role", "EDIT", "primary"),
+  createMenu("Delete Time Role", "DELETE", "secondary")
 ];
 
-const NewUserHandler: React.FC<IUserHandler> = ({
+const TimeRoleHandler: React.FC<IUserHandler> = ({
   open,
   handleClose,
-  user,
-  userScreen,
+  timeRole,
+  timeRoleScreen,
   changeScreen
 }) => {
   const [newSubmitForm, formHandle] = useSubmitPassBack();
   const [handleClick, userMenuProps] = useSimpleMenuProps(
     menuItems
-      .filter(menu => menu.location !== userScreen)
+      .filter(menu => menu.location !== timeRoleScreen)
       .map((menu: any) => ({
         Component: Button,
         functionString: menu.location,
@@ -63,36 +61,35 @@ const NewUserHandler: React.FC<IUserHandler> = ({
     changeScreen
   );
   const content = () => {
-    const actionProps = { formHandle, handleClose, user };
-    switch (userScreen) {
+    const actionProps = { formHandle, handleClose, timeRole };
+    switch (timeRoleScreen) {
       default: {
-        return <CreateUser {...actionProps} />;
+        return <CreateTimeRole {...actionProps} />;
       }
       case "EDIT": {
-        return <UpdateUser {...actionProps} />;
+        return <UpdateTimeRole {...actionProps} />;
       }
-      case "RESET PASSWORD": {
-        return <ResetPassUser {...actionProps} />;
+      case "ALLUSERS": {
+        return <TimeRoleUserSelector {...actionProps} />;
       }
-      case "ALLPERMISSIONS": {
-        return <UserPermissionSelector {...actionProps} />;
-      }
-      case "ALLTIMEROLES": {
-        return <UserTimeRoleSelector {...actionProps} />;
-      }
+
       case "DELETE": {
         return (
-          <Mutation
-            mutation={DELETE_USER}
-            variables={{ id: user.id }}
-            refetchQueries={[{ query: GET_USERS }]}
-            onCompleted={handleClose}
-          >
-            {(fnc: () => void) => {
-              formHandle(fnc);
-              return <>{`You sure you want to Delete ${user.firstName}?!?`}</>;
-            }}
-          </Mutation>
+          <div style={{ paddingTop: "24px" }}>
+            <Mutation
+              mutation={DELETE_TIMEROLE}
+              variables={{ id: timeRole.id }}
+              refetchQueries={[{ query: GET_TIMEROLES }]}
+              onCompleted={handleClose}
+              // onError={() => setError(true)}
+            >
+              {(fnc: () => void, data: any) => {
+                formHandle(fnc);
+                if (data.error) return data.error.graphQLErrors[0].message;
+                return `You sure you want to Delete ${timeRole.shortName}?!?`;
+              }}
+            </Mutation>
+          </div>
         );
       }
     }
@@ -101,10 +98,10 @@ const NewUserHandler: React.FC<IUserHandler> = ({
     <Dialog open={open} onClose={handleClose} style={{ top: "-30%" }}>
       <div style={{ display: "flex" }}>
         <DialogTitle id="form-dialog-title" style={{ paddingBottom: 0 }}>
-          {title(userScreen, user)}
+          {title(timeRoleScreen, timeRole)}
         </DialogTitle>
         <div style={{ flexGrow: 1 }} />
-        {user && (
+        {timeRole && (
           <IconButton
             size="small"
             color="default"
@@ -122,7 +119,7 @@ const NewUserHandler: React.FC<IUserHandler> = ({
           Cancel
         </Button>
         <Button onClick={newSubmitForm} color="primary">
-          {button(userScreen)}
+          {button(timeRoleScreen)}
         </Button>
       </DialogActions>
     </Dialog>
@@ -143,27 +140,21 @@ const button = (userScreen: string) => {
   }
 };
 
-const title = (userScreen: string, user: any) => {
+const title = (userScreen: string, timeRole: any) => {
   switch (userScreen) {
     default: {
-      return "Create New User";
-    }
-    case "ALLPERMISSIONS": {
-      return `Change ${user.firstName}'s Permissions`;
+      return "Create New Time Role";
     }
     case "EDIT": {
-      return `Edit ${user.firstName} ${user.lastName}`;
-    }
-    case "ALLTIMEROLES": {
-      return `Change ${user.firstName}'s Time Roles`;
-    }
-    case "RESET PASSWORD": {
-      return `Change ${user.firstName}'s Password`;
+      return `Edit ${timeRole.shortName} Time Role`;
     }
     case "DELETE": {
-      return `Delete ${user.firstName} ${user.lastName}`;
+      return `Delete ${timeRole.shortName} Time Role`;
+    }
+    case "ALLUSERS": {
+      return `Edit ${timeRole.shortName} Role's Users`;
     }
   }
 };
 
-export default NewUserHandler;
+export default TimeRoleHandler;

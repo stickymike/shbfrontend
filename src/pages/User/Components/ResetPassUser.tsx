@@ -1,11 +1,11 @@
 import React from "react";
 import { Mutation } from "react-apollo";
 import { Formik, Form } from "formik";
-import { GET_USERS } from "../../gql/queries/userQuery";
-import { RESET_PASSWORD } from "../../gql/mutations/userMut";
+import { GET_USERS } from "../../../gql/queries/userQuery";
+import { RESET_PASSWORD } from "../../../gql/mutations/userMut";
 
 import * as Yup from "yup";
-import FormikTextField from "../../components/FormikTextField";
+import FormikTextField from "../../../components/FormikTextField";
 
 const SignupSchema = Yup.object().shape({
   password: Yup.string()

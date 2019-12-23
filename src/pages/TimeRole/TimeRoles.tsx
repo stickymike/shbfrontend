@@ -34,6 +34,7 @@ import { Avatar, Tooltip, Theme } from "@material-ui/core";
 
 import useHighlightScrollandSreen from "../../helpers/hooks/useHighlightScrollandSreen";
 import { RouteChildrenProps } from "react-router";
+import TimeRolePage from "./TimeRolePage";
 
 const useStyles = makeStyles((theme: Theme) => ({
   rightIcon: {
@@ -239,6 +240,8 @@ const TimeRoles: React.FC<RouteChildrenProps> = props => {
         user={formData}
         userScreen={userScreen}
       />
+
+      <TimeRolePage />
     </>
   );
 };

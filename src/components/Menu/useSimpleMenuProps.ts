@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 
-const useMenuProps = (
-  options: {
-    display: string;
-    location: string;
-    color: "primary" | "secondary";
+const useSimpleMenuProps = (
+  menuItems: {
+    Component?: any;
+    functionString: string;
+    componentProps?: any;
+    text: string;
   }[],
-  changeScreen: (a: string) => void
+  menuFuction: (a: string) => void
 ) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -17,11 +18,11 @@ const useMenuProps = (
   const handleClose = (arg: string | null) => (
     e: React.MouseEvent<HTMLElement>
   ) => {
-    if (arg) changeScreen(arg);
+    if (arg) menuFuction(arg);
     setAnchorEl(null);
   };
 
-  return [handleClick, { anchorEl, handleClose, options }] as const;
+  return [handleClick, { anchorEl, handleClose, menuItems }] as const;
 };
 
-export default useMenuProps;
+export default useSimpleMenuProps;

@@ -1,14 +1,12 @@
 import React from "react";
 
 import { useQuery } from "react-apollo";
-import MyLoading from "../../components/MyLoading";
 import { USERS_WHEREQ } from "../../gql/queries/userQuery";
 import UserTable from "./UserTable";
 import { UsersWhereQ_users } from "../../generated/UsersWhereQ";
 import number2Words from "../../helpers/number2Words";
 import MyChip from "../../components/Table/MyChip";
 import { headerCell } from "../../components/Table/EnhancedTableHead";
-import { NetworkStatus } from "apollo-client/core/networkStatus";
 
 const formatTimeRoleText = (timeRoles: UsersWhereQ_users["timeRoles"]) => {
   switch (timeRoles.length) {
@@ -101,27 +99,19 @@ const header: headerCell<morphData>[] = [
 ];
 
 interface IProps {
-  refresh: boolean;
-  setRefresh?: (arg: boolean) => void;
-  loading: any;
+  returnFunction: (arg: any) => JSX.Element | undefined;
 }
 
-const UserTableWrapper: React.FC<IProps> = ({ refresh, loading }) => {
+const UserTableWrapper: React.FC<IProps> = ({ returnFunction }) => {
   const { data, ...qResults } = useQuery(USERS_WHEREQ, {
     variables: { query: {} },
     notifyOnNetworkStatusChange: true
   });
 
-  if (refresh) qResults.refetch();
-
-  if (qResults.networkStatus === 1) return <MyLoading />;
-  if (qResults.networkStatus === 4) loading(true);
-  else loading(false);
-
   let users: UsersWhereQ_users[] = [] as UsersWhereQ_users[];
   if (data) users = morphData(data.users);
 
-  return <UserTable header={header} data={users} />;
+  return returnFunction(qResults) || <UserTable header={header} data={users} />;
 };
 
 export default UserTableWrapper;

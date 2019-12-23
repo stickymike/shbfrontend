@@ -1,5 +1,6 @@
 import timeRole from "../fragments/timeRoleFrags";
 import gql from "graphql-tag";
+import user from "../fragments/userFrags";
 
 const CREATE_TIMEROLE = gql`
   mutation CREATE_TIMEROLE(
@@ -49,8 +50,13 @@ const UPDATE_TIMEROLE_USERS = gql`
   mutation Update_TimeRoles_Users($id: ID!, $userID: [UserWhereUniqueInput!]) {
     updateTimeRole(data: { users: { set: $userID } }, where: { id: $id }) {
       ...allTimeRoleFields
+      users {
+        ...allUserFields
+      }
     }
   }
+  ${user.fragments.allUserFields}
+
   ${timeRole.fragments.allTimeRoleFields}
 `;
 

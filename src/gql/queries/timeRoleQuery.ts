@@ -3,7 +3,7 @@ import user from "../fragments/userFrags";
 import timeRole from "../fragments/timeRoleFrags";
 
 const GET_TIMEROLES = gql`
-  query Get_TimeRoles {
+  query GetTimeRoles {
     timeRoles {
       ...allTimeRoleFields
       users {

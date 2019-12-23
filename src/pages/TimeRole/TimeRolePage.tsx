@@ -1,15 +1,13 @@
 import React, { useReducer } from "react";
 import PaperWrapper from "../../components/PaperWrapper";
-import UserTableWrapper from "./UserTableWrapper";
-import createUserCtx from "./createUserCtx";
-
-import NewUserHandler from "./NewUserHandler";
-import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
 
 import Button from "@material-ui/core/Button";
+import createCtx from "../../helpers/createCtx";
 import useUpdatedLoading from "../../helpers/hooks/useUpdatedLoading";
+import TimeRoleTableWrapper from "./TimeRoleTableWrapper";
+import TimeRoleHandler from "./TimeRoleHandler";
 
-const [useUserCtx, ContextProvider] = createUserCtx<any>();
+const [useTimeRoleCtx, ContextProvider] = createCtx<any>();
 
 type AppState = {
   open: boolean;
@@ -57,8 +55,9 @@ const reducer = (state: AppState, action: Action): AppState => {
   }
 };
 
-const NewUserPage: React.FC = () => {
+const TimeRolePage: React.FC = () => {
   const [returnFunction, loadingElement] = useUpdatedLoading();
+
   const [{ open, formData, userScreen }, dispatch] = useReducer(
     reducer,
     initialState
@@ -75,21 +74,21 @@ const NewUserPage: React.FC = () => {
   return (
     <PaperWrapper
       size={8}
-      title="Users"
+      title="Time Roles"
       action={false}
       hookActionIcon={loadingElement}
     >
       <ContextProvider value={dispatch}>
         {/* <TimeReportFilter id={id}> */}
-        <UserTableWrapper returnFunction={returnFunction} />
+        <TimeRoleTableWrapper returnFunction={returnFunction} />
         {/* </TimeReportFilter> */}
-        <NewUserHandler
+        {/* <NewUserHandler
           handleClose={handleClose}
           open={open}
           user={formData}
           userScreen={userScreen}
           changeScreen={changeScreen}
-        />
+        /> */}
         <div
           style={{
             display: "flex",
@@ -103,14 +102,21 @@ const NewUserPage: React.FC = () => {
               changeScreen("CREATE");
             }}
           >
-            Create New User
+            Create Time Role
           </Button>
+          <TimeRoleHandler
+            handleClose={handleClose}
+            open={open}
+            timeRole={formData}
+            timeRoleScreen={userScreen}
+            changeScreen={changeScreen}
+          />
         </div>
       </ContextProvider>
     </PaperWrapper>
   );
 };
 
-export default NewUserPage;
+export default TimeRolePage;
 
-export { useUserCtx };
+export { useTimeRoleCtx };
