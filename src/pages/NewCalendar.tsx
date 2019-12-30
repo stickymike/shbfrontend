@@ -65,16 +65,18 @@ const useMoreStyles = makeStyles((theme: Theme) => ({
 
 const NewCalendar: React.FC<Props> = () => {
   const [currentMonth, setcurrentMonth] = useState(moment().toISOString());
-  const [selectedDate, setSelectedDate] = useState(moment().toISOString());
+  const [selectedDate, setSelectedDate] = useState(
+    moment()
+      .startOf("month")
+      .toISOString()
+  );
   const [secondDate, setsecondDate] = useState("");
 
   const classes = useMoreStyles();
 
   const cellProps = useMemo(() => {
     const monthStart = moment(currentMonth).startOf("month");
-    const monthEnd = moment(currentMonth)
-      .add(1, "month")
-      .endOf("month");
+    const monthEnd = moment(currentMonth).endOf("month");
     const startDate = moment(monthStart.toISOString()).startOf("week");
     const endDate = moment(monthEnd.toISOString()).endOf("week");
     return [startDate, endDate] as const;
@@ -82,7 +84,7 @@ const NewCalendar: React.FC<Props> = () => {
 
   const [startDate] = cellProps;
 
-  console.log(secondDate);
+  // console.log(secondDate);
 
   const onDateClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -98,7 +100,7 @@ const NewCalendar: React.FC<Props> = () => {
     if (event.currentTarget.getAttribute("data-day2")) {
       setsecondDate(
         moment(startDate)
-          .add(event.currentTarget.getAttribute("data-day2"), "days")
+          .add(event.currentTarget.getAttribute("data-day2"), "day")
           .toISOString()
       );
       return;
@@ -110,31 +112,43 @@ const NewCalendar: React.FC<Props> = () => {
     setsecondDate("");
   };
 
-  const nextMonth = () => {
-    setcurrentMonth(
-      moment(currentMonth)
-        .add(1, "month")
-        .toISOString()
-    );
-  };
+  const nextMonth = useMemo(
+    () => () => {
+      setcurrentMonth(month =>
+        moment(month)
+          .add(1, "month")
+          .toISOString()
+      );
+    },
+    [setcurrentMonth]
+  );
 
-  const prevMonth = () => {
-    setcurrentMonth(
-      moment(currentMonth)
-        .subtract(1, "month")
-        .toISOString()
-    );
-  };
+  const prevMonth = useMemo(
+    () => () => {
+      setcurrentMonth(month =>
+        moment(month)
+          .subtract(1, "month")
+          .toISOString()
+      );
+    },
+    [setcurrentMonth]
+  );
 
   return (
     <div className="calendar">
-      <CalHeader
+      {/* <CalHeader
         currentMonth={currentMonth}
         classes={classes}
         prevMonth={prevMonth}
         nextMonth={nextMonth}
+      /> */}
+      <MemoCalHeader
+        currentMonth={currentMonth}
+        prevMonth={prevMonth}
+        nextMonth={nextMonth}
       />
-      <CalHeaderDays currentMonth={currentMonth} classes={classes} />
+      {/* <CalHeaderDays currentMonth={currentMonth} classes={classes} /> */}
+      <MemoCalHeaderDays currentMonth={currentMonth} classes={classes} />
       <CalDays
         cellProps={cellProps}
         onDateHover={onDateHover}
@@ -150,34 +164,22 @@ const NewCalendar: React.FC<Props> = () => {
 
 interface CHProps {
   currentMonth: string;
-  classes: Record<
-    | "calendarHeader"
-    | "hidden"
-    | "iconButton"
-    | "daysHeader"
-    | "dayLabel"
-    | "day"
-    | "week"
-    | "container"
-    | "daySelected",
-    string
-  >;
-  prevMonth: () => void;
-  nextMonth: () => void;
+  prevMonth?: () => void;
+  nextMonth?: () => void;
 }
 
 const CalHeader: React.FC<CHProps> = ({
   currentMonth,
-  classes,
   prevMonth,
   nextMonth
 }) => {
   const dateFormat = "MMMM YYYY";
+  const { calendarHeader, iconButton } = useMoreStyles();
 
   return (
     <div>
-      <div className={classes.calendarHeader}>
-        <IconButton className={classes.iconButton} onClick={prevMonth}>
+      <div className={calendarHeader}>
+        <IconButton className={iconButton} onClick={prevMonth}>
           <KeyboardArrowLeftIcon />
         </IconButton>
         <div>
@@ -185,13 +187,14 @@ const CalHeader: React.FC<CHProps> = ({
             {moment(currentMonth).format(dateFormat)}
           </Typography>
         </div>
-        <IconButton className={classes.iconButton} onClick={nextMonth}>
+        <IconButton className={iconButton} onClick={nextMonth}>
           <KeyboardArrowRightIcon />
         </IconButton>
       </div>
     </div>
   );
 };
+const MemoCalHeader = React.memo(CalHeader);
 
 interface CHDProps {
   currentMonth: string;
@@ -225,6 +228,8 @@ const CalHeaderDays: React.FC<CHDProps> = ({ currentMonth, classes }) => {
 
   return <div className={classes.daysHeader}>{days}</div>;
 };
+
+const MemoCalHeaderDays = React.memo(CalHeaderDays);
 
 interface CDProps {
   cellProps: readonly [moment.Moment, moment.Moment];
@@ -260,13 +265,13 @@ const CalDays: React.FC<CDProps> = ({
   const [newRows] = useMemo(() => {
     const dateFormat = "D";
     const newRows = [];
-    let days = [];
+    let days: { formattedDate: string; total: number }[] = [];
     let day = moment(startDate);
     let formattedDate = "";
     while (day.isBefore(endDate)) {
       for (let i = 0; i < 7; i++) {
         formattedDate = day.format(dateFormat);
-        days.push(formattedDate);
+        days.push({ formattedDate, total: i + 1 + (newRows.length + 1) * 7 });
         day = day.add(1, "day");
       }
       newRows.push(days);
@@ -275,8 +280,10 @@ const CalDays: React.FC<CDProps> = ({
     return [newRows] as const;
   }, [startDate, endDate]);
 
-  const addNewStar = (day: string) =>
-    startDate.add(day, "days").isBetween(selectedDate, secondDate) && "*";
+  const addNewStar = (day: number) =>
+    moment(startDate)
+      .add(day, "days")
+      .isBetween(selectedDate, secondDate) && "*";
 
   // const dateFormat = "D";
   // const rows = [];
@@ -294,26 +301,27 @@ const CalDays: React.FC<CDProps> = ({
   //     days.push(
   //       <div
   //         key={day.toISOString()}
+  //         className={classes.day}
   //         // className={classes.week}
   //         // onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
   //         data-day={day.toISOString()}
   //         onMouseEnter={onDateHover}
   //       >
   //         {addStar(day)}
-  //         <IconButton
+  //         {/* <IconButton
   //           className={[
-  //             classes.day,
+  //             classes.day
   //             // day.isSame(monthStart, "month") ? null : classes.hidden,
-  //             day.isSame(selectedDate, "day") ? classes.daySelected : null
+  //             // day.isSame(selectedDate, "day") ? classes.daySelected : null
   //             // day.isBetween(selectedDate, secondDate)
   //             //   ? classes.daySelected
   //             //   : null
   //           ].join(" ")}
   //           // onClick={onDateClick}
   //           key={`${day.toISOString()}-btn`}
-  //         >
-  //           <Typography variant="body2">{formattedDate}</Typography>
-  //         </IconButton>
+  //         > */}
+  //         <Typography variant="body2">{formattedDate}</Typography>
+  //         {/* </IconButton> */}
   //         {/* <span className="bg">{formattedDate}</span> */}
   //       </div>
   //     );
@@ -332,18 +340,18 @@ const CalDays: React.FC<CDProps> = ({
         {rows}
       </div> */}
       <div className={classes.container} onMouseLeave={onDateLeave}>
-        {newRows.map(days => (
-          <div className={classes.week} key={`${days[0]}-row`}>
+        {newRows.map((days, i) => (
+          <div className={classes.week} key={`${i}-row`}>
             {days.map(day => (
               <div
-                key={day}
-                // className={classes.week}
+                key={`${day.total}-day`}
+                className={classes.day}
                 // onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
-                data-day2={day}
+                data-day2={day.total}
                 onMouseEnter={onDateHover}
               >
-                {addNewStar(day)}
-                <IconButton
+                {addNewStar(day.total)}
+                {/* <IconButton
                   className={[
                     classes.day
                     // day.isSame(monthStart, "month") ? null : classes.hidden,
@@ -353,17 +361,41 @@ const CalDays: React.FC<CDProps> = ({
                     //   : null
                   ].join(" ")}
                   // onClick={onDateClick}
-                  key={`${day}-btn`}
-                >
-                  <Typography variant="body2">{day}</Typography>
-                </IconButton>
-                {/* <span className="bg">{formattedDate}</span> */}
+                  key={`${day.total}-btn`}
+                > */}
+                <Typography variant="body2">{day.formattedDate}</Typography>
+                {/* </IconButton> */}
               </div>
             ))}
           </div>
         ))}
       </div>
     </>
+  );
+};
+
+interface DayProps {
+  day: {
+    formattedDate: string;
+    total: number;
+  };
+  classDay: string;
+  extRender: (arg: number) => false | "*";
+  onDateHover: (event: any) => void;
+}
+const Day: React.FC<DayProps> = ({ day, classDay, extRender, onDateHover }) => {
+  return (
+    <div
+      key={`${day.total}-day`}
+      className={classDay}
+      // onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
+      data-day2={day.total}
+      onMouseEnter={onDateHover}
+    >
+      {extRender(day.total)}
+
+      <Typography variant="body2">{day.formattedDate}</Typography>
+    </div>
   );
 };
 
