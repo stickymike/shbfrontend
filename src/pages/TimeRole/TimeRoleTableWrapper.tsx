@@ -12,7 +12,6 @@ import {
   GetTimeRoles_timeRoles_users
 } from "../../generated/GetTimeRoles";
 import { formatMoney } from "../../helpers/formatMoney";
-import makeStyles from "@material-ui/styles/makeStyles";
 
 const formatUserText = (users: GetTimeRoles_timeRoles_users[]) => {
   const getFullName = (user: GetTimeRoles_timeRoles_users) =>

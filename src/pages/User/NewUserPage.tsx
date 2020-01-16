@@ -4,7 +4,7 @@ import UserTableWrapper from "./UserTableWrapper";
 import createUserCtx from "./createUserCtx";
 
 import NewUserHandler from "./NewUserHandler";
-import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
+// import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
 
 import Button from "@material-ui/core/Button";
 import useUpdatedLoading from "../../helpers/hooks/useUpdatedLoading";

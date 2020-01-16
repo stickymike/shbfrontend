@@ -305,6 +305,18 @@ const LoggedInMenu: React.FC<ILoggedInMenu> = ({ me, linkClick }) => {
           Time Report
         </MenuItem>
       )
+    },
+    {
+      node: (
+        <MenuItem
+          key="timerequest"
+          data-link="TimeRequest"
+          onClick={wrappedLinkClick}
+          className={classes.menuItems}
+        >
+          Time Request
+        </MenuItem>
+      )
     }
   ];
   const AdminMenu = [

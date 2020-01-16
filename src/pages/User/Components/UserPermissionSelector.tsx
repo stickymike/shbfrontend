@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "react-apollo";
 import { UPDATE_USER_PERMISSIONS } from "../../../gql/mutations/userMut";
 import makeStyles from "@material-ui/styles/makeStyles";
-import gql from "graphql-tag";
+// import gql from "graphql-tag";
 import MyLoading from "../../../components/MyLoading";
 import getInnerText from "../../../helpers/getInnerText";
 import AddRemoveField from "../../../components/CustomFields/AddRemoveField";
