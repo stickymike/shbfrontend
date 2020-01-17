@@ -8,7 +8,7 @@ import { Theme } from "@material-ui/core/styles";
 import { format } from "date-fns";
 
 interface CHProps {
-  currentMonth: string;
+  currentMonth: Date;
   prevMonth?: () => void;
   nextMonth?: () => void;
 }
@@ -46,7 +46,7 @@ const CalHeader: React.FC<CHProps> = ({
         </IconButton>
         <div>
           <Typography variant="body1">
-            {format(new Date(currentMonth), dateFormat)}
+            {format(currentMonth, dateFormat)}
           </Typography>
         </div>
 

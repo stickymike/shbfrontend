@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface IProps {
-  activeMonth: string;
+  activeMonth: Date;
 
   nextMonth?: () => void;
   prevMonth?: () => void;
@@ -42,8 +42,8 @@ const NewCalendar: React.FC<IProps> = ({
   const classes = useStyles();
 
   const [createdMonth] = useMemo(() => {
-    let startDate = startOfWeek(startOfMonth(new Date(currentMonth)));
-    const endDate = endOfWeek(endOfMonth(new Date(currentMonth)));
+    let startDate = startOfWeek(startOfMonth(currentMonth));
+    const endDate = endOfWeek(endOfMonth(currentMonth));
 
     const dateFormat = "d";
     const createdMonth = [];
@@ -62,7 +62,7 @@ const NewCalendar: React.FC<IProps> = ({
           formattedDate,
           total: i + 1 + (createdMonth.length + 1) * 7,
           iso: formatISO(startDate),
-          hidden: isSameMonth(startDate, new Date(currentMonth))
+          hidden: isSameMonth(startDate, currentMonth)
         });
         startDate = addDays(startDate, 1);
       }

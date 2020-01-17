@@ -32,7 +32,7 @@ import NewPunchPage from "./pages/QuickPunch/NewPunchPage";
 import { NEW_GET_ME } from "./gql/queries/userQuery";
 import NewUserPage from "./pages/User/NewUserPage";
 import TimeRolePage from "./pages/TimeRole/TimeRolePage";
-import TimeRequest from "./pages/TimeRequest";
+import TimeRequestFns from "./pages/TimeRequest/TimeRequestFns";
 
 class App extends Component {
   render() {
@@ -52,7 +52,11 @@ class App extends Component {
                     <Route exact path="/timeclock" component={NewPunchPage} />
 
                     <Route exact path="/TimeReport" component={TimeReport} />
-                    <Route exact path="/TimeRequest" component={TimeRequest} />
+                    <Route
+                      exact
+                      path="/TimeRequest"
+                      component={TimeRequestFns}
+                    />
 
                     <Route
                       exact

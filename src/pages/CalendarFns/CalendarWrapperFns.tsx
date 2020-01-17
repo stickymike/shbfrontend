@@ -2,25 +2,25 @@ import React, { useState } from "react";
 import createCtx from "../../helpers/createCtx";
 
 interface Props {
-  activeMonth: string;
-  firstDate: string;
-  secondDate: string;
-  changeFirst: (a: string) => void;
-  changeSecond: (a: string) => void;
+  activeMonth: Date;
+  firstDate: Date;
+  secondDate: Date;
+  changeFirst: (a: Date) => void;
+  changeSecond: (a: Date) => void;
   style?: React.CSSProperties;
 }
 
 const [useCalendarCtx, ContextProvider] = createCtx<{
   state: {
-    firstDate: string;
-    secondDate: string;
-    previewDate: string;
+    firstDate: Date;
+    secondDate: Date;
+    previewDate: Date;
     preview: boolean;
   };
   setState: {
-    changeFirst: (a: string) => void;
-    changeSecond: (a: string) => void;
-    setPreviewDate: React.Dispatch<React.SetStateAction<string>>;
+    changeFirst: (a: Date) => void;
+    changeSecond: (a: Date) => void;
+    setPreviewDate: React.Dispatch<React.SetStateAction<Date>>;
     setPreview: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }>();
@@ -33,7 +33,7 @@ const CalendarWrapper: React.FC<Props> = ({
   style,
   children
 }) => {
-  const [previewDate, setPreviewDate] = useState("");
+  const [previewDate, setPreviewDate] = useState(new Date(""));
   const [preview, setPreview] = useState(false);
 
   const state = { firstDate, secondDate, previewDate, preview };
@@ -43,7 +43,7 @@ const CalendarWrapper: React.FC<Props> = ({
     <ContextProvider value={{ state, setState }}>
       <div
         style={style}
-        // onMouseLeave={() => setPreview(false)}
+        onMouseLeave={() => setPreview(false)}
         onMouseEnter={() => setPreview(true)}
       >
         {children}

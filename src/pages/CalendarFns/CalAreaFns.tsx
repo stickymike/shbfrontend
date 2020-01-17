@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import { makeStyles, IconButton, Theme } from "@material-ui/core";
+import { makeStyles, IconButton, Theme, Badge, Color } from "@material-ui/core";
 
 import { useCalendarCtx } from "./CalendarWrapperFns";
 import {
   getDay,
-  format,
   isSameDay,
   isBefore,
   isValid,
@@ -20,6 +19,7 @@ import {
   endOfWeek,
   startOfDay
 } from "date-fns/esm";
+import { relative } from "path";
 
 const useMoreStyles = makeStyles((theme: Theme) => ({
   day: {
@@ -156,7 +156,7 @@ interface CDProps {
 }
 
 const CalArea: React.FC<CDProps> = ({ month }) => {
-  const leftSpace = (date: string) => {
+  const leftSpace = (date: Date) => {
     const dayofWeek = getDay(new Date(date));
     switch (dayofWeek) {
       case 0:
@@ -177,7 +177,7 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
         return "oneDay";
     }
   };
-  const rightSpace = (date: string) => {
+  const rightSpace = (date: Date) => {
     const dayofWeek = getDay(new Date(date));
     switch (dayofWeek) {
       case 0:
@@ -198,26 +198,18 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
         return "sevenDay";
     }
   };
-
-  const stringDate = (date: Date) =>
-    format(date, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 
   const {
     state: {
-      firstDate: selectedDate,
-      secondDate,
-      previewDate,
+      firstDate: dSelectedDate,
+      secondDate: dSecondDate,
+      previewDate: dPreviewDate,
       preview: showPreview
     },
     setState: { changeSecond, changeFirst, setPreviewDate }
   } = useCalendarCtx();
 
-  const dSelectedDate = new Date(selectedDate);
-  const dSecondDate = new Date(secondDate);
-  const dPreviewDate = new Date(previewDate);
-
-  const [lastDate, setlastDate] = useState("");
-  const dLastDate = new Date(lastDate);
+  const [dLastDate, setlastDate] = useState(new Date(""));
 
   const classes: any = useMoreStyles();
 
@@ -231,69 +223,61 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
       isSameDay(dHoverDate, dSelectedDate) ||
       isSameDay(dHoverDate, dSecondDate)
     )
-      setlastDate(stringDate(dHoverDate));
-    setPreviewDate(hoverDate);
+      setlastDate(dHoverDate);
+    setPreviewDate(dHoverDate);
   };
 
   const wrappedOnCLick = (event: any) => {
     const clickDate = event.currentTarget.getAttribute("data-day2") || "";
-
     const dClickDate = new Date(clickDate);
 
-    const oldSelectedDate = selectedDate;
-    const oldSecondDate = secondDate;
+    const oldSelectedDate = dSelectedDate;
+    const oldSecondDate = dSecondDate;
 
-    if (!isValid(dSelectedDate)) changeFirst(clickDate);
+    if (!isValid(dSelectedDate)) changeFirst(dClickDate);
     else if (isValid(dSelectedDate) && !isValid(dSecondDate)) {
       if (isBefore(dClickDate, dSelectedDate)) {
-        changeFirst(clickDate);
+        changeFirst(dClickDate);
         changeSecond(oldSelectedDate);
       } else if (isSameDay(dClickDate, dSelectedDate)) {
-        changeFirst("");
-      } else changeSecond(clickDate);
+        changeFirst(new Date(""));
+      } else changeSecond(dClickDate);
     } else {
       if (isSameDay(dClickDate, dSelectedDate)) {
         changeFirst(oldSecondDate);
-        changeSecond("");
+        changeSecond(new Date(""));
       } else if (isSameDay(dClickDate, dSecondDate)) {
-        changeSecond("");
+        changeSecond(new Date(""));
       } else if (
         isBefore(dClickDate, dSecondDate) &&
         isAfter(dClickDate, dSelectedDate)
       ) {
-        if (isBefore(dPreviewDate, dLastDate)) changeSecond(clickDate);
-        else changeFirst(clickDate);
+        if (isBefore(dPreviewDate, dLastDate)) changeSecond(dClickDate);
+        else changeFirst(dClickDate);
       } else if (isBefore(dPreviewDate, dLastDate)) {
-        changeFirst(clickDate);
+        changeFirst(dClickDate);
       } else {
-        changeSecond(clickDate);
+        changeSecond(dClickDate);
       }
     }
   };
 
   useEffect(() => {
-    if (!isValid(dSecondDate)) setlastDate(selectedDate);
+    if (!isValid(dSecondDate)) setlastDate(dSelectedDate);
     if (
       isValid(dLastDate) &&
       (isBefore(dPreviewDate, dSelectedDate) ||
         isEqual(dPreviewDate, dSelectedDate))
     )
-      setlastDate(selectedDate);
+      setlastDate(dSelectedDate);
     if (
       isValid(dLastDate) &&
       (isAfter(dPreviewDate, dSecondDate) || isEqual(dPreviewDate, dSecondDate))
     )
-      setlastDate(secondDate);
+      setlastDate(dSecondDate);
     return () => {};
-  }, [
-    dLastDate,
-    dPreviewDate,
-    dSecondDate,
-    dSelectedDate,
-    lastDate,
-    secondDate,
-    selectedDate
-  ]);
+  }, [dLastDate, dPreviewDate, dSecondDate, dSelectedDate]);
+
   const createLeftRightPreviewFunctions = (f1: any, f2: any) => (i: number) => {
     const dWeekInLoop = addWeeks(firstShownWeek, i);
     const dTestDay = f1(firstShownWeek, lastShownWeek)
@@ -309,23 +293,23 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
           isSameWeek(dWeekInLoop, dPreviewDate) &&
           isSameMonth(dPreviewDate, dTestDay)
         )
-          return classes[f2(previewDate)!];
+          return classes[f2(dPreviewDate)!];
         else if (f1(dWeekInLoop, dPreviewDate)) {
           if (isSameWeek(dWeekInLoop, dAltTestDay)) {
-            return classes[f2(stringDate(dAltTestDay))];
+            return classes[f2(dAltTestDay)];
           }
           return classes.sevenDay;
         } else if (isSameWeek(dWeekInLoop, dTestDay)) {
-          return classes[f2(stringDate(dTestDay))];
+          return classes[f2(dTestDay)];
         } else return classes.oneDay;
       } else {
         if (
           isSameWeek(dWeekInLoop, dLastDate) &&
           isSameMonth(dTestDay, dLastDate)
         )
-          return classes[f2(stringDate(dLastDate))];
+          return classes[f2(dLastDate)];
         else if (isSameWeek(dWeekInLoop, dTestDay)) {
-          return classes[f2(stringDate(dTestDay))];
+          return classes[f2(dTestDay)];
         } else return classes.oneDay;
       }
     };
@@ -335,7 +319,7 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
         isSameWeek(dWeekInLoop, dPreviewDate) &&
         isSameMonth(dPreviewDate, dTestDay)
       )
-        return classes[f2(previewDate)];
+        return classes[f2(dPreviewDate)];
       if (f1(dPreviewDate, dWeekInLoop)) return classes.oneDay;
       return classes.sevenDay;
     }
@@ -346,147 +330,53 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
   const functionsLeft = createLeftRightPreviewFunctions(isBefore, leftSpace);
   const functionsRight = createLeftRightPreviewFunctions(isAfter, rightSpace);
 
-  // const functionsRight = (i: number) => {
-  //   const dWeekInLoop = addWeeks(firstShownWeek, i);
-
-  //   const testFunction2 = () => {
-  //     if (isAfter(dPreviewDate, dLastDate)) {
-  //       if (
-  //         isSameWeek(dWeekInLoop, dPreviewDate) &&
-  //         isSameMonth(dPreviewDate, lastShownWeek)
-  //       )
-  //         return classes[rightSpace(previewDate)!];
-  //       else if (isAfter(dWeekInLoop, dPreviewDate)) {
-  //         if (isSameWeek(dWeekInLoop, firstShownWeek)) {
-  //           return classes[rightSpace(stringDate(firstShownWeek))];
-  //         }
-  //         return classes.sevenDay;
-  //       } else if (isSameWeek(dWeekInLoop, lastShownWeek)) {
-  //         return classes[rightSpace(stringDate(lastShownWeek))];
-  //       } else return classes.oneDay;
-  //     } else {
-  //       if (
-  //         isSameWeek(dWeekInLoop, dLastDate) &&
-  //         isSameMonth(lastShownWeek, dLastDate)
-  //       )
-  //         return classes[rightSpace(stringDate(dLastDate))];
-  //       else if (isSameWeek(dWeekInLoop, lastShownWeek)) {
-  //         return classes[rightSpace(stringDate(lastShownWeek))];
-  //       } else return classes.oneDay;
-  //     }
-  //   };
-
-  //   if (!isValid(dSelectedDate)) {
-  //     if (
-  //       isSameWeek(dWeekInLoop, dPreviewDate) &&
-  //       isSameMonth(dPreviewDate, lastShownWeek)
-  //     )
-  //       return classes[rightSpace(previewDate)];
-  //     if (isAfter(dPreviewDate, dWeekInLoop)) return classes.oneDay;
-  //     return classes.sevenDay;
-  //   }
-
-  //   return testFunction2();
-  // };
-
-  // const functionsLeft = (i: number) => {
-  //   const dWeekInLoop = addWeeks(firstShownWeek, i);
-  //   const dTestDay =
-  //     isBefore(dSelectedDate, dSecondDate) ||
-  //     !isValid(dSelectedDate) ||
-  //     !isValid(dSecondDate)
-  //       ? firstShownWeek
-  //       : lastShownWeek;
-  //   const dAltTestDay = isSameDay(dTestDay, firstShownWeek)
-  //     ? lastShownWeek
-  //     : firstShownWeek;
-
-  //   const testFunction2 = () => {
-  //     if (isBefore(dPreviewDate, dLastDate)) {
-  //       if (
-  //         isSameWeek(dWeekInLoop, dPreviewDate) &&
-  //         isSameMonth(dPreviewDate, firstShownWeek)
-  //       )
-  //         return classes[leftSpace(previewDate)!];
-  //       else if (isBefore(dWeekInLoop, dPreviewDate)) {
-  //         if (isSameWeek(dWeekInLoop, lastShownWeek))
-  //           return classes[leftSpace(stringDate(lastShownWeek))];
-  //         else return classes.sevenDay;
-  //       } else if (isSameWeek(dWeekInLoop, firstShownWeek)) {
-  //         return classes[leftSpace(stringDate(firstShownWeek))];
-  //       } else return classes.oneDay;
-  //     } else {
-  //       if (
-  //         isSameWeek(dWeekInLoop, dLastDate) &&
-  //         isSameMonth(firstShownWeek, dLastDate)
-  //       )
-  //         return classes[leftSpace(stringDate(dLastDate))];
-  //       else if (isSameWeek(dWeekInLoop, firstShownWeek)) {
-  //         return classes[leftSpace(stringDate(firstShownWeek))];
-  //       } else return classes.oneDay;
-  //     }
-  //   };
-
-  //   if (!isValid(dSelectedDate)) {
-  //     if (
-  //       isSameWeek(dWeekInLoop, dPreviewDate) &&
-  //       isSameMonth(dPreviewDate, firstShownWeek)
-  //     )
-  //       return classes[leftSpace(previewDate)];
-  //     if (isBefore(dPreviewDate, dWeekInLoop)) return classes.oneDay;
-  //     return classes.sevenDay;
-  //   }
-
-  //   return testFunction2();
-  // };
-
-  const singleStaticFunction = (f1: any, f2: (arg: string) => string) => (
+  const singleStaticFunction = (f1: Date, f2: (arg: Date) => string) => (
     i: number
   ) => {
     const dWeekInLoop = addWeeks(firstShownWeek, i);
 
     if (isValid(dSecondDate)) {
       if (!isSameMonth(dSecondDate, dSelectedDate)) {
-        if (
-          isSameWeek(dWeekInLoop, new Date(f1)) &&
-          isSameMonth(firstShownWeek, new Date(f1))
-        )
+        if (isSameWeek(dWeekInLoop, f1) && isSameMonth(firstShownWeek, f1))
           return classes[f2(f1)];
         if (isSameWeek(dWeekInLoop, firstShownWeek))
-          return f1 === selectedDate
-            ? classes[f2(stringDate(firstShownWeek))]
+          return isSameDay(f1, dSelectedDate)
+            ? classes[f2(firstShownWeek)]
             : classes.oneDay;
         if (isSameWeek(dWeekInLoop, lastShownWeek))
-          return f1 === selectedDate
+          return isSameDay(f1, dSelectedDate)
             ? classes.oneDay
-            : classes[f2(stringDate(lastShownWeek))];
-      } else if (isSameWeek(dWeekInLoop, new Date(f1))) return classes[f2(f1)];
+            : classes[f2(lastShownWeek)];
+      } else if (isSameWeek(dWeekInLoop, f1)) return classes[f2(f1)];
     }
     return classes.oneDay;
   };
 
-  const functionsLeft2 = singleStaticFunction(selectedDate, leftSpace);
-  const functionsRight2 = singleStaticFunction(secondDate, rightSpace);
+  const functionsLeft2 = singleStaticFunction(dSelectedDate, leftSpace);
+  const functionsRight2 = singleStaticFunction(dSecondDate, rightSpace);
 
   const functionsPreviewContainer = (i: number) => {
     const theStartOfWeek = addWeeks(startOfDay(startOfWeek(firstShownWeek)), i);
     const theEndofWeek = addWeeks(startOfDay(endOfWeek(firstShownWeek)), i);
     const dWeekInLoopStart = isBefore(theStartOfWeek, firstShownWeek)
-      ? firstShownWeek
+      ? startOfDay(firstShownWeek)
       : theStartOfWeek;
 
     const dWeekInLoopEnd = isAfter(theEndofWeek, lastShownWeek)
-      ? lastShownWeek
+      ? startOfDay(lastShownWeek)
       : theEndofWeek;
-    let myClasses: string[] = [selectedDate ? classes.selectedBoarder : null];
+    let myClasses: string[] = [
+      isValid(dSelectedDate) ? classes.selectedBoarder : null
+    ];
     myClasses.push(
       isBefore(dPreviewDate, dLastDate) ? classes.indicatorLeft : null
     );
     if (isValid(dLastDate))
       if (isBefore(dPreviewDate, dLastDate)) {
         if (isAfter(dWeekInLoopEnd, dPreviewDate)) {
-          if (!isSameDay(dLastDate, dWeekInLoopStart))
+          if (!isSameDay(dLastDate, dWeekInLoopStart)) {
             myClasses.push(classes.rightBorder);
+          }
         }
         if (isAfter(dWeekInLoopStart, dPreviewDate)) {
           if (!isSameDay(dLastDate, dWeekInLoopStart))
@@ -527,6 +417,8 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
   };
 
   const hidecursor = (i: number) => {
+    // return classes.unhide;
+
     const theStartOfWeek = addWeeks(startOfDay(startOfWeek(firstShownWeek)), i);
     const theEndofWeek = addWeeks(startOfDay(endOfWeek(firstShownWeek)), i);
     const dWeekInLoopStart = isBefore(theStartOfWeek, firstShownWeek)
@@ -540,22 +432,19 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
     if (showPreview) {
       if (!isValid(dSelectedDate) && isSameWeek(dWeekInLoopStart, dPreviewDate))
         return classes.unhide;
-
       if (isBefore(dPreviewDate, dLastDate)) {
         if (
-          (isSameWeek(dWeekInLoopStart, dPreviewDate) ||
-            isAfter(dWeekInLoopStart, dPreviewDate)) &&
-          isBefore(dWeekInLoopStart, dLastDate) &&
-          isAfter(dWeekInLoopEnd, dPreviewDate)
+          (isAfter(dWeekInLoopEnd, dPreviewDate) ||
+            isSameDay(dWeekInLoopEnd, dPreviewDate)) &&
+          isBefore(dWeekInLoopStart, dLastDate)
         )
           return classes.unhide;
       }
       if (isAfter(dPreviewDate, dLastDate)) {
         if (
-          (isSameWeek(dWeekInLoopEnd, dPreviewDate) ||
-            isBefore(dWeekInLoopEnd, dPreviewDate)) &&
-          isAfter(dWeekInLoopEnd, dLastDate) &&
-          isBefore(dWeekInLoopStart, dPreviewDate)
+          (isBefore(dWeekInLoopStart, dPreviewDate) ||
+            isSameDay(dWeekInLoopStart, dPreviewDate)) &&
+          isAfter(dWeekInLoopEnd, dLastDate)
         )
           return classes.unhide;
       }
@@ -567,7 +456,7 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
     <div className={classes.container}>
       {month.map((days, i) => (
         <div className={classes.week} key={`${i}-row`}>
-          {secondDate && (
+          {isValid(dSecondDate) && (
             <span className={[classes.flexContainer, null].join(" ")}>
               <span className={[classes.left, functionsLeft2(i)].join(" ")} />
               <span
@@ -620,6 +509,7 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
                 key={`${day.total}-btn`}
               >
                 <MemoMySpan show={day.formattedDate} key={day.iso} />
+                {day.formattedDate === "16" && <MyBadge amount={2} />}
               </MemoButton>
             </div>
           ))}
@@ -639,7 +529,6 @@ const MySpan: React.FC<{ show: string }> = props => {
       >
         {show}
       </span>
-      <span className={"test1"}> </span>
     </>
   );
 };
@@ -649,5 +538,22 @@ const MemoMySpan = React.memo(MySpan);
 const MemoButton = React.memo(IconButton, (first, second) => {
   return first.className === second.className;
 });
+
+const useStyles = makeStyles((theme: Theme) => ({
+  defaultBadge: {
+    position: "absolute",
+    width: "6px",
+    height: "6px",
+    borderRadius: "60px",
+    bottom: "3px",
+    background: (amount: number) => theme.palette.grey[700]
+  }
+}));
+
+const MyBadge: React.FC<{ amount: number }> = ({ amount }) => {
+  const { defaultBadge }: any = useStyles(amount);
+
+  return <span className={defaultBadge}> </span>;
+};
 
 export default CalArea;

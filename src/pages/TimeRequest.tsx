@@ -3,7 +3,7 @@ import PaperWrapper from "../components/PaperWrapper";
 import NewCalendar from "./Calendar/NewCalendar";
 import moment from "moment";
 import CalendarWrapper from "./Calendar/CalendarWrapper";
-import TimeRequestFns from "./TimeRequestFns";
+import TimeRequestFns from "./TimeRequest/TimeRequestFns";
 
 interface Props {}
 

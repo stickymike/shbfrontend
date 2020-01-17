@@ -1,41 +1,33 @@
 import React, { useState, useMemo } from "react";
-import PaperWrapper from "../components/PaperWrapper";
-import NewCalendar from "./CalendarFns/NewCalendarFns";
-import moment from "moment";
-import CalendarWrapper from "./CalendarFns/CalendarWrapperFns";
+import PaperWrapper from "../../components/PaperWrapper";
+import NewCalendar from "../CalendarFns/NewCalendarFns";
+import CalendarWrapper from "../CalendarFns/CalendarWrapperFns";
+import { addMonths, subMonths } from "date-fns/esm";
 
 interface Props {}
 
 const TimeRequestFns: React.FC<Props> = () => {
-  const [activeMonth, setActiveMonth] = useState(moment().toISOString());
-  const [firstDate, setfirstDate] = useState("");
-  const [secondDate, setSecondDate] = useState("");
+  const [activeMonth, setActiveMonth] = useState(new Date());
+  const [firstDate, setfirstDate] = useState(new Date(""));
+  const [secondDate, setSecondDate] = useState(new Date(""));
 
-  const changeFirst = (a: string) => {
+  const changeFirst = (a: Date) => {
     setfirstDate(a);
   };
 
-  const changeSecond = (a: string) => {
+  const changeSecond = (a: Date) => {
     setSecondDate(a);
   };
 
   const nextMonth = useMemo(
     () => () => {
-      setActiveMonth(month =>
-        moment(month)
-          .add(1, "month")
-          .toISOString()
-      );
+      setActiveMonth(date => addMonths(date, 1));
     },
     [setActiveMonth]
   );
   const prevMonth = useMemo(
     () => () => {
-      setActiveMonth(month =>
-        moment(month)
-          .subtract(1, "month")
-          .toISOString()
-      );
+      setActiveMonth(month => subMonths(month, 1));
     },
     [setActiveMonth]
   );
@@ -55,8 +47,8 @@ const TimeRequestFns: React.FC<Props> = () => {
   };
 
   return (
-    <div style={{ marginTop: "-300px" }}>
-      <PaperWrapper size={8} title="Test">
+    <div>
+      <PaperWrapper size={8} title="Time Request">
         <CalendarWrapper
           {...wrapperProps}
           style={{ display: "flex", justifyContent: "center" }}
@@ -65,9 +57,7 @@ const TimeRequestFns: React.FC<Props> = () => {
             <MemoNewCaledar {...Props} nextMonth={undefined} />
             <MemoNewCaledar
               {...Props}
-              activeMonth={moment(activeMonth)
-                .add(1, "month")
-                .toISOString()}
+              activeMonth={addMonths(activeMonth, 1)}
               prevMonth={undefined}
             />
           </div>
