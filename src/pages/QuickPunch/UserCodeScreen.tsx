@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Formik, Form, FormikActions, Field, FormikProps } from "formik";
+import { Formik, Form, Field, FormikProps } from "formik";
+import { FormikHelpers as FormikActions } from "formik";
 import { useMutation } from "react-apollo";
 
 import Button from "@material-ui/core/Button";

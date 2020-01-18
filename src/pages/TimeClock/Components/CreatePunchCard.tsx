@@ -1,5 +1,11 @@
 import React from "react";
-import { Formik, FormikActions, Form, Field, FormikProps } from "formik";
+import {
+  Formik,
+  FormikHelpers as FormikActions,
+  Form,
+  Field,
+  FormikProps
+} from "formik";
 import { useMutation, useQuery } from "react-apollo";
 
 import Grid from "@material-ui/core/Grid";
@@ -62,7 +68,7 @@ const CreatePunchCard: React.FC<IProps> = props => {
   const findUser = (users: any, id: string) =>
     users.find((user: any) => user.id === id);
 
-  const formSubmit = async (
+  const formSubmit: any = async (
     {
       punchDateIn,
       punchHoursIn,
