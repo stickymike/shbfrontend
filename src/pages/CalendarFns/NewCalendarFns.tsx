@@ -14,32 +14,93 @@ import {
   addDays,
   format,
   formatISO,
-  isSameMonth
+  isSameMonth,
+  isSameDay
 } from "date-fns";
+import { useCalendarCtx } from "./CalendarWrapperFns";
+import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
+import { isAfter, startOfDay, addHours } from "date-fns/esm";
 
 const useStyles = makeStyles((theme: Theme) => ({
   calendarContainer: {
-    // overflow: "hidden",
     position: "relative",
-    width: "280px",
-    margin: "0 8px"
-  }
+    width: "280px"
+  },
+  spacerLines: { width: "8px", zIndex: 1 }
 }));
 
 interface IProps {
   activeMonth: Date;
-
   nextMonth?: () => void;
   prevMonth?: () => void;
+  timeRequests?: GetTimeRequestsIDandDates_timeRequests[];
 }
+
+const dotFunction = (
+  testDate: Date,
+  timeRequests: GetTimeRequestsIDandDates_timeRequests[]
+) => {
+  let color = "none";
+  timeRequests.forEach(timeRequest => {
+    if (
+      isSameDay(testDate, new Date(timeRequest.startTime)) ||
+      isSameDay(testDate, new Date(timeRequest.endTime))
+    ) {
+      if (timeRequest.isAllDay) color = "allDay";
+      else if (
+        isBefore(
+          new Date(timeRequest.endTime),
+          addHours(startOfDay(new Date(timeRequest.endTime)), 12)
+        )
+      )
+        color = "pm";
+      else color = "am";
+      // boolean = true;
+    }
+    if (
+      isBefore(testDate, new Date(timeRequest.endTime)) &&
+      isAfter(testDate, new Date(timeRequest.startTime))
+    ) {
+      if (timeRequest.isAllDay) color = "allDay";
+      else if (
+        isBefore(
+          new Date(timeRequest.endTime),
+          addHours(startOfDay(new Date(timeRequest.endTime)), 12)
+        )
+      )
+        color = "pm";
+      else color = "am";
+    }
+  });
+  return color;
+};
 
 const NewCalendar: React.FC<IProps> = ({
   activeMonth: currentMonth,
-
   nextMonth,
-  prevMonth
+  prevMonth,
+  timeRequests
 }) => {
-  const classes = useStyles();
+  const { calendarContainer, spacerLines } = useStyles();
+
+  const createdDots = useMemo(() => {
+    let startDate = startOfWeek(startOfMonth(currentMonth));
+    const endDate = endOfWeek(endOfMonth(currentMonth));
+
+    const createdDots = [];
+    let dots: string[] = [];
+
+    while (isBefore(startDate, endDate)) {
+      for (let i = 0; i < 7; i++) {
+        dots.push(dotFunction(startDate, timeRequests || []));
+        startDate = addDays(startDate, 1);
+      }
+      createdDots.push(dots);
+      dots = [];
+    }
+
+    return createdDots;
+  }, [currentMonth, timeRequests]);
 
   const [createdMonth] = useMemo(() => {
     let startDate = startOfWeek(startOfMonth(currentMonth));
@@ -63,25 +124,48 @@ const NewCalendar: React.FC<IProps> = ({
           total: i + 1 + (createdMonth.length + 1) * 7,
           iso: formatISO(startDate),
           hidden: isSameMonth(startDate, currentMonth)
+          // dot: dotFunction(startDate, timeRequests || [])
         });
+        // dots.push(dotFunction(startDate, timeRequests || []));
         startDate = addDays(startDate, 1);
       }
       createdMonth.push(days);
+      // createdDots.push(dots);
+      // dots = [];
       days = [];
     }
-    return [createdMonth] as const;
-  }, [currentMonth]);
+    console.log(createdDots);
+
+    return [createdMonth, createdDots] as const;
+  }, [currentMonth, timeRequests]);
+
+  const {
+    setState: { setPreview }
+  } = useCalendarCtx();
+
+  const spacerDiv = () => (
+    <div
+      className={spacerLines}
+      onMouseOverCapture={() => {
+        setPreview(false);
+      }}
+    />
+  );
 
   return (
-    <div className={classes.calendarContainer}>
-      <CalHeader
-        currentMonth={currentMonth}
-        prevMonth={prevMonth}
-        nextMonth={nextMonth}
-      />
-      <CalHeaderDays />
-      <CalArea month={createdMonth} />
-    </div>
+    <>
+      {spacerDiv()}
+      <div className={calendarContainer}>
+        <CalHeader
+          currentMonth={currentMonth}
+          prevMonth={prevMonth}
+          nextMonth={nextMonth}
+        />
+        <CalHeaderDays />
+        <CalArea month={createdMonth} createdDots={createdDots} />
+      </div>
+      {spacerDiv()}
+    </>
   );
 };
 

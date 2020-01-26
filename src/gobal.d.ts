@@ -1,1 +1,1 @@
-type MyDateTime = string;
+type MyDateTime = string | Date;

@@ -5,7 +5,12 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/styles/makeStyles";
 import { Theme } from "@material-ui/core/styles";
-import { format } from "date-fns";
+import { differenceInMonths } from "date-fns";
+
+import { DatePicker } from "@material-ui/pickers";
+
+import { useCalendarCtx } from "./CalendarWrapperFns";
+import { addMonths } from "date-fns/esm";
 
 interface CHProps {
   currentMonth: Date;
@@ -23,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   iconButton: {
     zIndex: 1,
     backgroundColor: theme.palette.background.paper
+  },
+  HoverClick: {
+    "&:hover": { cursor: "pointer" }
   }
 }));
 
@@ -31,8 +39,14 @@ const CalHeader: React.FC<CHProps> = ({
   prevMonth,
   nextMonth
 }) => {
-  const dateFormat = "MMMM yyyy";
   const { calendarHeader, iconButton } = useStyles();
+
+  const {
+    state: { activeMonth },
+    setState: { setActiveMonth }
+  } = useCalendarCtx();
+
+  const AddWeeks = differenceInMonths(activeMonth, currentMonth);
 
   return (
     <div>
@@ -45,9 +59,16 @@ const CalHeader: React.FC<CHProps> = ({
           <KeyboardArrowLeftIcon />
         </IconButton>
         <div>
-          <Typography variant="body1">
-            {format(currentMonth, dateFormat)}
-          </Typography>
+          <DatePicker
+            openTo="month"
+            views={["year", "month"]}
+            value={currentMonth}
+            onChange={(date: any) =>
+              setActiveMonth(addMonths(date.toDate(), AddWeeks))
+            }
+            TextFieldComponent={HeaderType}
+            showTodayButton={true}
+          />
         </div>
 
         <IconButton
@@ -59,6 +80,15 @@ const CalHeader: React.FC<CHProps> = ({
         </IconButton>
       </div>
     </div>
+  );
+};
+
+const HeaderType: React.FC<any> = ({ value, onClick }) => {
+  const { HoverClick } = useStyles();
+  return (
+    <Typography className={HoverClick} onClick={onClick} variant="body1">
+      {value}
+    </Typography>
   );
 };
 

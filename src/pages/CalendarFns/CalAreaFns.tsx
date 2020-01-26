@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-import { makeStyles, IconButton, Theme, Badge, Color } from "@material-ui/core";
+import { makeStyles, IconButton, Theme } from "@material-ui/core";
 
 import { useCalendarCtx } from "./CalendarWrapperFns";
 import {
@@ -9,7 +9,6 @@ import {
   isBefore,
   isValid,
   isAfter,
-  isEqual,
   startOfWeek,
   isSameWeek,
   addWeeks,
@@ -19,7 +18,6 @@ import {
   endOfWeek,
   startOfDay
 } from "date-fns/esm";
-import { relative } from "path";
 
 const useMoreStyles = makeStyles((theme: Theme) => ({
   day: {
@@ -37,7 +35,6 @@ const useMoreStyles = makeStyles((theme: Theme) => ({
     justifyContent: "center"
   },
   container: {
-    minHeight: 36 * 6,
     marginTop: theme.spacing(1.5)
   },
   hidden: {
@@ -143,6 +140,9 @@ const useMoreStyles = makeStyles((theme: Theme) => ({
   },
   eightDay: {
     width: "322px"
+  },
+  pointerEffects: {
+    pointerEvents: "auto"
   }
 }));
 
@@ -153,9 +153,10 @@ interface CDProps {
     iso: string;
     hidden: boolean;
   }[][];
+  createdDots: string[][];
 }
 
-const CalArea: React.FC<CDProps> = ({ month }) => {
+const CalArea: React.FC<CDProps> = ({ month, createdDots }) => {
   const leftSpace = (date: Date) => {
     const dayofWeek = getDay(new Date(date));
     switch (dayofWeek) {
@@ -204,27 +205,36 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
       firstDate: dSelectedDate,
       secondDate: dSecondDate,
       previewDate: dPreviewDate,
-      preview: showPreview
+      preview: showPreview,
+      dLastDate
     },
-    setState: { changeSecond, changeFirst, setPreviewDate }
+    setState: {
+      changeSecond,
+      changeFirst,
+      setPreviewDate,
+
+      setPreview
+    }
   } = useCalendarCtx();
 
-  const [dLastDate, setlastDate] = useState(new Date(""));
-
   const classes: any = useMoreStyles();
+
+  // console.table({
+  //   dSelectedDate,
+  //   dSecondDate,
+  //   dPreviewDate,
+  //   dLastDate,
+  //   showPreview
+  // });
 
   const firstShownWeek = startOfMonth(new Date(month[0][6].iso));
   const lastShownWeek = endOfMonth(firstShownWeek);
 
   const DateHover = (event: any) => {
     const hoverDate = event.currentTarget.getAttribute("data-day2") || "";
-    const dHoverDate = new Date(hoverDate);
-    if (
-      isSameDay(dHoverDate, dSelectedDate) ||
-      isSameDay(dHoverDate, dSecondDate)
-    )
-      setlastDate(dHoverDate);
-    setPreviewDate(dHoverDate);
+    setPreview(true);
+    setPreviewDate(new Date(hoverDate));
+    // event.persist();
   };
 
   const wrappedOnCLick = (event: any) => {
@@ -262,21 +272,20 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
     }
   };
 
-  useEffect(() => {
-    if (!isValid(dSecondDate)) setlastDate(dSelectedDate);
-    if (
-      isValid(dLastDate) &&
-      (isBefore(dPreviewDate, dSelectedDate) ||
-        isEqual(dPreviewDate, dSelectedDate))
-    )
-      setlastDate(dSelectedDate);
-    if (
-      isValid(dLastDate) &&
-      (isAfter(dPreviewDate, dSecondDate) || isEqual(dPreviewDate, dSecondDate))
-    )
-      setlastDate(dSecondDate);
-    return () => {};
-  }, [dLastDate, dPreviewDate, dSecondDate, dSelectedDate]);
+  // useEffect(() => {
+  //   if (!isValid(dSecondDate)) setlastDate(dSelectedDate);
+  //   if (
+  //     isBefore(dPreviewDate, dSelectedDate) ||
+  //     isEqual(dPreviewDate, dSelectedDate)
+  //   )
+  //     setlastDate(dSelectedDate);
+  //   if (
+  //     isAfter(dPreviewDate, dSecondDate) ||
+  //     isEqual(dPreviewDate, dSecondDate)
+  //   )
+  //     setlastDate(dSecondDate);
+  //   return () => {};
+  // }, [dLastDate, dPreviewDate, dSecondDate, dSelectedDate]);
 
   const createLeftRightPreviewFunctions = (f1: any, f2: any) => (i: number) => {
     const dWeekInLoop = addWeeks(firstShownWeek, i);
@@ -453,42 +462,51 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
   };
 
   return (
-    <div className={classes.container}>
-      {month.map((days, i) => (
-        <div className={classes.week} key={`${i}-row`}>
+    <div
+      className={classes.container}
+      onMouseLeave={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        setPreview(false);
+      }}
+    >
+      {month.map((days, week) => (
+        <div className={classes.week} key={`${week}-row`}>
           {isValid(dSecondDate) && (
             <span className={[classes.flexContainer, null].join(" ")}>
-              <span className={[classes.left, functionsLeft2(i)].join(" ")} />
+              <span
+                className={[classes.left, functionsLeft2(week)].join(" ")}
+              />
               <span
                 className={[
                   classes.newTest,
-                  hideCursor2(i),
+                  hideCursor2(week),
                   classes.newestTest
                 ].join(" ")}
               ></span>
-              <span className={[classes.left, functionsRight2(i)].join(" ")} />
+              <span
+                className={[classes.left, functionsRight2(week)].join(" ")}
+              />
             </span>
           )}
-          <span className={[classes.flexContainer].join(" ")}>
-            <span className={[classes.left, functionsLeft(i)].join(" ")} />
+          <span className={[classes.flexContainer, "mainContainer"].join(" ")}>
+            <span className={[classes.left, functionsLeft(week)].join(" ")} />
             <span
               className={[
                 classes.newTest,
-                ...functionsPreviewContainer(i),
-                hidecursor(i)
+                ...functionsPreviewContainer(week),
+                hidecursor(week)
               ].join(" ")}
             >
               <div
                 className={[
                   classes.other,
-                  isSameWeek(dPreviewDate, addWeeks(firstShownWeek, i)) &&
+                  isSameWeek(dPreviewDate, addWeeks(firstShownWeek, week)) &&
                   isSameMonth(dPreviewDate, firstShownWeek)
                     ? classes.unhide
                     : classes.hide
                 ].join(" ")}
               />
             </span>
-            <span className={[classes.left, functionsRight(i)].join(" ")} />
+            <span className={[classes.left, functionsRight(week)].join(" ")} />
           </span>
           {days.map((day, i) => (
             <div
@@ -497,6 +515,7 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
               onClick={wrappedOnCLick}
               data-day2={day.iso}
               onMouseEnter={DateHover}
+              style={{ position: "relative" }}
             >
               <MemoButton
                 className={[
@@ -509,8 +528,10 @@ const CalArea: React.FC<CDProps> = ({ month }) => {
                 key={`${day.total}-btn`}
               >
                 <MemoMySpan show={day.formattedDate} key={day.iso} />
-                {day.formattedDate === "16" && <MyBadge amount={2} />}
               </MemoButton>
+              {!(createdDots[week][i] === "none") && (
+                <MyBadge amount={createdDots[week][i]} />
+              )}
             </div>
           ))}
         </div>
@@ -544,14 +565,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: "absolute",
     width: "6px",
     height: "6px",
+    left: "17px",
     borderRadius: "60px",
-    bottom: "3px",
-    background: (amount: number) => theme.palette.grey[700]
+    bottom: "5px",
+    zIndex: 10,
+    cursor: "pointer"
+    // background: (color: string) => color
+    // background: theme.palette.primary.main
   }
 }));
 
-const MyBadge: React.FC<{ amount: number }> = ({ amount }) => {
-  const { defaultBadge }: any = useStyles(amount);
+const MyBadge: React.FC<{ amount: string }> = ({ amount }) => {
+  const { defaultBadge }: any = useStyles("black");
 
   return <span className={defaultBadge}> </span>;
 };

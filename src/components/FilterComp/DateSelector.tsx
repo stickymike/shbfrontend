@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
-import { DatePicker, MaterialUiPickersDate } from "@material-ui/pickers";
+import { DatePicker } from "@material-ui/pickers";
 
 import { Theme } from "@material-ui/core";
 import { useCtx } from "./NewFilterHeader";
@@ -32,7 +32,7 @@ const DateSelector: React.FC<IProps> = ({ type }) => {
   const classes = useStyles();
   const { qParams: nParams, setParams: setnParams } = useCtx();
 
-  function dateLabel(date: MaterialUiPickersDate) {
+  function dateLabel(date: any) {
     if (!date) return "No Date Selected";
     return `From: ${date.format("MM/DD")}`;
   }

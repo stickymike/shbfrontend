@@ -35,6 +35,11 @@ export interface IntFilter {
   gte?: number | null;
 }
 
+export interface NullableBooleanFilter {
+  equals?: boolean | null;
+  not?: boolean | null;
+}
+
 export interface NullableStringFilter {
   equals?: string | null;
   not?: string | null;
@@ -82,6 +87,27 @@ export interface StringFilter {
   endsWith?: string | null;
 }
 
+export interface TimeRequestFilter {
+  every?: TimeRequestWhereInput | null;
+  some?: TimeRequestWhereInput | null;
+  none?: TimeRequestWhereInput | null;
+}
+
+export interface TimeRequestWhereInput {
+  id?: StringFilter | null;
+  reason?: StringFilter | null;
+  approved?: NullableBooleanFilter | null;
+  startTime?: DateTimeFilter | null;
+  endTime?: DateTimeFilter | null;
+  isAllDay?: NullableBooleanFilter | null;
+  updatedAt?: DateTimeFilter | null;
+  createdAt?: DateTimeFilter | null;
+  AND?: TimeRequestWhereInput[] | null;
+  OR?: TimeRequestWhereInput[] | null;
+  NOT?: TimeRequestWhereInput[] | null;
+  user?: UserWhereInput | null;
+}
+
 export interface TimeRoleFilter {
   every?: TimeRoleWhereInput | null;
   some?: TimeRoleWhereInput | null;
@@ -125,6 +151,7 @@ export interface UserWhereInput {
   updatedAt?: DateTimeFilter | null;
   timeRoles?: TimeRoleFilter | null;
   punchCards?: PunchCardFilter | null;
+  events?: TimeRequestFilter | null;
   AND?: UserWhereInput[] | null;
   OR?: UserWhereInput[] | null;
   NOT?: UserWhereInput[] | null;

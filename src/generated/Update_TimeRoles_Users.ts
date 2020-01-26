@@ -2,11 +2,26 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { UserWhereUniqueInput } from "./globalTypes";
+import { UserWhereUniqueInput, Permissions } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: Update_TimeRoles_Users
 // ====================================================
+
+export interface Update_TimeRoles_Users_updateTimeRole_users {
+  __typename: "User";
+  id: string;
+  firstName: string;
+  lastName: string;
+  title: string | null;
+  code: number;
+  email: string;
+  updatedAt: MyDateTime;
+  createdAt: MyDateTime;
+  permissions: Permissions[];
+  clockedIn: string;
+  recentTimeRoleId: string;
+}
 
 export interface Update_TimeRoles_Users_updateTimeRole {
   __typename: "TimeRole";
@@ -17,6 +32,7 @@ export interface Update_TimeRoles_Users_updateTimeRole {
   payRate: number;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
+  users: Update_TimeRoles_Users_updateTimeRole_users[];
 }
 
 export interface Update_TimeRoles_Users {
