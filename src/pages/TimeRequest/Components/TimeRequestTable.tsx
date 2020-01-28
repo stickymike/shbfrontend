@@ -1,22 +1,18 @@
 import React from "react";
-
-import TableWrapper from "../../components/Table/TableWrapper";
-import EnhancedTableHead, {
-  headerCell
-} from "../../components/Table/EnhancedTableHead";
-import DerivedTableBody from "../../components/Table/DerivedTableBody";
-import { useUserCtx } from "./NewUserPage";
-import { morphData } from "./UserTableWrapper";
+import TableWrapper from "../../../components/Table/TableWrapper";
+import EnhancedTableHead from "../../../components/Table/EnhancedTableHead";
+import DerivedTableBody from "../../../components/Table/DerivedTableBody";
 
 interface IProps {
-  header: headerCell<morphData>[];
+  // header: headerCell<morphData>[];
+  header: any;
   data: any;
+  changeScreen: (screen: string) => void;
 }
 
-const UserTable: React.FC<IProps> = ({ header, data }) => {
+const TimeRequestTable: React.FC<IProps> = ({ header, data }) => {
   const [order, setOrder] = React.useState<false | "desc" | "asc">("asc");
   const [orderBy, setOrderBy] = React.useState("");
-  const dispatch = useUserCtx();
 
   const handleRequestSort = (event: any, property: any) => {
     const isDesc = orderBy === property && order === "desc";
@@ -31,7 +27,7 @@ const UserTable: React.FC<IProps> = ({ header, data }) => {
     const screen = e.currentTarget.getAttribute("data-value")
       ? (e.currentTarget.getAttribute("data-value") as string).toUpperCase()
       : "EDIT";
-    dispatch({ type: "OPEN", payload: { user, screen } });
+    // dispatch({ type: "OPEN", payload: { user, screen } });
     e.stopPropagation();
   };
 
@@ -54,4 +50,4 @@ const UserTable: React.FC<IProps> = ({ header, data }) => {
   );
 };
 
-export default UserTable;
+export default TimeRequestTable;

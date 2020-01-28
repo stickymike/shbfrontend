@@ -7,10 +7,11 @@ import { headerCell } from "./EnhancedTableHead";
 interface Props<M> {
   order: false | "desc" | "asc";
   orderBy: string;
-  data: any;
+  data: M[];
   header: headerCell<M>[];
   openMenu?: any;
 }
+
 const DerivedTableBody = <M,>({
   order,
   orderBy,
@@ -18,7 +19,7 @@ const DerivedTableBody = <M,>({
   header,
   children,
   openMenu = false
-}: Props<M> & { children?: ReactNode }) => {
+}: React.PropsWithChildren<Props<M>>) => {
   return (
     <TableBody>
       {stableSort(data, getSorting(order, orderBy)).map((row: any) => (

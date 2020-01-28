@@ -9,8 +9,6 @@ import Navigation from "./pages/Navigation";
 
 import { ThemeProvider } from "@material-ui/styles";
 
-import CssBaseline from "@material-ui/core/CssBaseline";
-
 import client from "./config/apollo";
 import theme from "./config/theme";
 import MomentUtils from "@date-io/moment";
@@ -33,6 +31,7 @@ import { NEW_GET_ME } from "./gql/queries/userQuery";
 import NewUserPage from "./pages/User/NewUserPage";
 import TimeRolePage from "./pages/TimeRole/TimeRolePage";
 import TimeRequestFns from "./pages/TimeRequest/TimeRequestFns";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 class App extends Component {
   render() {

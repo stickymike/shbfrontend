@@ -52,10 +52,9 @@ const dotFunction = (
           new Date(timeRequest.endTime),
           addHours(startOfDay(new Date(timeRequest.endTime)), 12)
         )
-      )
+      ) {
         color = "pm";
-      else color = "am";
-      // boolean = true;
+      } else color = "am";
     }
     if (
       isBefore(testDate, new Date(timeRequest.endTime)) &&
@@ -124,20 +123,16 @@ const NewCalendar: React.FC<IProps> = ({
           total: i + 1 + (createdMonth.length + 1) * 7,
           iso: formatISO(startDate),
           hidden: isSameMonth(startDate, currentMonth)
-          // dot: dotFunction(startDate, timeRequests || [])
         });
-        // dots.push(dotFunction(startDate, timeRequests || []));
         startDate = addDays(startDate, 1);
       }
       createdMonth.push(days);
-      // createdDots.push(dots);
-      // dots = [];
+
       days = [];
     }
-    console.log(createdDots);
 
-    return [createdMonth, createdDots] as const;
-  }, [currentMonth, timeRequests]);
+    return [createdMonth] as const;
+  }, [currentMonth]);
 
   const {
     setState: { setPreview }

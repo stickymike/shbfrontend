@@ -9,7 +9,6 @@ interface Props {
   changeFirst: (a: Date) => void;
   changeSecond: (a: Date) => void;
   style?: React.CSSProperties;
-  returnToNow: () => void;
   setActiveMonth: React.Dispatch<React.SetStateAction<Date>>;
 }
 
@@ -28,7 +27,6 @@ const [useCalendarCtx, ContextProvider] = createCtx<{
     setPreviewDate: React.Dispatch<React.SetStateAction<Date>>;
     setPreview: React.Dispatch<React.SetStateAction<boolean>>;
     setlastDate: React.Dispatch<React.SetStateAction<Date>>;
-    returnToNow: () => void;
     setActiveMonth: React.Dispatch<React.SetStateAction<Date>>;
   };
 }>();
@@ -39,7 +37,6 @@ const CalendarWrapper: React.FC<Props> = ({
   secondDate,
   changeFirst,
   changeSecond,
-  returnToNow,
   style,
   setActiveMonth,
   children
@@ -63,7 +60,7 @@ const CalendarWrapper: React.FC<Props> = ({
     setPreviewDate,
     setPreview,
     setlastDate,
-    returnToNow,
+
     setActiveMonth
   };
 

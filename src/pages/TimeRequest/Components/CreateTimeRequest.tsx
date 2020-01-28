@@ -7,14 +7,7 @@ import {
   CreateTimeRequest as CreateTimeRequest2,
   CreateTimeRequestVariables
 } from "../../../generated/CreateTimeRequest";
-import {
-  Button,
-  TextField,
-  Typography,
-  Box,
-  Container
-} from "@material-ui/core";
-import { DatePicker } from "@material-ui/pickers";
+import { TextField, Box } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import {
@@ -23,28 +16,23 @@ import {
   startOfDay,
   differenceInMilliseconds,
   addMilliseconds,
-  endOfDay,
-  formatISO
+  endOfDay
 } from "date-fns/esm";
-import { TimePicker } from "@material-ui/pickers";
-import moment from "moment";
+
 import FormikTimePicker from "../Fields/FormikTimePicker";
 import FormikTextBox from "../Fields/FormikTextBox";
 import { Me_me } from "../../../generated/Me";
-import { sub } from "date-fns";
+import { CREATE_TIMEREQUEST_ID_DATES } from "../../../gql/queries/timeRequestQuery";
 
 interface Props {
   dates: [Date, Date];
   formHandle: any;
   user: Me_me;
+  qInfoTimeRequests: Record<string, any>;
+  changeScreen: (a: string) => void;
 }
 
 const SignupSchema = Yup.object().shape({
-  // userId: Yup.string().required("Needs User"),
-  // name: Yup.string()
-  //   .min(2, "Too Short!")
-  //   .max(50, "Too Long!")
-  //   .required("Required"),
   reason: Yup.string()
     .min(5, "Too Short!")
     .max(500, "Too Long!")
@@ -61,9 +49,20 @@ const initValues = {
   isAllDay: true
 };
 
-const CreateTimeRequest: React.FC<Props> = ({ dates, formHandle, user }) => {
+const CreateTimeRequest: React.FC<Props> = ({
+  dates,
+  formHandle,
+  user,
+  changeScreen,
+  qInfoTimeRequests
+}) => {
   const [submit] = useMutation<CreateTimeRequest2, CreateTimeRequestVariables>(
-    CREATE_TIMEREQUEST
+    CREATE_TIMEREQUEST,
+    {
+      refetchQueries: [
+        { query: CREATE_TIMEREQUEST_ID_DATES, variables: qInfoTimeRequests }
+      ]
+    }
   );
 
   const printDateLate = () => {
@@ -77,7 +76,8 @@ const CreateTimeRequest: React.FC<Props> = ({ dates, formHandle, user }) => {
       initialValues={initValues}
       validationSchema={SignupSchema}
       // validateOnChange={false}
-      onSubmit={(
+
+      onSubmit={async (
         { isAllDay, startTime: formStartTime, endTime: formEndTime, reason },
         helpers
       ) => {
@@ -97,21 +97,7 @@ const CreateTimeRequest: React.FC<Props> = ({ dates, formHandle, user }) => {
             differenceInMilliseconds(formEndTime, startOfDay(formEndTime))
           );
         }
-        // startTime = formatISO(startTime);
-        // endTime = formatISO(endTime);
-
-        // console.log({
-        //   variables: {
-        //     startTime,
-        //     endTime,
-        //     userId: user.id,
-        //     reason,
-        //     isAllDay,
-        //     approved: false
-        //   }
-        // });
-
-        submit({
+        const results = await submit({
           variables: {
             startTime,
             endTime,
@@ -120,13 +106,20 @@ const CreateTimeRequest: React.FC<Props> = ({ dates, formHandle, user }) => {
             isAllDay,
             approved: false
           }
+        }).catch((e: any) => {
+          if (e.graphQLErrors) {
+            e.graphQLErrors.map(({ code, message }: any) => {
+              helpers.setErrors({ reason: message });
+              return helpers.setSubmitting(false);
+            });
+          }
         });
-
-        // console.log(values);
+        helpers.setSubmitting(false);
+        if (results) changeScreen("");
       }}
     >
-      {({ values: { isAllDay }, errors, submitForm }) => {
-        formHandle(submitForm);
+      {({ values: { isAllDay }, isSubmitting, submitForm }) => {
+        formHandle(isSubmitting ? () => {} : submitForm);
         return (
           <Form>
             <Box display="flex">

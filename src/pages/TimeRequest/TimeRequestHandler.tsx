@@ -13,13 +13,15 @@ interface IProps {
   dates: [Date, Date];
   dialogueScreen: string;
   user: Me_me;
+  qInfoTimeRequests: Record<string, any>;
 }
 
 const TimeRequestHandler: React.FC<IProps> = ({
   dates,
   dialogueScreen,
   changeScreen,
-  user
+  user,
+  qInfoTimeRequests
 }) => {
   const [newSubmitForm, formHandle] = useSubmitPassBack();
 
@@ -34,6 +36,8 @@ const TimeRequestHandler: React.FC<IProps> = ({
             dates={dates}
             formHandle={formHandle}
             user={user}
+            changeScreen={changeScreen}
+            qInfoTimeRequests={qInfoTimeRequests}
           />
         );
         // <CreateUser {...actionProps} />

@@ -2,11 +2,28 @@ import React from "react";
 
 import { useQuery } from "react-apollo";
 import { USERS_WHEREQ } from "../../gql/queries/userQuery";
-import UserTable from "./UserTable";
 import { UsersWhereQ_users } from "../../generated/UsersWhereQ";
 import number2Words from "../../helpers/number2Words";
 import MyChip from "../../components/Table/MyChip";
 import { headerCell } from "../../components/Table/EnhancedTableHead";
+import { TableProps } from "../../components/Table/GenericTable";
+import { useUserCtx } from "./NewUserPage";
+
+const morphData = (users: UsersWhereQ_users[]) => {
+  if (users) {
+    return users.map(user => {
+      return {
+        numPermissions: user.permissions.length,
+        numTimeRoles: user.timeRoles.length,
+        name: `${user.firstName} ${user.lastName}`,
+        allPermissions: formatPermissionText(user.permissions),
+        allTimeRoles: formatTimeRoleText(user.timeRoles),
+        ...user
+      };
+    });
+  }
+  return [];
+};
 
 const formatTimeRoleText = (timeRoles: UsersWhereQ_users["timeRoles"]) => {
   switch (timeRoles.length) {
@@ -45,31 +62,6 @@ const formatPermissionText = (perms: UsersWhereQ_users["permissions"]) => {
         .slice(0, -1)}`;
   }
 };
-export interface morphData extends UsersWhereQ_users {
-  numPermissions: string;
-  numTimeRoles: string;
-  name: string;
-  allPermissions: string;
-  allTimeRoles: string;
-}
-
-const morphData = (users: UsersWhereQ_users[]) => {
-  if (users) {
-    return users.map(user => {
-      formatPermissionText(user.permissions);
-
-      return {
-        numPermissions: user.permissions.length,
-        numTimeRoles: user.timeRoles.length,
-        name: `${user.firstName} ${user.lastName}`,
-        allPermissions: formatPermissionText(user.permissions),
-        allTimeRoles: formatTimeRoleText(user.timeRoles),
-        ...user
-      };
-    });
-  }
-  return [];
-};
 
 const header: headerCell<morphData>[] = [
   {
@@ -98,20 +90,45 @@ const header: headerCell<morphData>[] = [
   }
 ];
 
-interface IProps {
-  returnFunction: (arg: any) => JSX.Element | undefined;
+export interface morphData extends UsersWhereQ_users {
+  numPermissions: number;
+  numTimeRoles: number;
+  name: string;
+  allPermissions: string;
+  allTimeRoles: string;
 }
 
-const UserTableWrapper: React.FC<IProps> = ({ returnFunction }) => {
+interface IProps<G> {
+  returnFunction: (arg: any) => JSX.Element | undefined;
+  table: <G>(props: React.PropsWithChildren<TableProps<G>>) => JSX.Element;
+}
+
+type TFC<G> = React.PropsWithChildren<IProps<G>>;
+
+const UserTableWrapper = <G,>({ returnFunction, table: Table }: TFC<G>) => {
   const { data, ...qResults } = useQuery(USERS_WHEREQ, {
     variables: { query: {} },
     notifyOnNetworkStatusChange: true
   });
 
-  let users: UsersWhereQ_users[] = [] as UsersWhereQ_users[];
+  const dispatch = useUserCtx();
+
+  const setScreenwithPayload = (screen: string, payload: morphData) => {
+    dispatch({ type: "OPEN", payload: { payload, screen } });
+  };
+
+  let users: morphData[] = [] as morphData[];
   if (data) users = morphData(data.users);
 
-  return returnFunction(qResults) || <UserTable header={header} data={users} />;
+  return (
+    returnFunction(qResults) || (
+      <Table
+        header={header}
+        data={users}
+        setScreenwithPayload={setScreenwithPayload}
+      />
+    )
+  );
 };
 
 export default UserTableWrapper;

@@ -1,6 +1,8 @@
 import React from "react";
 
-import { makeStyles, IconButton, Theme } from "@material-ui/core";
+import { IconButton, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+import { useTheme } from "@material-ui/styles";
 
 import { useCalendarCtx } from "./CalendarWrapperFns";
 import {
@@ -530,7 +532,13 @@ const CalArea: React.FC<CDProps> = ({ month, createdDots }) => {
                 <MemoMySpan show={day.formattedDate} key={day.iso} />
               </MemoButton>
               {!(createdDots[week][i] === "none") && (
-                <MyBadge amount={createdDots[week][i]} />
+                <MyBadge
+                  amount={createdDots[week][i]}
+                  selected={
+                    isSameDay(new Date(day.iso), dSelectedDate) ||
+                    isSameDay(new Date(day.iso), dSecondDate)
+                  }
+                />
               )}
             </div>
           ))}
@@ -560,7 +568,7 @@ const MemoButton = React.memo(IconButton, (first, second) => {
   return first.className === second.className;
 });
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles2 = makeStyles((theme: Theme) => ({
   defaultBadge: {
     position: "absolute",
     width: "6px",
@@ -570,15 +578,26 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: "5px",
     zIndex: 10,
     cursor: "pointer"
-    // background: (color: string) => color
     // background: theme.palette.primary.main
   }
 }));
 
-const MyBadge: React.FC<{ amount: string }> = ({ amount }) => {
-  const { defaultBadge }: any = useStyles("black");
-
-  return <span className={defaultBadge}> </span>;
+const MyBadge: React.FC<{ amount: string; selected: boolean }> = ({
+  amount,
+  selected
+}) => {
+  const { defaultBadge } = useStyles2();
+  const { calendar, palette } = useTheme();
+  return (
+    <span
+      className={defaultBadge}
+      style={{
+        backgroundColor: selected
+          ? palette.getContrastText(calendar[amount])
+          : calendar[amount]
+      }}
+    />
+  );
 };
 
 export default CalArea;

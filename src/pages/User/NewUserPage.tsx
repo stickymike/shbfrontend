@@ -8,6 +8,7 @@ import NewUserHandler from "./NewUserHandler";
 
 import Button from "@material-ui/core/Button";
 import useUpdatedLoading from "../../helpers/hooks/useUpdatedLoading";
+import GenericTable from "../../components/Table/GenericTable";
 
 const [useUserCtx, ContextProvider] = createUserCtx<any>();
 
@@ -80,9 +81,10 @@ const NewUserPage: React.FC = () => {
       hookActionIcon={loadingElement}
     >
       <ContextProvider value={dispatch}>
-        {/* <TimeReportFilter id={id}> */}
-        <UserTableWrapper returnFunction={returnFunction} />
-        {/* </TimeReportFilter> */}
+        <UserTableWrapper
+          returnFunction={returnFunction}
+          table={GenericTable}
+        />
         <NewUserHandler
           handleClose={handleClose}
           open={open}

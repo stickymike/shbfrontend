@@ -2,25 +2,12 @@ import React, { useState, useMemo } from "react";
 import PaperWrapper from "../../components/PaperWrapper";
 import NewCalendar from "../CalendarFns/NewCalendarFns";
 import CalendarWrapper from "../CalendarFns/CalendarWrapperFns";
-import {
-  addMonths,
-  subMonths,
-  isValid,
-  endOfMonth,
-  startOfMonth
-} from "date-fns/esm";
+import { addMonths, subMonths, isValid } from "date-fns/esm";
 import CalControlsFns from "../CalendarFns/CalControlsFns";
 import Button from "@material-ui/core/Button";
 import TimeRequestHandler from "./TimeRequestHandler";
-import { useQuery } from "react-apollo";
-import { NEW_GET_ME } from "../../gql/queries/userQuery";
-import { Me, Me_me } from "../../generated/Me";
-import {
-  GetTimeRequestsIDandDates,
-  GetTimeRequestsIDandDates_timeRequests
-} from "../../generated/GetTimeRequestsIDandDates";
-import { CREATE_TIMEREQUEST_ID_DATES } from "../../gql/queries/timeRequestQuery";
-import MyLoading from "../../components/MyLoading";
+
+import useTimeRequestData from "./hooks/useTimeRequestData";
 
 interface Props {}
 
@@ -28,27 +15,9 @@ const TimeRequestFns: React.FC<Props> = () => {
   const [activeMonth, setActiveMonth] = useState(new Date());
   const [firstDate, setfirstDate] = useState(new Date(""));
   const [secondDate, setSecondDate] = useState(new Date(""));
-
   const [dialogueScreen, setdialogueScreen] = useState("");
 
-  const { data } = useQuery<Me>(NEW_GET_ME);
-
-  let me = { id: "" } as Me_me;
-  if (data) me = data.me!;
-
-  const { data: timeData, loading } = useQuery<GetTimeRequestsIDandDates>(
-    CREATE_TIMEREQUEST_ID_DATES,
-    {
-      variables: {
-        userId: me.id,
-        startTimeShown: startOfMonth(activeMonth),
-        endTimeShown: endOfMonth(addMonths(activeMonth, 1))
-      }
-    }
-  );
-
-  let timeRequests = [] as GetTimeRequestsIDandDates_timeRequests[];
-  if (timeData) timeRequests = timeData.timeRequests!;
+  const [me, timeRequests, qInfoTimeRequests] = useTimeRequestData(activeMonth);
 
   const changeScreen = (screen: string) => {
     setdialogueScreen(screen);
@@ -75,13 +44,6 @@ const TimeRequestFns: React.FC<Props> = () => {
     [setActiveMonth]
   );
 
-  const returnToNow = useMemo(
-    () => () => {
-      setActiveMonth(month => new Date());
-    },
-    [setActiveMonth]
-  );
-
   const Props = {
     activeMonth,
     nextMonth,
@@ -95,7 +57,7 @@ const TimeRequestFns: React.FC<Props> = () => {
     secondDate,
     changeFirst,
     changeSecond,
-    returnToNow,
+
     setActiveMonth
   };
 
@@ -137,8 +99,8 @@ const TimeRequestFns: React.FC<Props> = () => {
           changeScreen={changeScreen}
           dates={[firstDate, secondDate]}
           user={me}
+          qInfoTimeRequests={qInfoTimeRequests}
         />
-        {/* <CreateTimeRequest /> */}
       </PaperWrapper>
     </div>
   );
