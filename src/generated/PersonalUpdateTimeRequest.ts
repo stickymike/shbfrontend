@@ -3,10 +3,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetTimeRequestsIDandDates
+// GraphQL mutation operation: PersonalUpdateTimeRequest
 // ====================================================
 
-export interface GetTimeRequestsIDandDates_timeRequests {
+export interface PersonalUpdateTimeRequest_updateTimeRequest {
   __typename: "TimeRequest";
   id: string;
   startTime: MyDateTime;
@@ -19,12 +19,17 @@ export interface GetTimeRequestsIDandDates_timeRequests {
   userUpdatedAt: MyDateTime | null;
 }
 
-export interface GetTimeRequestsIDandDates {
-  timeRequests: GetTimeRequestsIDandDates_timeRequests[];
+export interface PersonalUpdateTimeRequest {
+  updateTimeRequest: PersonalUpdateTimeRequest_updateTimeRequest | null;
 }
 
-export interface GetTimeRequestsIDandDatesVariables {
-  userId: string;
-  startTimeShown: MyDateTime;
-  endTimeShown: MyDateTime;
+export interface PersonalUpdateTimeRequestVariables {
+  id: string;
+  startTime: MyDateTime;
+  endTime: MyDateTime;
+  reason: string;
+  isAllDay: boolean;
+  approved: boolean;
+  updatedAt: MyDateTime;
+  userUpdatedAt: MyDateTime;
 }

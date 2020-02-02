@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,7 +10,10 @@ interface Props<M> {
   data: M[];
   header: headerCell<M>[];
   openMenu?: any;
+  messageNoEntries?: string;
 }
+
+const defaultMsg = "No records to display";
 
 const DerivedTableBody = <M,>({
   order,
@@ -18,10 +21,17 @@ const DerivedTableBody = <M,>({
   data,
   header,
   children,
-  openMenu = false
+  openMenu = false,
+  messageNoEntries = defaultMsg
 }: React.PropsWithChildren<Props<M>>) => {
   return (
     <TableBody>
+      {data.length === 0 && (
+        <NoEnteriesRow
+          messageNoEntries={messageNoEntries}
+          colSpan={header.length}
+        />
+      )}
       {stableSort(data, getSorting(order, orderBy)).map((row: any) => (
         <TableRow
           key={row.id}
@@ -77,5 +87,16 @@ function getSorting(order: any, orderBy: any) {
     ? (a: any, b: any) => desc(a, b, orderBy)
     : (a: any, b: any) => -desc(a, b, orderBy);
 }
+
+const NoEnteriesRow: React.FC<{
+  messageNoEntries: string;
+  colSpan: number;
+}> = ({ messageNoEntries, colSpan }) => (
+  <TableRow>
+    <TableCell colSpan={colSpan} style={{ textAlign: "center" }}>
+      {messageNoEntries}
+    </TableCell>
+  </TableRow>
+);
 
 export default DerivedTableBody;

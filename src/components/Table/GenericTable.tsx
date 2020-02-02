@@ -8,12 +8,24 @@ export interface TableProps<G> {
   header: headerCell<G>[];
   data: G[];
   setScreenwithPayload: (arg: string, arg1: G) => void;
+  tableWrapperStyles?: React.CSSProperties;
+  messageNoEntries?: string;
 }
+
+// export interface TableProps2<G> {
+//   // header: headerCell<G>[];
+//   // data: G[];
+//   // setScreenwithPayload: (arg: string, arg1: G) => void;
+//   tableWrapperStyles?: React.CSSProperties;
+//   messageNoEntries?: string;
+// }
 
 const GenericTable = <G,>({
   header,
   data,
-  setScreenwithPayload
+  setScreenwithPayload,
+  tableWrapperStyles,
+  messageNoEntries
 }: React.PropsWithChildren<TableProps<G>>) => {
   const [order, setOrder] = React.useState<false | "desc" | "asc">("asc");
   const [orderBy, setOrderBy] = React.useState("");
@@ -36,7 +48,7 @@ const GenericTable = <G,>({
   };
 
   return (
-    <TableWrapper>
+    <TableWrapper style={tableWrapperStyles}>
       <EnhancedTableHead
         order={order}
         orderBy={orderBy}
@@ -49,6 +61,7 @@ const GenericTable = <G,>({
         data={data}
         header={header}
         openMenu={openMenu}
+        messageNoEntries={messageNoEntries}
       />
     </TableWrapper>
   );

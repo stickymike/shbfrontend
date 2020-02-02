@@ -11,11 +11,12 @@ export interface CreateTimeRequest_createTimeRequest {
   id: string;
   startTime: MyDateTime;
   endTime: MyDateTime;
-  approved: boolean | null;
+  approved: boolean;
   reason: string;
-  isAllDay: boolean | null;
+  isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
+  userUpdatedAt: MyDateTime | null;
 }
 
 export interface CreateTimeRequest {

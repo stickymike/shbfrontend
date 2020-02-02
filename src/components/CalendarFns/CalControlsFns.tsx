@@ -110,7 +110,7 @@ const CalControlsFns: React.FC<Props> = () => {
   };
 
   return (
-    <div style={{ marginTop: "8px", marginBottom: "8px", width: "576px" }}>
+    <>
       <Chip
         icon={<ClearIcon />}
         label="Clear All"
@@ -132,7 +132,7 @@ const CalControlsFns: React.FC<Props> = () => {
         color={buttonState === "all" ? "primary" : undefined}
         {...reoccuringProps}
       />
-    </div>
+    </>
   );
 };
 

@@ -13,6 +13,7 @@ timeRequestFrags.fragments = {
       isAllDay
       updatedAt
       createdAt
+      userUpdatedAt
     }
   `
 };

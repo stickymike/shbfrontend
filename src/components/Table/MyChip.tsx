@@ -2,7 +2,6 @@ import React from "react";
 import makeStyles from "@material-ui/styles/makeStyles";
 import { headerCell } from "./EnhancedTableHead";
 import Chip from "@material-ui/core/Chip";
-import { morphData } from "../../pages/User/UserTableWrapper";
 
 const useStyles = makeStyles(() => ({
   chip: {
@@ -27,25 +26,32 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export interface ICProps<M> {
+export interface ChipProps<M> {
   headerCell: headerCell<M>;
   openFunc: (e: React.MouseEvent<HTMLElement>, rowInfo: M) => void;
   rowInfo: M;
 }
 
-const MyChip: React.FC<ICProps<morphData>> = ({
+// React.FC<ICProps<morphData>> = ({
+//   headerCell,
+//   openFunc,
+//   rowInfo,
+//   ...props
+// }) =>
+
+const MyChip = <M,>({
   headerCell,
   openFunc,
   rowInfo,
   ...props
-}) => {
+}: React.PropsWithChildren<ChipProps<M>>) => {
   const { hover, test, chip } = useStyles();
   return (
     <Chip
       className={[hover, test, chip].join(" ")}
       onClick={(e: any) => openFunc(e, rowInfo)}
       data-value={headerCell.id}
-      label={rowInfo[headerCell.id as keyof morphData]}
+      label={rowInfo[headerCell.id as keyof M]}
       {...props}
     />
   );

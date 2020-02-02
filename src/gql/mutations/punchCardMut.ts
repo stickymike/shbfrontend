@@ -64,6 +64,15 @@ const PUNCHOUT_PUNCHCARD = gql`
   ${punchCard.fragments.allPunchCardFields}
 `;
 
+// const DELETE_TR = gql`
+//   mutation DeleteTimeRequest($id: ID!) {
+//     deleteTimeRequest(where: { id: $id }) {
+//       id
+//       # ...allTimeRequestFields
+//     }
+//   }
+// `;
+
 // const UPDATE_TIMECARD = gql`
 //   mutation Update_TimeCard(
 //     $tid: ID!

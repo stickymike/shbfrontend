@@ -7,6 +7,10 @@ import Button from "@material-ui/core/Button";
 import useSubmitPassBack from "../../helpers/hooks/useSubmitPassBack";
 import CreateTimeRequest from "./Components/CreateTimeRequest";
 import { Me_me } from "../../generated/Me";
+import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
+import DeleteTimeRequest from "./Components/DeleteTimeRequest";
+import usePrevious from "../../helpers/hooks/usePrevious";
+import EditTimeRequest from "./Components/EditTimeRequest";
 
 interface IProps {
   changeScreen: (a: string) => void;
@@ -14,6 +18,7 @@ interface IProps {
   dialogueScreen: string;
   user: Me_me;
   qInfoTimeRequests: Record<string, any>;
+  timeRequest?: GetTimeRequestsIDandDates_timeRequests;
 }
 
 const TimeRequestHandler: React.FC<IProps> = ({
@@ -21,44 +26,37 @@ const TimeRequestHandler: React.FC<IProps> = ({
   dialogueScreen,
   changeScreen,
   user,
+  timeRequest,
   qInfoTimeRequests
 }) => {
   const [newSubmitForm, formHandle] = useSubmitPassBack();
+  const prevScreen = usePrevious(dialogueScreen);
 
-  const handleClose = () => changeScreen("");
+  const newScreen: string = dialogueScreen === "" ? prevScreen : dialogueScreen;
+  const deletescrn = newScreen === "DELETE";
+
+  const handleClose = () => {
+    changeScreen("");
+  };
 
   const content = () => {
-    // const actionProps = { formHandle, handleClose, user };
-    switch (dialogueScreen) {
+    const repeatProps = { changeScreen, formHandle, qInfoTimeRequests };
+    switch (newScreen) {
       default: {
-        return (
-          <CreateTimeRequest
-            dates={dates}
-            formHandle={formHandle}
-            user={user}
-            changeScreen={changeScreen}
-            qInfoTimeRequests={qInfoTimeRequests}
-          />
-        );
-        // <CreateUser {...actionProps} />
+        return <CreateTimeRequest {...repeatProps} dates={dates} user={user} />;
       }
       case "EDIT": {
-        return "Edit";
-        // <UpdateUser {...actionProps} />
+        return (
+          <EditTimeRequest
+            {...repeatProps}
+            dates={dates}
+            user={user}
+            timeRequest={timeRequest!}
+          />
+        );
       }
       case "DELETE": {
-        return "delete me";
-        // <Mutation
-        //   mutation={DELETE_USER}
-        //   variables={{ id: user.id }}
-        //   refetchQueries={[{ query: GET_USERS }]}
-        //   onCompleted={handleClose}
-        // >
-        //   {(fnc: () => void) => {
-        //     formHandle(fnc);
-        //     return <>{`You sure you want to Delete ${user.firstName}?!?`}</>;
-        //   }}
-        // </Mutation>
+        return <DeleteTimeRequest {...repeatProps} id={timeRequest?.id} />;
       }
     }
   };
@@ -71,16 +69,24 @@ const TimeRequestHandler: React.FC<IProps> = ({
     >
       <div style={{ display: "flex", minWidth: "500px" }}>
         <DialogTitle id="form-dialog-title" style={{ paddingBottom: 0 }}>
-          {title(dialogueScreen)}
+          {title(newScreen)}
         </DialogTitle>
       </div>
       <DialogContent>{content()}</DialogContent>
       <DialogActions>
+        {timeRequest?.id && (
+          <Button
+            onClick={() => changeScreen(deletescrn ? "EDIT" : "DELETE")}
+            color={deletescrn ? "primary" : "default"}
+          >
+            {!deletescrn ? "Delete" : "Edit"}
+          </Button>
+        )}
         <Button onClick={handleClose} color="secondary">
           Cancel
         </Button>
         <Button onClick={newSubmitForm} color="primary">
-          {button(dialogueScreen)}
+          {button(newScreen)}
         </Button>
       </DialogActions>
     </Dialog>
@@ -91,6 +97,9 @@ const button = (userScreen: string) => {
   switch (userScreen) {
     default: {
       return "Update";
+    }
+    case "DELETE": {
+      return "Delete";
     }
     case "CREATE": {
       return "Create";

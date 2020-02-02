@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import PaperWrapper from "../../components/PaperWrapper";
-import UserTableWrapper from "./UserTableWrapper";
+import UserTableWrapper from "./Components/UserTableLoader";
 import createUserCtx from "./createUserCtx";
 
 import NewUserHandler from "./NewUserHandler";

@@ -1,5 +1,3 @@
-import { addMonths, endOfMonth, startOfMonth } from "date-fns/esm";
-
 import { useQuery } from "react-apollo";
 import { NEW_GET_ME } from "../../../gql/queries/userQuery";
 import { Me, Me_me } from "../../../generated/Me";
@@ -9,7 +7,7 @@ import {
 } from "../../../generated/GetTimeRequestsIDandDates";
 import { CREATE_TIMEREQUEST_ID_DATES } from "../../../gql/queries/timeRequestQuery";
 
-const useTimeRequestData = (date: Date) => {
+const useTimeRequestData = (firstDate: Date, secondDate: Date) => {
   const { data } = useQuery<Me>(NEW_GET_ME);
 
   let me = { id: "" } as Me_me;
@@ -20,8 +18,8 @@ const useTimeRequestData = (date: Date) => {
   >(CREATE_TIMEREQUEST_ID_DATES, {
     variables: {
       userId: me.id,
-      startTimeShown: startOfMonth(date),
-      endTimeShown: endOfMonth(addMonths(date, 1))
+      startTimeShown: firstDate,
+      endTimeShown: secondDate
     }
   });
 

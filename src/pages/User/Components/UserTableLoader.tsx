@@ -1,13 +1,13 @@
 import React from "react";
 
 import { useQuery } from "react-apollo";
-import { USERS_WHEREQ } from "../../gql/queries/userQuery";
-import { UsersWhereQ_users } from "../../generated/UsersWhereQ";
-import number2Words from "../../helpers/number2Words";
-import MyChip from "../../components/Table/MyChip";
-import { headerCell } from "../../components/Table/EnhancedTableHead";
-import { TableProps } from "../../components/Table/GenericTable";
-import { useUserCtx } from "./NewUserPage";
+import { USERS_WHEREQ } from "../../../gql/queries/userQuery";
+import { UsersWhereQ_users } from "../../../generated/UsersWhereQ";
+import number2Words from "../../../helpers/number2Words";
+import MyChip from "../../../components/Table/MyChip";
+import { headerCell } from "../../../components/Table/EnhancedTableHead";
+import { TableProps } from "../../../components/Table/GenericTable";
+import { useUserCtx } from "../NewUserPage";
 
 const morphData = (users: UsersWhereQ_users[]) => {
   if (users) {
@@ -105,7 +105,7 @@ interface IProps<G> {
 
 type TFC<G> = React.PropsWithChildren<IProps<G>>;
 
-const UserTableWrapper = <G,>({ returnFunction, table: Table }: TFC<G>) => {
+const UserTableLoader = <G,>({ returnFunction, table: Table }: TFC<G>) => {
   const { data, ...qResults } = useQuery(USERS_WHEREQ, {
     variables: { query: {} },
     notifyOnNetworkStatusChange: true
@@ -114,7 +114,7 @@ const UserTableWrapper = <G,>({ returnFunction, table: Table }: TFC<G>) => {
   const dispatch = useUserCtx();
 
   const setScreenwithPayload = (screen: string, payload: morphData) => {
-    dispatch({ type: "OPEN", payload: { payload, screen } });
+    dispatch({ type: "OPEN", payload: { user: payload, screen } });
   };
 
   let users: morphData[] = [] as morphData[];
@@ -131,4 +131,4 @@ const UserTableWrapper = <G,>({ returnFunction, table: Table }: TFC<G>) => {
   );
 };
 
-export default UserTableWrapper;
+export default UserTableLoader;

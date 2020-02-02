@@ -13,6 +13,11 @@ export enum Permissions {
   USER = "USER",
 }
 
+export interface BooleanFilter {
+  equals?: boolean | null;
+  not?: boolean | null;
+}
+
 export interface DateTimeFilter {
   equals?: MyDateTime | null;
   not?: MyDateTime | null;
@@ -35,9 +40,15 @@ export interface IntFilter {
   gte?: number | null;
 }
 
-export interface NullableBooleanFilter {
-  equals?: boolean | null;
-  not?: boolean | null;
+export interface NullableDateTimeFilter {
+  equals?: MyDateTime | null;
+  not?: MyDateTime | null;
+  in?: MyDateTime[] | null;
+  notIn?: MyDateTime[] | null;
+  lt?: MyDateTime | null;
+  lte?: MyDateTime | null;
+  gt?: MyDateTime | null;
+  gte?: MyDateTime | null;
 }
 
 export interface NullableStringFilter {
@@ -96,11 +107,12 @@ export interface TimeRequestFilter {
 export interface TimeRequestWhereInput {
   id?: StringFilter | null;
   reason?: StringFilter | null;
-  approved?: NullableBooleanFilter | null;
+  approved?: BooleanFilter | null;
   startTime?: DateTimeFilter | null;
   endTime?: DateTimeFilter | null;
-  isAllDay?: NullableBooleanFilter | null;
+  isAllDay?: BooleanFilter | null;
   updatedAt?: DateTimeFilter | null;
+  userUpdatedAt?: NullableDateTimeFilter | null;
   createdAt?: DateTimeFilter | null;
   AND?: TimeRequestWhereInput[] | null;
   OR?: TimeRequestWhereInput[] | null;

@@ -3,7 +3,7 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell, { TableCellProps } from "@material-ui/core/TableCell";
-import { ICProps } from "./MyChip";
+import { ChipProps } from "./MyChip";
 
 interface IProps {
   order: false | "desc" | "asc";
@@ -17,7 +17,9 @@ export interface headerCell<M> {
   label: string;
   cellProps?: TableCellProps;
   orderBy?: string;
-  renderComp?: React.FC<ICProps<M>>;
+  renderComp?: <M>(
+    props: React.PropsWithChildren<ChipProps<any>>
+  ) => JSX.Element;
 }
 
 const EnhancedTableHead: React.FC<IProps> = ({

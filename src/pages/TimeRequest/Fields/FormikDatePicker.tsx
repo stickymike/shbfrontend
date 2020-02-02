@@ -1,9 +1,7 @@
 import React from "react";
 import { useField, useFormikContext } from "formik";
-import { TimePicker, DatePickerProps } from "@material-ui/pickers/";
+import { DatePicker, DatePickerProps } from "@material-ui/pickers/";
 import moment from "moment";
-import makeStyles from "@material-ui/styles/makeStyles";
-import { Theme } from "@material-ui/core/styles";
 
 interface Props extends DatePickerProps {
   name: string;
@@ -13,12 +11,12 @@ interface Props extends DatePickerProps {
     correction: (date: Date) => Date;
   }[];
 }
-const useStyles = makeStyles((theme: Theme) => ({
-  timePicker: {
-    width: "100px",
-    marginRight: theme.spacing(2)
-  }
-}));
+// const useStyles = makeStyles((theme: Theme) => ({
+//   timePicker: {
+//     width: "100px",
+//     marginRight: theme.spacing(2)
+//   }
+// }));
 
 interface formikContext {
   id: string;
@@ -32,17 +30,14 @@ interface formikContext {
   isAllDay: boolean;
 }
 
-const FormikTimePicker: React.FC<Omit<Props, "onChange" | "value">> = ({
+const FormikDatePicker: React.FC<Omit<Props, "onChange" | "value">> = ({
   label,
   disabled,
   name,
   tiedValues,
-
   ...props
 }) => {
   const [field, meta, helpers] = useField(name);
-  const { timePicker } = useStyles();
-
   const { values, setFieldValue } = useFormikContext<formikContext>();
 
   const onChange = (date: any) => {
@@ -55,21 +50,20 @@ const FormikTimePicker: React.FC<Omit<Props, "onChange" | "value">> = ({
   };
 
   return (
-    <TimePicker
+    <DatePicker
       label={label}
       {...field}
-      className={timePicker}
+      // className={timePicker}
       value={moment(field.value)}
       onChange={onChange}
       error={!!meta.error}
       helperText={meta.error || " "}
       disabled={disabled}
-      minutesStep={5}
-      // {...props}
+      fullWidth
+      format={"LL"}
+      {...props}
     />
   );
 };
 
-// setValue(addHours(date!.toDate(),1)
-
-export default FormikTimePicker;
+export default FormikDatePicker;

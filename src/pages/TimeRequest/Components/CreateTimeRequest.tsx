@@ -16,7 +16,8 @@ import {
   startOfDay,
   differenceInMilliseconds,
   addMilliseconds,
-  endOfDay
+  endOfDay,
+  addHours
 } from "date-fns/esm";
 
 import FormikTimePicker from "../Fields/FormikTimePicker";
@@ -44,8 +45,8 @@ const SignupSchema = Yup.object().shape({
 
 const initValues = {
   reason: "",
-  startTime: new Date(),
-  endTime: new Date(),
+  startTime: addHours(startOfDay(new Date()), 6),
+  endTime: addHours(startOfDay(new Date()), 8),
   isAllDay: true
 };
 
