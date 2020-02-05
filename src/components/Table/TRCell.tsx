@@ -28,29 +28,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-//Table Layout :Auto
-// element.style {
-//   min-width: 100%;
-//   white-space: nowrap;
-// }
-// .MuiTableCell-alignCenter {
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-//   white-space: nowrap;
-//   text-align: left;
-//   width: 100%;
-//   max-width: 1px;
-// }
-
 const TRCell = <M,>({
   headerCell,
   openFunc,
   rowInfo
 }: React.PropsWithChildren<Props<TRTableData>>) => {
-  const selfEdit = rowInfo.userUpdatedAt === rowInfo.updatedAt;
-  const beenSeen = selfEdit
-    ? rowInfo.userUpdatedAt !== rowInfo.updatedAt
-    : rowInfo.createdAt !== rowInfo.updatedAt;
   const { wrapper, marginRight, marginLeft } = useStyles();
   const similiarProps = {
     fontSize: "small" as "inherit" | "default" | "large" | "small" | undefined,
@@ -58,7 +40,7 @@ const TRCell = <M,>({
   };
 
   const svgComp = () => {
-    if (beenSeen) {
+    if (rowInfo.adminSeen) {
       if (rowInfo.approved)
         return <CheckBoxIcon color="primary" {...similiarProps} />;
       return <IndeterminateCheckBoxIcon color="secondary" {...similiarProps} />;

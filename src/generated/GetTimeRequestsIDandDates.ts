@@ -16,7 +16,7 @@ export interface GetTimeRequestsIDandDates_timeRequests {
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  userUpdatedAt: MyDateTime | null;
+  adminSeen: boolean | null;
 }
 
 export interface GetTimeRequestsIDandDates {

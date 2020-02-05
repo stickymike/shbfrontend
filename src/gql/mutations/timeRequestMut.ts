@@ -35,8 +35,6 @@ const PERSONAL_UPDATE_TIMEREQUEST = gql`
     $reason: String!
     $isAllDay: Boolean!
     $approved: Boolean!
-    $updatedAt: DateTime!
-    $userUpdatedAt: DateTime!
   ) {
     updateTimeRequest(
       data: {
@@ -45,8 +43,6 @@ const PERSONAL_UPDATE_TIMEREQUEST = gql`
         reason: $reason
         isAllDay: $isAllDay
         approved: $approved
-        updatedAt: $updatedAt
-        userUpdatedAt: $userUpdatedAt
       }
       where: { id: $id }
     ) {

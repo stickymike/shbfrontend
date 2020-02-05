@@ -16,5 +16,5 @@ export interface allTimeRequestFields {
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  userUpdatedAt: MyDateTime | null;
+  adminSeen: boolean | null;
 }

@@ -147,9 +147,7 @@ const EditTimeRequest: React.FC<Props> = ({
             id,
             reason,
             isAllDay,
-            approved: false,
-            updatedAt: new Date(),
-            userUpdatedAt: new Date()
+            approved: false
           }
         }).catch((e: any) => {
           if (e.graphQLErrors) {

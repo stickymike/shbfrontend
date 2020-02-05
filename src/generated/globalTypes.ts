@@ -40,15 +40,9 @@ export interface IntFilter {
   gte?: number | null;
 }
 
-export interface NullableDateTimeFilter {
-  equals?: MyDateTime | null;
-  not?: MyDateTime | null;
-  in?: MyDateTime[] | null;
-  notIn?: MyDateTime[] | null;
-  lt?: MyDateTime | null;
-  lte?: MyDateTime | null;
-  gt?: MyDateTime | null;
-  gte?: MyDateTime | null;
+export interface NullableBooleanFilter {
+  equals?: boolean | null;
+  not?: boolean | null;
 }
 
 export interface NullableStringFilter {
@@ -112,8 +106,8 @@ export interface TimeRequestWhereInput {
   endTime?: DateTimeFilter | null;
   isAllDay?: BooleanFilter | null;
   updatedAt?: DateTimeFilter | null;
-  userUpdatedAt?: NullableDateTimeFilter | null;
   createdAt?: DateTimeFilter | null;
+  adminSeen?: NullableBooleanFilter | null;
   AND?: TimeRequestWhereInput[] | null;
   OR?: TimeRequestWhereInput[] | null;
   NOT?: TimeRequestWhereInput[] | null;

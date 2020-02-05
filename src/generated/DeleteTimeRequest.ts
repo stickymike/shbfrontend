@@ -16,7 +16,7 @@ export interface DeleteTimeRequest_deleteTimeRequest {
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  userUpdatedAt: MyDateTime | null;
+  adminSeen: boolean | null;
 }
 
 export interface DeleteTimeRequest {

@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const TimeClock: React.FC<RouterProps> = () => {
   const [cardID, setCardID] = React.useState<string | null>(null);
-  const [screen, setScreen] = React.useState("By Date");
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const classes = useStyles();
@@ -44,16 +43,9 @@ const TimeClock: React.FC<RouterProps> = () => {
 
   return (
     <>
-      <PaperWrapper
-        size={8}
-        title="Timecards"
-        menu
-        menuOptions={["By Users", "By Date"]}
-        menuCurrent={screen}
-        menuChange={setScreen}
-      >
+      <PaperWrapper size={8} title="Timecards">
         <NewTimeCardFilter>
-          <TimeCardViewer screen={screen} editFunc={handleEditTimecard} />
+          <TimeCardViewer editFunc={handleEditTimecard} />
           <TimeClockHandler
             open={openDialog}
             handleClose={handleCloseDialog}

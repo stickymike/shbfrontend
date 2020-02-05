@@ -16,7 +16,7 @@ export interface PersonalUpdateTimeRequest_updateTimeRequest {
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  userUpdatedAt: MyDateTime | null;
+  adminSeen: boolean | null;
 }
 
 export interface PersonalUpdateTimeRequest {
@@ -30,6 +30,4 @@ export interface PersonalUpdateTimeRequestVariables {
   reason: string;
   isAllDay: boolean;
   approved: boolean;
-  updatedAt: MyDateTime;
-  userUpdatedAt: MyDateTime;
 }

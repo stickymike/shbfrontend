@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { makeStyles } from "@material-ui/styles";
 import TextField from "@material-ui/core/TextField";
@@ -10,7 +10,6 @@ import { Query } from "react-apollo";
 
 import { GET_USERS } from "../../gql/queries/userQuery";
 import { Theme } from "@material-ui/core";
-import { useCtx } from "./NewFilterHeader";
 
 const useStyles = makeStyles((theme: Theme) => ({
   smallpadding: {
@@ -32,15 +31,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const ITEM_HEIGHT = 48;
 
-interface IUser {
-  id: string;
-  firstName: string;
+interface Props {
+  userIds: string[];
+  setUsers: (users: string[]) => void;
 }
 
-const UserSelector: React.FC<any> = () => {
-  const { setParams: setQParams } = useCtx();
-  const [userIds, setUserIds] = React.useState<string[]>([]);
-
+const UserSelectorMod: React.FC<Props> = ({ userIds, setUsers }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
   const open = Boolean(anchorEl);
@@ -61,21 +57,20 @@ const UserSelector: React.FC<any> = () => {
     const middlearray = userIds;
     if (userID && userIds.includes(userID)) {
       const newarray = middlearray.filter(id => id !== userID);
-      setUserIds(newarray);
+      setUsers(newarray);
+      // setParams((params: any) => ({ ...params, userIds: newarray }));
     } else if (userID) {
       middlearray.push(userID);
-      setUserIds(middlearray);
+      setUsers(middlearray);
+      // setParams((params: any) => ({ ...params, userIds: middlearray }));
     }
     handleClose();
   }
   function clearIDs() {
-    setUserIds([]);
+    setUsers([]);
+    // setParams((params: any) => ({ ...params, userIds: [] }));
     handleClose();
   }
-
-  useEffect(() => {
-    setQParams((params: any) => ({ ...params, userIds }));
-  }, [setQParams, userIds, userIds.length]);
 
   function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     setAnchorEl(event.currentTarget);
@@ -138,4 +133,4 @@ const UserSelector: React.FC<any> = () => {
   );
 };
 
-export default UserSelector;
+export default UserSelectorMod;

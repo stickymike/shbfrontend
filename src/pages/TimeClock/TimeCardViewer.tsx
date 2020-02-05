@@ -10,7 +10,6 @@ import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 import MyLoading from "../../components/MyLoading";
 
 interface IProps {
-  screen: string;
   editFunc: (arg: string) => void;
 }
 
@@ -28,7 +27,7 @@ const morphData = (punchCards: PunchCardsWhereQ_punchCards[]) => {
   }
 };
 
-const TimeCardViewer: React.FC<IProps> = ({ screen, editFunc }) => {
+const TimeCardViewer: React.FC<IProps> = ({ editFunc }) => {
   const { qParams } = useCtx();
 
   const { data, loading } = useQuery(PUNCHCARDS_WHEREQ, {

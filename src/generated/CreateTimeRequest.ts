@@ -16,7 +16,7 @@ export interface CreateTimeRequest_createTimeRequest {
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  userUpdatedAt: MyDateTime | null;
+  adminSeen: boolean | null;
 }
 
 export interface CreateTimeRequest {

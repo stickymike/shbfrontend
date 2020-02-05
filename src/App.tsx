@@ -7,11 +7,13 @@ import Free from "./pages/Free";
 
 import Navigation from "./pages/Navigation";
 
+// import DateFnsUtils from "@date-io/date-fns";
+import MomentUtils from "@date-io/moment";
+
 import { ThemeProvider } from "@material-ui/styles";
 
 import client from "./config/apollo";
 import theme from "./config/theme";
-import MomentUtils from "@date-io/moment";
 
 import {
   BrowserRouter as Router,
@@ -32,6 +34,7 @@ import NewUserPage from "./pages/User/NewUserPage";
 import TimeRolePage from "./pages/TimeRole/TimeRolePage";
 import TimeRequestFns from "./pages/TimeRequest/TimeRequestFns";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import AdminTR from "./pages/AdminTimeRequests/AdminTR";
 
 class App extends Component {
   render() {
@@ -61,6 +64,12 @@ class App extends Component {
                       exact
                       path="/Admin/TimeCards"
                       component={TimeClock}
+                    />
+
+                    <Route
+                      exact
+                      path="/Admin/TimeRequest"
+                      component={AdminTR}
                     />
 
                     <Route exact path="/login" component={Login} />
