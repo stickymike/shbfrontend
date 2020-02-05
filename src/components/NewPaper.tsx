@@ -21,9 +21,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1
   },
   header: {
-    fontSize: ".85rem",
+    fontSize: "1rem",
     fontWeight: 500,
-    lineHeight: "unset"
+    lineHeight: "36px"
+    // lineHeight: "unset"
   },
   paperStyles: {
     textAlign: "center",
@@ -36,13 +37,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: "10rem auto"
   },
   actionButton: {
-    padding: "7px",
+    padding: "6px",
     marginLeft: theme.spacing(0.5),
     marginRight: theme.spacing(0.5)
   },
   container: {
     display: "flex",
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(2),
     alignItems: "center"
   },
   grow: {
@@ -62,7 +63,7 @@ export interface IPaperProps {
   actionIcons?: {
     icon: (props: SvgIconProps) => JSX.Element;
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    state: boolean;
+    iClass?: string;
   }[];
 }
 
@@ -79,20 +80,21 @@ const NewPaper: React.FC<IPaperProps> = ({
       <Grid item xs={size}>
         <Paper className={classes.paperStyles} elevation={0}>
           <Box className={classes.container}>
-            <Typography variant="overline" className={classes.header}>
+            <Typography variant="body2" className={classes.header}>
               {title}
             </Typography>
             <div className={classes.grow} />
-            {actionIcons.map(({ icon: Icon, onClick, state }, i) => (
+            {actionIcons.map(({ icon: Icon, onClick, iClass }, i) => (
               <IconButton
                 key={`IButton-${i}`}
                 className={[
-                  classes.actionButton
+                  classes.actionButton,
+                  iClass
                   // spinnerLoading ? classes.spin : null
                 ].join(" ")}
                 onClick={onClick}
               >
-                <Icon fontSize="small" />
+                <Icon />
               </IconButton>
             ))}
           </Box>

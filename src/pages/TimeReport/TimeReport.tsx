@@ -1,15 +1,15 @@
 import React from "react";
-import PaperWrapper from "../../components/PaperWrapper";
 import TimeReportFilter from "./TimeReportFilter";
 
 import { useQuery } from "react-apollo";
 import { NEW_GET_ME } from "../../gql/queries/userQuery";
 import MyLoading from "../../components/MyLoading";
 import TableReportWrapper from "./TableReportWrapper";
-import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
+import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
+import NewPaper from "../../components/NewPaper";
 
 const TimeReport: React.FC = () => {
-  const [refresh, setSpinnerLoading, loadingElement] = useLoadingTrigger();
+  const [myReturnFnc, actionIcon] = useRefreshLoader();
 
   const { loading, data } = useQuery(NEW_GET_ME);
 
@@ -19,20 +19,15 @@ const TimeReport: React.FC = () => {
     if (loading) return <MyLoading />;
     return (
       <TimeReportFilter id={id}>
-        <TableReportWrapper refresh={refresh} loading={setSpinnerLoading} />
+        <TableReportWrapper returnFunction={myReturnFnc} />
       </TimeReportFilter>
     );
   };
 
   return (
-    <PaperWrapper
-      size={8}
-      title="Time Report"
-      action={false}
-      hookActionIcon={loadingElement}
-    >
+    <NewPaper size={8} title="Time Report" actionIcons={[actionIcon]}>
       {content()}
-    </PaperWrapper>
+    </NewPaper>
   );
 };
 

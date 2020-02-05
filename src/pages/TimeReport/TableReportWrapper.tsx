@@ -7,7 +7,6 @@ import { useCtx } from "../../components/FilterComp/NewFilterHeader";
 import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
 import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 
-import MyLoading from "../../components/MyLoading";
 import TimeReportTable from "./TimeReportTable";
 
 interface morphData {
@@ -100,37 +99,28 @@ const header = [
 ];
 
 interface IProps {
-  refresh: boolean;
-  loading: any;
+  returnFunction: (arg: any) => JSX.Element | undefined;
 }
 
-const TableReportWrapper: React.FC<IProps> = ({
-  refresh,
-
-  loading
-}) => {
+const TableReportWrapper: React.FC<IProps> = ({ returnFunction }) => {
   const { qParams } = useCtx();
 
-  const { data, refetch, networkStatus } = useQuery(PUNCHCARDS_WHEREQ, {
+  const { data, ...qResults } = useQuery(PUNCHCARDS_WHEREQ, {
     variables: { query: query(qParams) },
     notifyOnNetworkStatusChange: true
   });
-
-  if (refresh) refetch();
-
-  if (networkStatus === 1) return <MyLoading />;
-  if (networkStatus === 4) loading(true);
-  else loading(false);
 
   let timeCards: morphData[] = [];
   if (data) timeCards = morphData(data.punchCards);
 
   return (
-    <TimeReportTable
-      header={header}
-      data={timeCards}
-      totals={totals(timeCards)}
-    />
+    returnFunction(qResults) || (
+      <TimeReportTable
+        header={header}
+        data={timeCards}
+        totals={totals(timeCards)}
+      />
+    )
   );
 };
 

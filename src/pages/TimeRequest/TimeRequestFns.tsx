@@ -23,6 +23,7 @@ import useTimeRequestData from "./hooks/useTimeRequestData";
 import GenericTable from "../../components/Table/GenericTable";
 import TRTableLoader from "./Components/TRTableLoader";
 import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
+import NewPaper from "../../components/NewPaper";
 
 interface Props {}
 
@@ -124,67 +125,65 @@ const TimeRequestFns: React.FC<Props> = () => {
   };
 
   return (
-    <div>
-      <PaperWrapper size={8} title="Time Off Request">
-        <CalendarWrapper
-          {...wrapperProps}
-          style={{ display: "flex", justifyContent: "center" }}
+    <NewPaper size={8} title="Time Off Request">
+      <CalendarWrapper
+        {...wrapperProps}
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap"
+          }}
         >
+          <MemoNewCaledar {...Props} nextMonth={undefined} />
+          <MemoNewCaledar
+            {...Props}
+            activeMonth={addMonths(activeMonth, 1)}
+            prevMonth={undefined}
+          />
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              flexWrap: "wrap"
+              marginTop: "16px",
+              marginBottom: "16px",
+              width: `${280 * 2 + 3 * 8}px`,
+              alignItems: "center",
+              display: "flex"
             }}
           >
-            <MemoNewCaledar {...Props} nextMonth={undefined} />
-            <MemoNewCaledar
-              {...Props}
-              activeMonth={addMonths(activeMonth, 1)}
-              prevMonth={undefined}
-            />
-            <div
-              style={{
-                marginTop: "16px",
-                marginBottom: "16px",
-                width: `${280 * 2 + 3 * 8}px`,
-                alignItems: "center",
-                display: "flex"
-              }}
+            <Button
+              color="primary"
+              variant="outlined"
+              disabled={!isValid(firstDate)}
+              onClick={() => changeScreen("CREATE")}
             >
-              <Button
-                color="primary"
-                variant="outlined"
-                disabled={!isValid(firstDate)}
-                onClick={() => changeScreen("CREATE")}
-              >
-                Create New Request
-              </Button>
-              <div style={{ flexGrow: 1 }} />
-              <CalControlsFns />
-            </div>
+              Create New Request
+            </Button>
+            <div style={{ flexGrow: 1 }} />
+            <CalControlsFns />
           </div>
-        </CalendarWrapper>
+        </div>
+      </CalendarWrapper>
 
-        <TRTableLoader
-          changeScreen={changeScreen}
-          changeTR={setTimeRequest}
-          timeRequests={filterTimeRequest(timeRequests)}
-          table={GenericTable}
-          tableWrapperStyles={{ tableLayout: "auto" }}
-          messageNoEntries="Select Dates to show Requests"
-        />
+      <TRTableLoader
+        changeScreen={changeScreen}
+        changeTR={setTimeRequest}
+        timeRequests={filterTimeRequest(timeRequests)}
+        table={GenericTable}
+        tableWrapperStyles={{ tableLayout: "auto" }}
+        messageNoEntries="Select Dates to show Requests"
+      />
 
-        <TimeRequestHandler
-          dialogueScreen={dialogueScreen}
-          changeScreen={changeScreen}
-          dates={[firstDate, secondDate]}
-          user={me}
-          timeRequest={timeRequest}
-          qInfoTimeRequests={qInfoTimeRequests}
-        />
-      </PaperWrapper>
-    </div>
+      <TimeRequestHandler
+        dialogueScreen={dialogueScreen}
+        changeScreen={changeScreen}
+        dates={[firstDate, secondDate]}
+        user={me}
+        timeRequest={timeRequest}
+        qInfoTimeRequests={qInfoTimeRequests}
+      />
+    </NewPaper>
   );
 };
 

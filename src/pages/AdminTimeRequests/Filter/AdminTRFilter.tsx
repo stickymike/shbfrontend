@@ -72,7 +72,7 @@ export interface IQParams {
   actionIcons: {
     icon: (props: SvgIconProps) => JSX.Element;
     onClick: (arg: any) => void;
-    state: boolean;
+    iClass?: string;
   }[];
 }
 
@@ -87,12 +87,12 @@ const AdminTRFilter: React.FC = ({ children }) => {
       onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setAnchorEl(event.currentTarget);
       },
-      state: false
+      iClass: ""
     },
     {
       icon: Refresh,
       onClick: (arg: any) => {},
-      state: false
+      iClass: ""
     }
   ];
   const [qParams, setParams] = useState(initialValues);

@@ -1,7 +1,8 @@
 import React, { useReducer } from "react";
 import PaperWrapper from "../../components/PaperWrapper";
-import UserTableWrapper from "./Components/UserTableLoader";
+import UserTableLoader from "./Components/UserTableLoader";
 import createUserCtx from "./createUserCtx";
+import Refresh from "@material-ui/icons/Refresh";
 
 import NewUserHandler from "./NewUserHandler";
 // import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
@@ -9,6 +10,8 @@ import NewUserHandler from "./NewUserHandler";
 import Button from "@material-ui/core/Button";
 import useUpdatedLoading from "../../helpers/hooks/useUpdatedLoading";
 import GenericTable from "../../components/Table/GenericTable";
+import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
+import NewPaper from "../../components/NewPaper";
 
 const [useUserCtx, ContextProvider] = createUserCtx<any>();
 
@@ -59,7 +62,8 @@ const reducer = (state: AppState, action: Action): AppState => {
 };
 
 const NewUserPage: React.FC = () => {
-  const [returnFunction, loadingElement] = useUpdatedLoading();
+  const [myReturnFnc, actionIcon] = useRefreshLoader();
+
   const [{ open, formData, userScreen }, dispatch] = useReducer(
     reducer,
     initialState
@@ -74,17 +78,9 @@ const NewUserPage: React.FC = () => {
   };
 
   return (
-    <PaperWrapper
-      size={8}
-      title="Users"
-      action={false}
-      hookActionIcon={loadingElement}
-    >
+    <NewPaper size={8} title="Users" actionIcons={[actionIcon]}>
       <ContextProvider value={dispatch}>
-        <UserTableWrapper
-          returnFunction={returnFunction}
-          table={GenericTable}
-        />
+        <UserTableLoader returnFunction={myReturnFnc} table={GenericTable} />
         <NewUserHandler
           handleClose={handleClose}
           open={open}
@@ -109,7 +105,7 @@ const NewUserPage: React.FC = () => {
           </Button>
         </div>
       </ContextProvider>
-    </PaperWrapper>
+    </NewPaper>
   );
 };
 

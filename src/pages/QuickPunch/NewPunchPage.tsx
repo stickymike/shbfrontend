@@ -5,7 +5,6 @@ import moment from "moment";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Refresh from "@material-ui/icons/Refresh";
 
-import PaperWrapper from "../../components/PaperWrapper";
 import { RouterProps } from "react-router";
 import { NEW_GET_ME } from "../../gql/queries/userQuery";
 import { useQuery } from "@apollo/react-hooks";
@@ -13,6 +12,7 @@ import UserCodeScreen from "./UserCodeScreen";
 import { Me, Me_me } from "../../generated/Me";
 import UserPunchScreen from "./UserPunchScreen";
 import MyLoading from "../../components/MyLoading";
+import NewPaper from "../../components/NewPaper";
 
 const NewPunchPage: React.FC<RouterProps> = () => {
   const [user, setUser] = useState<any | string>("");
@@ -83,12 +83,16 @@ const NewPunchPage: React.FC<RouterProps> = () => {
     );
   };
 
+  const actionIcon = {
+    icon: me ? Refresh : ArrowBack,
+    onClick: reset
+    // iClass: outClass
+  };
+
   return (
-    <PaperWrapper
-      title={"Quick Punch"}
-      action={screen === "clockin"}
-      actionIcon={me ? Refresh : ArrowBack}
-      actionFnc={reset}
+    <NewPaper
+      title="Quick Punch"
+      actionIcons={screen === "clockin" ? [actionIcon] : undefined}
     >
       {screenRender()}
 
@@ -102,7 +106,7 @@ const NewPunchPage: React.FC<RouterProps> = () => {
       >
         {buttonText()}
       </Button>
-    </PaperWrapper>
+    </NewPaper>
   );
 };
 

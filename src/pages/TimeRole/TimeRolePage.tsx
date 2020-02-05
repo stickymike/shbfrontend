@@ -6,6 +6,8 @@ import createCtx from "../../helpers/createCtx";
 import useUpdatedLoading from "../../helpers/hooks/useUpdatedLoading";
 import TimeRoleTableWrapper from "./TimeRoleTableWrapper";
 import TimeRoleHandler from "./TimeRoleHandler";
+import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
+import NewPaper from "../../components/NewPaper";
 
 const [useTimeRoleCtx, ContextProvider] = createCtx<any>();
 
@@ -56,7 +58,9 @@ const reducer = (state: AppState, action: Action): AppState => {
 };
 
 const TimeRolePage: React.FC = () => {
-  const [returnFunction, loadingElement] = useUpdatedLoading();
+  // const [returnFunction, loadingElement] = useUpdatedLoading();
+
+  const [myReturnFnc, actionIcon] = useRefreshLoader();
 
   const [{ open, formData, userScreen }, dispatch] = useReducer(
     reducer,
@@ -72,23 +76,9 @@ const TimeRolePage: React.FC = () => {
   };
 
   return (
-    <PaperWrapper
-      size={8}
-      title="Time Roles"
-      action={false}
-      hookActionIcon={loadingElement}
-    >
+    <NewPaper size={8} title="Time Roles" actionIcons={[actionIcon]}>
       <ContextProvider value={dispatch}>
-        {/* <TimeReportFilter id={id}> */}
-        <TimeRoleTableWrapper returnFunction={returnFunction} />
-        {/* </TimeReportFilter> */}
-        {/* <NewUserHandler
-          handleClose={handleClose}
-          open={open}
-          user={formData}
-          userScreen={userScreen}
-          changeScreen={changeScreen}
-        /> */}
+        <TimeRoleTableWrapper returnFunction={myReturnFnc} />
         <div
           style={{
             display: "flex",
@@ -113,7 +103,7 @@ const TimeRolePage: React.FC = () => {
           />
         </div>
       </ContextProvider>
-    </PaperWrapper>
+    </NewPaper>
   );
 };
 

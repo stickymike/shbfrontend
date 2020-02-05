@@ -177,9 +177,7 @@ const TimeRoles: React.FC<RouteChildrenProps> = props => {
     <>
       <PaperWrapper
         size={8}
-        menu
         title="Time Roles"
-        menuOptions={["Edit", "Assign"]}
         menuCurrent={screen}
         menuChange={handleChange}
       >

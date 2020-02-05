@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PaperWrapper from "../../components/PaperWrapper";
 
 import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
@@ -18,6 +17,7 @@ import TimeCardViewer from "./TimeCardViewer";
 import CreatePunchCard from "./Components/CreatePunchCard";
 import EditPunchCard from "./Components/EditPunchCard";
 import DeletePunchCard from "./Components/DeletePunchCard";
+import NewPaper from "../../components/NewPaper";
 
 const useStyles = makeStyles((theme: Theme) => ({
   shiftleft: {
@@ -43,7 +43,7 @@ const TimeClock: React.FC<RouterProps> = () => {
 
   return (
     <>
-      <PaperWrapper size={8} title="Timecards">
+      <NewPaper size={8} title="Timecards">
         <NewTimeCardFilter>
           <TimeCardViewer editFunc={handleEditTimecard} />
           <TimeClockHandler
@@ -61,7 +61,7 @@ const TimeClock: React.FC<RouterProps> = () => {
             Create New Timecard
           </Button>
         </div>
-      </PaperWrapper>
+      </NewPaper>
     </>
   );
 };
