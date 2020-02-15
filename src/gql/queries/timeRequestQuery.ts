@@ -1,8 +1,20 @@
 import gql from "graphql-tag";
 // import timeRole from "../fragments/timeRoleFrags";
 import timeRequestFrags from "../fragments/timeRequestFrags";
+import user from "../fragments/userFrags";
 
-const CREATE_TIMEREQUEST_ID_DATES = gql`
+// id
+// duration
+// startTime
+// endTime
+// name
+// approved
+// description
+// isAllDay
+// updatedAt
+// createdAt
+
+const GET_TIMEREQUEST_ID_DATES = gql`
   query GetTimeRequestsIDandDates(
     $userId: String!
     $startTimeShown: DateTime!
@@ -16,19 +28,27 @@ const CREATE_TIMEREQUEST_ID_DATES = gql`
       }
     ) {
       ...allTimeRequestFields
+      user {
+        ...allUserFields
+      }
     }
   }
+  ${user.fragments.allUserFields}
+
   ${timeRequestFrags.fragments.allTimeRequestFields}
 `;
 
-// id
-// duration
-// startTime
-// endTime
-// name
-// approved
-// description
-// isAllDay
-// updatedAt
-// createdAt
-export { CREATE_TIMEREQUEST_ID_DATES };
+const Q_GET_TIMEREQUEST = gql`
+  query QGetTimeRequests($where: TimeRequestWhereInput!) {
+    timeRequests(where: $where) {
+      ...allTimeRequestFields
+      user {
+        ...allUserFields
+      }
+    }
+  }
+  ${user.fragments.allUserFields}
+  ${timeRequestFrags.fragments.allTimeRequestFields}
+`;
+
+export { GET_TIMEREQUEST_ID_DATES, Q_GET_TIMEREQUEST };

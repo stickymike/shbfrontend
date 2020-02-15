@@ -11,12 +11,11 @@ export interface CreateTimeRequest_createTimeRequest {
   id: string;
   startTime: MyDateTime;
   endTime: MyDateTime;
-  approved: boolean;
+  approved: boolean | null;
   reason: string;
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  adminSeen: boolean | null;
 }
 
 export interface CreateTimeRequest {
@@ -29,5 +28,5 @@ export interface CreateTimeRequestVariables {
   endTime: MyDateTime;
   reason: string;
   isAllDay: boolean;
-  approved: boolean;
+  approved?: boolean | null;
 }

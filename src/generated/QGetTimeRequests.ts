@@ -2,13 +2,13 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Permissions } from "./globalTypes";
+import { TimeRequestWhereInput, Permissions } from "./globalTypes";
 
 // ====================================================
-// GraphQL query operation: GetTimeRequestsIDandDates
+// GraphQL query operation: QGetTimeRequests
 // ====================================================
 
-export interface GetTimeRequestsIDandDates_timeRequests_user {
+export interface QGetTimeRequests_timeRequests_user {
   __typename: "User";
   id: string;
   firstName: string;
@@ -23,7 +23,7 @@ export interface GetTimeRequestsIDandDates_timeRequests_user {
   recentTimeRoleId: string;
 }
 
-export interface GetTimeRequestsIDandDates_timeRequests {
+export interface QGetTimeRequests_timeRequests {
   __typename: "TimeRequest";
   id: string;
   startTime: MyDateTime;
@@ -33,15 +33,13 @@ export interface GetTimeRequestsIDandDates_timeRequests {
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  user: GetTimeRequestsIDandDates_timeRequests_user;
+  user: QGetTimeRequests_timeRequests_user;
 }
 
-export interface GetTimeRequestsIDandDates {
-  timeRequests: GetTimeRequestsIDandDates_timeRequests[];
+export interface QGetTimeRequests {
+  timeRequests: QGetTimeRequests_timeRequests[];
 }
 
-export interface GetTimeRequestsIDandDatesVariables {
-  userId: string;
-  startTimeShown: MyDateTime;
-  endTimeShown: MyDateTime;
+export interface QGetTimeRequestsVariables {
+  where: TimeRequestWhereInput;
 }

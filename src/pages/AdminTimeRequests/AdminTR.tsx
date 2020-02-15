@@ -1,21 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import AdminTRFilter from "./Filter/AdminTRFilter";
 
 import NewPaper from "../../components/NewPaper";
 import TRPaperWrapper from "./Filter/TRPaperWrapper";
-import { Typography } from "@material-ui/core";
-import Test from "./Filter/Test";
-import { useTRFilterCtx } from "./Filter/AdminTRFilter";
+import TRFDWrapper from "./Filter/TRFDWrapper";
+import FilterDisplayer from "../../components/FilterComp/FilterDisplayer";
+import AdminTRTableLoader from "./Components/AdminTRTableLoader";
+import GenericTable from "../../components/Table/GenericTable";
+import { QGetTimeRequests_timeRequests } from "../../generated/QGetTimeRequests";
+import AdminTRHandler from "./AdminTRHandler";
+import Button from "@material-ui/core/Button";
 
-interface Props {}
+const AdminTR: React.FC = () => {
+  const [dialogueScreen, setdialogueScreen] = useState("");
+  const [timeRequest, setTimeRequest] = useState<
+    QGetTimeRequests_timeRequests | undefined
+  >(undefined);
 
-const AdminTR: React.FC<Props> = () => {
   return (
     <AdminTRFilter>
       <TRPaperWrapper as={NewPaper} size={8} title="Time Requests">
-        <Typography>How Are you</Typography>
-        <Test ctx={useTRFilterCtx} />
+        <TRFDWrapper
+          as={FilterDisplayer}
+          boxProps={{ marginTop: "-8px", marginBottom: "8px" }}
+          chipProps={{ color: "primary" }}
+        />
+        <AdminTRTableLoader
+          table={GenericTable}
+          changeScreen={setdialogueScreen}
+          tableWrapperStyles={{ tableLayout: "auto" }}
+          changeTR={setTimeRequest}
+        />
+        <div
+          style={{
+            display: "flex",
+            marginTop: "16px"
+          }}
+        >
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={e => {
+              setdialogueScreen("CREATE");
+            }}
+            fullWidth
+          >
+            Create New Request
+          </Button>
+        </div>
       </TRPaperWrapper>
+      <AdminTRHandler
+        dialogueScreen={dialogueScreen}
+        changeScreen={setdialogueScreen}
+        timeRequest={timeRequest}
+        admin
+      />
     </AdminTRFilter>
   );
 };

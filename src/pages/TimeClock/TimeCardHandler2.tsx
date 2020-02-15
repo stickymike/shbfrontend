@@ -5,31 +5,29 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import useSubmitPassBack from "../../helpers/hooks/useSubmitPassBack";
-import CreateTimeRequest from "./Components/CreateTimeRequest";
+// import CreateTimeRequest from "./Components/CreateTimeRequest";
 import { Me_me } from "../../generated/Me";
 import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
-import DeleteTimeRequest from "./Components/DeleteTimeRequest";
+// import DeleteTimeRequest from "./Components/DeleteTimeRequest";
 import usePrevious from "../../helpers/hooks/usePrevious";
-import EditTimeRequest from "./Components/EditTimeRequest";
+import EditPunchCard2 from "./Components/EditPunchCard2";
+import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
+import DeletePunchCard2 from "./Components/DeletePunchCard2";
+import CreatePunchCard2 from "./Components/CreatePunchCard2";
+import { useTimeCLockCTX, qGenerator } from "./Filter/TimeCardFilter";
+import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
+// import EditTimeRequest from "./Components/EditTimeRequest";
 
 export interface TimeRequestHandlerProps {
   changeScreen: (a: string) => void;
   dialogueScreen: string;
-  refetch?: { query: any; variables: any }[];
-  timeRequest?: GetTimeRequestsIDandDates_timeRequests;
-  dates?: [Date, Date];
-  user?: Me_me;
-  admin?: boolean;
+  punchCard?: PunchCardsWhereQ_punchCards;
 }
 
-const TimeRequestHandler: React.FC<TimeRequestHandlerProps> = ({
-  dates,
+const TimeClockHandler2: React.FC<TimeRequestHandlerProps> = ({
   dialogueScreen,
   changeScreen,
-  user,
-  timeRequest,
-  admin,
-  refetch
+  punchCard
 }) => {
   const [newSubmitForm, formHandle] = useSubmitPassBack();
   const prevScreen = usePrevious(dialogueScreen);
@@ -41,31 +39,26 @@ const TimeRequestHandler: React.FC<TimeRequestHandlerProps> = ({
     changeScreen("");
   };
 
+  const { qParams } = useTimeCLockCTX();
+
+  const refetch = [
+    {
+      query: PUNCHCARDS_WHEREQ,
+      variables: { query: qGenerator(qParams) }
+    }
+  ];
+
   const content = () => {
     const repeatProps = { changeScreen, formHandle, refetch };
     switch (newScreen) {
       default: {
-        return (
-          <CreateTimeRequest
-            {...repeatProps}
-            dates={dates}
-            user={user}
-            admin={admin}
-          />
-        );
+        return <CreatePunchCard2 {...repeatProps} />;
       }
       case "EDIT": {
-        return (
-          <EditTimeRequest
-            {...repeatProps}
-            user={user}
-            timeRequest={timeRequest!}
-            admin={admin}
-          />
-        );
+        return <EditPunchCard2 {...repeatProps} punchCard={punchCard!} />;
       }
       case "DELETE": {
-        return <DeleteTimeRequest {...repeatProps} id={timeRequest?.id} />;
+        return <DeletePunchCard2 {...repeatProps} punchCard={punchCard!} />;
       }
     }
   };
@@ -83,7 +76,7 @@ const TimeRequestHandler: React.FC<TimeRequestHandlerProps> = ({
       </div>
       <DialogContent>{content()}</DialogContent>
       <DialogActions>
-        {timeRequest?.id && (
+        {punchCard?.id && (
           <Button
             onClick={() => changeScreen(deletescrn ? "EDIT" : "DELETE")}
             color={deletescrn ? "primary" : "default"}
@@ -130,4 +123,4 @@ const title = (userScreen: string) => {
   }
 };
 
-export default TimeRequestHandler;
+export default TimeClockHandler2;

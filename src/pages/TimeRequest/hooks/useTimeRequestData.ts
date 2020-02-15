@@ -5,7 +5,7 @@ import {
   GetTimeRequestsIDandDates,
   GetTimeRequestsIDandDates_timeRequests
 } from "../../../generated/GetTimeRequestsIDandDates";
-import { CREATE_TIMEREQUEST_ID_DATES } from "../../../gql/queries/timeRequestQuery";
+import { GET_TIMEREQUEST_ID_DATES } from "../../../gql/queries/timeRequestQuery";
 
 const useTimeRequestData = (firstDate: Date, secondDate: Date) => {
   const { data } = useQuery<Me>(NEW_GET_ME);
@@ -15,7 +15,7 @@ const useTimeRequestData = (firstDate: Date, secondDate: Date) => {
 
   const { data: timeData, variables: timeRequestVariables } = useQuery<
     GetTimeRequestsIDandDates
-  >(CREATE_TIMEREQUEST_ID_DATES, {
+  >(GET_TIMEREQUEST_ID_DATES, {
     variables: {
       userId: me.id,
       startTimeShown: firstDate,

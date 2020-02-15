@@ -11,12 +11,11 @@ export interface DeleteTimeRequest_deleteTimeRequest {
   id: string;
   startTime: MyDateTime;
   endTime: MyDateTime;
-  approved: boolean;
+  approved: boolean | null;
   reason: string;
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  adminSeen: boolean | null;
 }
 
 export interface DeleteTimeRequest {

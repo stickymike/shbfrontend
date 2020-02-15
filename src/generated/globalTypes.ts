@@ -101,13 +101,12 @@ export interface TimeRequestFilter {
 export interface TimeRequestWhereInput {
   id?: StringFilter | null;
   reason?: StringFilter | null;
-  approved?: BooleanFilter | null;
+  approved?: NullableBooleanFilter | null;
   startTime?: DateTimeFilter | null;
   endTime?: DateTimeFilter | null;
   isAllDay?: BooleanFilter | null;
   updatedAt?: DateTimeFilter | null;
   createdAt?: DateTimeFilter | null;
-  adminSeen?: NullableBooleanFilter | null;
   AND?: TimeRequestWhereInput[] | null;
   OR?: TimeRequestWhereInput[] | null;
   NOT?: TimeRequestWhereInput[] | null;

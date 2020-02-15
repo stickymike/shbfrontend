@@ -16,9 +16,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-const FormikCheckBox: React.FC<any> = ({ label, disabled, ...props }) => {
+const FormikCheckBox: React.FC<any> = ({
+  label,
+  disabled,
+  className,
+  ...props
+}) => {
   const [field] = useField(props);
   const { checkBox } = useStyles();
+  const myClasses = className ? className : checkBox;
+
   return (
     <FormControlLabel
       control={
@@ -36,7 +43,7 @@ const FormikCheckBox: React.FC<any> = ({ label, disabled, ...props }) => {
           // onChange={() => setFieldValue("secondDate", firstDate)}
         />
       }
-      className={checkBox}
+      className={myClasses}
       disabled={disabled}
       label={label}
     />

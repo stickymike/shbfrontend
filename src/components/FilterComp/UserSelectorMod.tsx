@@ -5,11 +5,18 @@ import TextField from "@material-ui/core/TextField";
 
 import Menu from "@material-ui/core/Menu";
 
-import MenuItem from "@material-ui/core/MenuItem";
 import { Query } from "react-apollo";
 
 import { GET_USERS } from "../../gql/queries/userQuery";
 import { Theme } from "@material-ui/core";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import ListItemText from "@material-ui/core/ListItemText";
+import Select from "@material-ui/core/Select";
+import Checkbox from "@material-ui/core/Checkbox";
+import Chip from "@material-ui/core/Chip";
 
 const useStyles = makeStyles((theme: Theme) => ({
   smallpadding: {
@@ -26,15 +33,35 @@ const useStyles = makeStyles((theme: Theme) => ({
   selected: {
     backgroundColor: theme.palette.action.selected,
     fontWeight: theme.typography.fontWeightMedium
+  },
+  chips: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  chip: {
+    margin: 2
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    maxWidth: 300
   }
 }));
-
-const ITEM_HEIGHT = 48;
 
 interface Props {
   userIds: string[];
   setUsers: (users: string[]) => void;
 }
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
 
 const UserSelectorMod: React.FC<Props> = ({ userIds, setUsers }) => {
   const classes = useStyles();
@@ -80,10 +107,42 @@ const UserSelectorMod: React.FC<Props> = ({ userIds, setUsers }) => {
     <Query query={GET_USERS}>
       {({ data = {} }: any) => {
         const { users } = data;
+        // console.log(users);
         return (
           <>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
+              <Select
+                multiple
+                value={userIds}
+                // onChange={handleChange}
+                input={<Input />}
+                renderValue={selected => (
+                  <div className={classes.chips}>
+                    {(selected as string[]).map(value => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chip}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}
+              >
+                {users?.map(({ firstName, id }: any) => (
+                  <MenuItem
+                    key={id}
+                    value={firstName}
+                    // style={getStyles(name, personName, theme)}
+                  >
+                    {firstName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
             <TextField
-              variant="outlined"
               placeholder="Users"
               value={filterValue(userIds, "User")}
               className={userIds.length > 0 ? classes.bkColor : undefined}

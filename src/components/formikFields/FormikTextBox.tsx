@@ -14,7 +14,7 @@ const FormikTextBox: React.FC<Props> = ({ name, type, ...props }) => {
       {...field}
       {...props}
       error={!!meta.error && meta.touched}
-      helperText={meta.touched && meta.error}
+      helperText={(meta.touched && meta.error) || " "}
     />
   );
 };

@@ -9,7 +9,7 @@ const CREATE_TIMEREQUEST = gql`
     $endTime: DateTime!
     $reason: String!
     $isAllDay: Boolean!
-    $approved: Boolean!
+    $approved: Boolean
   ) {
     createTimeRequest(
       data: {
@@ -30,11 +30,12 @@ const CREATE_TIMEREQUEST = gql`
 const PERSONAL_UPDATE_TIMEREQUEST = gql`
   mutation PersonalUpdateTimeRequest(
     $id: ID!
+    $userId: ID!
     $startTime: DateTime!
     $endTime: DateTime!
     $reason: String!
     $isAllDay: Boolean!
-    $approved: Boolean!
+    $approved: Boolean
   ) {
     updateTimeRequest(
       data: {
@@ -43,6 +44,7 @@ const PERSONAL_UPDATE_TIMEREQUEST = gql`
         reason: $reason
         isAllDay: $isAllDay
         approved: $approved
+        user: { connect: { id: $userId } }
       }
       where: { id: $id }
     ) {

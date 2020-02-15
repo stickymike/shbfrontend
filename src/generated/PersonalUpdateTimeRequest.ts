@@ -11,12 +11,11 @@ export interface PersonalUpdateTimeRequest_updateTimeRequest {
   id: string;
   startTime: MyDateTime;
   endTime: MyDateTime;
-  approved: boolean;
+  approved: boolean | null;
   reason: string;
   isAllDay: boolean;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  adminSeen: boolean | null;
 }
 
 export interface PersonalUpdateTimeRequest {
@@ -25,9 +24,10 @@ export interface PersonalUpdateTimeRequest {
 
 export interface PersonalUpdateTimeRequestVariables {
   id: string;
+  userId: string;
   startTime: MyDateTime;
   endTime: MyDateTime;
   reason: string;
   isAllDay: boolean;
-  approved: boolean;
+  approved?: boolean | null;
 }

@@ -4,7 +4,7 @@ import { useQuery } from "react-apollo";
 
 import moment, { Moment } from "moment";
 
-import DateComp from "../../components/DateComp";
+import DateComp from "./components/DateComp";
 import Chip from "@material-ui/core/Chip";
 import Typography from "@material-ui/core/Typography";
 

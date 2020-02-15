@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import PaperWrapper from "../../components/PaperWrapper";
 import NewCalendar from "../../components/CalendarFns/NewCalendarFns";
 import CalendarWrapper from "../../components/CalendarFns/CalendarWrapperFns";
 import {
@@ -24,6 +23,7 @@ import GenericTable from "../../components/Table/GenericTable";
 import TRTableLoader from "./Components/TRTableLoader";
 import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
 import NewPaper from "../../components/NewPaper";
+import { GET_TIMEREQUEST_ID_DATES } from "../../gql/queries/timeRequestQuery";
 
 interface Props {}
 
@@ -98,7 +98,6 @@ const TimeRequestFns: React.FC<Props> = () => {
     secondDate,
     changeFirst,
     changeSecond,
-
     setActiveMonth
   };
 
@@ -181,7 +180,9 @@ const TimeRequestFns: React.FC<Props> = () => {
         dates={[firstDate, secondDate]}
         user={me}
         timeRequest={timeRequest}
-        qInfoTimeRequests={qInfoTimeRequests}
+        refetch={[
+          { query: GET_TIMEREQUEST_ID_DATES, variables: qInfoTimeRequests }
+        ]}
       />
     </NewPaper>
   );

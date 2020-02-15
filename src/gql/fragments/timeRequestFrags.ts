@@ -13,7 +13,6 @@ timeRequestFrags.fragments = {
       isAllDay
       updatedAt
       createdAt
-      adminSeen
     }
   `
 };

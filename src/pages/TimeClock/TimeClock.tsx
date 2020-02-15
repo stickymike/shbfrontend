@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 
 import Dialog from "@material-ui/core/Dialog";
@@ -9,7 +8,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 
 import NewTimeCardFilter from "./NewTimeCardFilter";
-import { Theme } from "@material-ui/core";
 import { RouterProps } from "react-router";
 
 import TimeCardViewer from "./TimeCardViewer";
@@ -18,51 +16,73 @@ import CreatePunchCard from "./Components/CreatePunchCard";
 import EditPunchCard from "./Components/EditPunchCard";
 import DeletePunchCard from "./Components/DeletePunchCard";
 import NewPaper from "../../components/NewPaper";
-
-const useStyles = makeStyles((theme: Theme) => ({
-  shiftleft: {
-    display: "flex",
-    marginTop: theme.spacing(2)
-  }
-}));
+import TimeCardFilter from "./Filter/TimeCardFilter";
+import TimeCardPapperWrapper from "./Filter/TimeCardPapperWrapper";
+import TCFilterDisplayW from "./Filter/TCFilterDisplayW";
+import FilterDisplayer from "../../components/FilterComp/FilterDisplayer";
+import TimeCardTableLoader from "./Components/TimeCardTableLoader";
+import GenericTable from "../../components/Table/GenericTable";
+import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
+import TimeClockHandler2 from "./TimeCardHandler2";
 
 const TimeClock: React.FC<RouterProps> = () => {
+  const [dialogueScreen, setdialogueScreen] = useState("");
+  const [punchCard, setPunchCard] = useState<
+    PunchCardsWhereQ_punchCards | undefined
+  >(undefined);
+
   const [cardID, setCardID] = React.useState<string | null>(null);
   const [openDialog, setOpenDialog] = React.useState(false);
 
-  const classes = useStyles();
   function handleCloseDialog() {
     setOpenDialog(false);
     setTimeout(() => setCardID(null), 200);
   }
-
   function handleEditTimecard(card: string) {
     setCardID(card);
     setOpenDialog(true);
   }
 
   return (
-    <>
-      <NewPaper size={8} title="Timecards">
+    <TimeCardFilter>
+      <TimeCardPapperWrapper title="Time Cards" size={8} as={NewPaper}>
         <NewTimeCardFilter>
+          <TCFilterDisplayW
+            as={FilterDisplayer}
+            boxProps={{ marginTop: "-8px", marginBottom: "8px" }}
+            chipProps={{ color: "primary" }}
+          />
           <TimeCardViewer editFunc={handleEditTimecard} />
+          <TimeCardTableLoader
+            table={GenericTable}
+            changeScreen={setdialogueScreen}
+            tableWrapperStyles={{ tableLayout: "auto" }}
+            changePC={setPunchCard}
+          />
           <TimeClockHandler
             open={openDialog}
             handleClose={handleCloseDialog}
             cardID={cardID}
           />
         </NewTimeCardFilter>
-        <div className={classes.shiftleft}>
-          <Button
-            color="primary"
-            variant="outlined"
-            onClick={() => setOpenDialog(true)}
-          >
-            Create New Timecard
-          </Button>
-        </div>
-      </NewPaper>
-    </>
+        <Button
+          color="primary"
+          variant="outlined"
+          onClick={() => setdialogueScreen("CREATE")}
+        >
+          Create New Timecard
+        </Button>
+      </TimeCardPapperWrapper>
+
+      <TimeClockHandler2
+        dialogueScreen={dialogueScreen}
+        changeScreen={setdialogueScreen}
+        punchCard={punchCard}
+        // refetch={[
+        //   { query: GET_TIMEREQUEST_ID_DATES, variables: qInfoTimeRequests }
+        // ]}
+      />
+    </TimeCardFilter>
   );
 };
 
@@ -124,6 +144,7 @@ const TimeClockHandler: React.FC<ITimeClockHandler> = ({
       <CreatePunchCard formHandle={formHandle} handleClose={handleClose} />
     );
   };
+
   const button = () => {
     if (deletescrn) return "Delete";
     if (id) return "Update";

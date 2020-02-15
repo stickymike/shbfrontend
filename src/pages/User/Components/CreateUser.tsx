@@ -56,7 +56,8 @@ const CreateUser: React.FC<IProps> = ({ handleClose, formHandle }) => {
           onSubmit={async (values, actions) => {
             const rtn = await submit({
               variables: {
-                ...values
+                ...values,
+                code: Number(values.code)
               }
             }).catch(e => {
               if (e.graphQLErrors) {

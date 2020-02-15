@@ -3,11 +3,10 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
-import OverlineMenu from "./OverlineMenu";
-import FilterListIcon from "@material-ui/icons/FilterList";
+
 import { makeStyles } from "@material-ui/styles";
 import Box from "@material-ui/core/Box";
-import MyDivider from "./MyDivider";
+
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
 import { Theme } from "@material-ui/core";
 
@@ -38,8 +37,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   actionButton: {
     padding: "6px",
-    marginLeft: theme.spacing(0.5),
-    marginRight: theme.spacing(0.5)
+    marginLeft: theme.spacing(1)
   },
   container: {
     display: "flex",
@@ -86,7 +84,7 @@ const NewPaper: React.FC<IPaperProps> = ({
             <div className={classes.grow} />
             {actionIcons.map(({ icon: Icon, onClick, iClass }, i) => (
               <IconButton
-                key={`IButton-${i}`}
+                key={`button-${i}`}
                 className={[
                   classes.actionButton,
                   iClass

@@ -34,9 +34,9 @@ interface field {
 }
 
 interface IProps {
-  errors: FormikErrors<IFormOpts>;
+  errors: FormikErrors<IFormOpts> | string | undefined;
   options: any;
-  listedItems: [];
+  listedItems: string[];
   label: string;
   field: field;
 }

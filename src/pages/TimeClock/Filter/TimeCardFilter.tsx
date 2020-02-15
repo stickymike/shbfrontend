@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 
+import createFilterCtx from "../../../components/FilterComp/createFilterCtx";
+import { NetworkStatus } from "apollo-client";
+import useRefreshLoader from "../../../helpers/hooks/useRefreshLoader";
+
 import Popover from "@material-ui/core/Popover";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import { useQuery } from "@apollo/react-hooks";
 
 import { SvgIconProps, Typography } from "@material-ui/core";
-
-import createFilterCtx from "../../../components/FilterComp/createFilterCtx";
 
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { Formik, Form } from "formik";
@@ -16,10 +18,6 @@ import { GET_USERS } from "../../../gql/queries/userQuery";
 import { Get_Users, Get_Users_users } from "../../../generated/Get_Users";
 import FormikMSelector from "../../../components/formikFields/FormikMSelect";
 import FormikClearButton from "../../../components/formikFields/FormikClearButton";
-import { QGetTimeRequestsVariables } from "../../../generated/QGetTimeRequests";
-import FormikClearableRadio from "../../../components/formikFields/FormikClearableRadio";
-import { NetworkStatus } from "apollo-client";
-import useRefreshLoader from "../../../helpers/hooks/useRefreshLoader";
 
 // const useStyles = makeStyles((theme: Theme) => ({
 //   filterMenu: {
@@ -27,50 +25,18 @@ import useRefreshLoader from "../../../helpers/hooks/useRefreshLoader";
 //     marginTop: "-.5em",
 //     marginBottom: ".5em"
 //   },
-//   flex: { display: "flex" },
-//   checkBox: {
-//     marginRight: "0px",
-//     marginBottom: theme.spacing(1)
-//   }
+//   flex: { display: "flex" }
 // }));
 
-// radios: {
-//   label: string;
-//   value: string;
-//   color: "primary" | "secondary";
-// }[];
+function qGenerator({ startDate, endDate, userIds }: any): {} {
+  const punchTime_gt = startDate;
+  const punchTime_lt = endDate;
 
-const createRadio = (
-  label: string,
-  value: string,
-  color?: "primary" | "secondary"
-) => ({
-  label,
-  value,
-  color
-});
-
-const radios = [
-  createRadio("Approval Pending", "pending"),
-  createRadio("Approved", "approved"),
-  createRadio("Rejected", "rejected", "secondary")
-];
-
-const whereGenerator = ({
-  userIds,
-  approved,
-  startDate,
-  endDate
-}: initVals): QGetTimeRequestsVariables => {
-  let filter: any = { where: {} };
-  if (startDate) filter.where.startTime = { gt: startDate };
-  if (endDate) filter.where.endTime = { lt: endDate };
-  if (approved === "pending") filter.where.approved = null;
-  if (approved === "approved") filter.where.approved = { equals: true };
-  if (approved === "rejected") filter.where.approved = { equals: false };
-
+  let filter: any = { punchIn: {} };
+  if (punchTime_gt) filter.punchIn.gt = punchTime_gt;
+  if (punchTime_lt) filter.punchIn.lt = punchTime_lt;
   if (userIds.length === 0) {
-    return filter;
+    return { ...filter };
   }
   if (userIds.length === 1)
     return { ...filter, user: { id: { equals: userIds[0] } } };
@@ -81,25 +47,25 @@ const whereGenerator = ({
       return { user: { id: { equals: user } } };
     })
   };
-};
+}
 
-export type initVals = {
+type initVals = {
   userIds: string[];
-  // adminSeen: boolean;
-  approved: string;
   startDate: Date | null;
   endDate: Date | null;
 };
-
-const clearValues: initVals = {
-  userIds: [],
-  startDate: null,
-  approved: "",
-  endDate: null
-  // adminSeen: false
+type qResults = {
+  loading: boolean;
+  networkStatus: NetworkStatus;
+  refetch: any;
+  variables: any;
 };
 
-const [useTRFilterCtx, ContextProvider] = createFilterCtx<IQParams>();
+const clearValues = {
+  userIds: [],
+  startDate: null,
+  endDate: null
+};
 
 export interface IQParams {
   qParams: initVals;
@@ -112,20 +78,14 @@ export interface IQParams {
   myReturnFnc: (qResults: qResults) => JSX.Element | undefined;
 }
 
-type qResults = {
-  loading: boolean;
-  networkStatus: NetworkStatus;
-  refetch: any;
-  variables: any;
-};
+const [useTimeCLockCTX, ContextProvider] = createFilterCtx<IQParams>();
 
-const AdminTRFilter: React.FC = ({ children }) => {
+const TimeCardFilter: React.FC = ({ children }) => {
   const [myReturnFnc, actionIcon] = useRefreshLoader();
 
   const startValues: initVals = {
     userIds: [],
     startDate: null,
-    approved: "pending",
     endDate: null
   };
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -141,6 +101,7 @@ const AdminTRFilter: React.FC = ({ children }) => {
     },
     actionIcon
   ];
+
   const [qParams, setParams] = useState(startValues);
   const { data } = useQuery<Get_Users>(GET_USERS);
 
@@ -153,7 +114,6 @@ const AdminTRFilter: React.FC = ({ children }) => {
         open={!!anchorEl}
         anchorEl={anchorEl}
         onClose={() => {
-          // newSubmitForm();
           setAnchorEl(null);
         }}
         transformOrigin={{
@@ -189,7 +149,6 @@ const AdminTRFilter: React.FC = ({ children }) => {
               </Typography>
               <FilterListIcon style={{ width: "1.25em", height: "1.25em" }} />
             </Box>
-            <FormikClearableRadio radios={radios} name="approved" />
             <Box flexGrow={1} />
             <FormikDatePicker
               clearable
@@ -227,6 +186,6 @@ const AdminTRFilter: React.FC = ({ children }) => {
   );
 };
 
-export default AdminTRFilter;
+export default TimeCardFilter;
 
-export { whereGenerator, useTRFilterCtx };
+export { qGenerator, useTimeCLockCTX };

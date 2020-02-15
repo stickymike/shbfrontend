@@ -4,7 +4,7 @@ import { withStyles } from "@material-ui/styles";
 
 // import TimePickerInput from "../pages/QuickPunch/TimePickerInput";
 import moment from "moment";
-import getWidthOfText from "../helpers/widthoftext";
+import getWidthOfText from "../../../helpers/widthoftext";
 import { Theme } from "@material-ui/core";
 
 const styles = (theme: Theme) => ({

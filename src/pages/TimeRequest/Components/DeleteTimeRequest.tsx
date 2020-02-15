@@ -1,31 +1,24 @@
 import React from "react";
-
 import { useMutation } from "react-apollo";
 import { DELETE_TIMEREQUEST } from "../../../gql/mutations/timeRequestMut";
-import { CREATE_TIMEREQUEST_ID_DATES } from "../../../gql/queries/timeRequestQuery";
 
 interface IProps {
   changeScreen: (a: string) => void;
   formHandle: (arg: () => void) => void;
   id?: string;
-  qInfoTimeRequests: Record<string, any>;
+  refetch?: { query: any; variables: any }[];
 }
 
 const DeleteTimeRequest: React.FC<IProps> = ({
   formHandle,
   id,
   changeScreen,
-  qInfoTimeRequests
+  refetch
 }) => {
-  // const { qParams } = useCtx();
-  // const query = paramFunc(qParams);
-
   const [submit] = useMutation(DELETE_TIMEREQUEST, {
     variables: { id },
     onCompleted: () => changeScreen(""),
-    refetchQueries: [
-      { query: CREATE_TIMEREQUEST_ID_DATES, variables: qInfoTimeRequests }
-    ]
+    refetchQueries: refetch
   });
 
   if (submit) formHandle(submit);

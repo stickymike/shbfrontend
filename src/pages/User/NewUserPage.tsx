@@ -1,14 +1,11 @@
 import React, { useReducer } from "react";
-import PaperWrapper from "../../components/PaperWrapper";
 import UserTableLoader from "./Components/UserTableLoader";
 import createUserCtx from "./createUserCtx";
-import Refresh from "@material-ui/icons/Refresh";
 
 import NewUserHandler from "./NewUserHandler";
 // import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
 
 import Button from "@material-ui/core/Button";
-import useUpdatedLoading from "../../helpers/hooks/useUpdatedLoading";
 import GenericTable from "../../components/Table/GenericTable";
 import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
 import NewPaper from "../../components/NewPaper";

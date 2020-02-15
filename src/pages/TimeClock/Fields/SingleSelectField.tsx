@@ -5,7 +5,7 @@ import { IFormOpts } from "../Components/CreatePunchCard";
 
 interface IProps extends FieldProps<IFormOpts> {
   options: any;
-  listedItems: [];
+  listedItems: string[];
   label: string;
 }
 

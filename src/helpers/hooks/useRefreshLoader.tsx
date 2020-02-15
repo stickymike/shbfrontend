@@ -38,9 +38,10 @@ const useRefreshLoader = () => {
   const outClass = spinnerLoading ? classes.spin : undefined;
 
   const returnFunction = (qResults: qResults) => {
-    if (refresh) qResults.refetch();
+    if (refresh) qResults.refetch(qResults.variables);
     if (qResults.networkStatus === 1) return <MyLoading />;
-    if (qResults.networkStatus === 4) setSpinnerLoading(true);
+    if (qResults.networkStatus === 4 || qResults.networkStatus === 2)
+      setSpinnerLoading(true);
     else setSpinnerLoading(false);
   };
 
@@ -57,6 +58,7 @@ type qResults = {
   loading: boolean;
   networkStatus: NetworkStatus;
   refetch: any;
+  variables: any;
 };
 
 export default useRefreshLoader;

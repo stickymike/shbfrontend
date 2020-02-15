@@ -40,7 +40,7 @@ const TRCell = <M,>({
   };
 
   const svgComp = () => {
-    if (rowInfo.adminSeen) {
+    if (rowInfo.approved !== null) {
       if (rowInfo.approved)
         return <CheckBoxIcon color="primary" {...similiarProps} />;
       return <IndeterminateCheckBoxIcon color="secondary" {...similiarProps} />;

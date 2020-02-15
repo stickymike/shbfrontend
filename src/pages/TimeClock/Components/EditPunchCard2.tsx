@@ -33,11 +33,13 @@ const SignupSchema = Yup.object().shape({
 });
 
 interface IProps {
-  handleClose: () => void;
-  changeScreen?: (a: string) => void;
+  // handleClose: () => void;
+  changeScreen: (a: string) => void;
   formHandle: (arg: () => void) => void;
-  punchCards?: PunchCardsWhereQ_punchCards;
-  id: string;
+  punchCard: PunchCardsWhereQ_punchCards;
+  refetch?: { query: any; variables: any }[];
+
+  // id: string;
 }
 
 export interface IFormOpts {
@@ -49,7 +51,12 @@ export interface IFormOpts {
   timeRoleID: string;
 }
 
-const EditPunchCard: React.FC<IProps> = props => {
+const EditPunchCard2: React.FC<IProps> = ({
+  changeScreen,
+  punchCard,
+  formHandle,
+  refetch
+}) => {
   let createPunchCard: IFormOpts = {
     punchDateIn: null,
     punchHoursIn: null,
@@ -59,15 +66,9 @@ const EditPunchCard: React.FC<IProps> = props => {
     timeRoleID: ""
   };
 
-  const [submit] = useMutation(UPDATE_PUNCHCARD);
-
-  const { data: punchData, loading: punchLoading } = useQuery(
-    PUNCHCARDS_BY_ID,
-    { variables: { id: props.id } }
-  );
-
-  if (punchData) {
-    const { punchCard } = punchData;
+  const [submit] = useMutation(UPDATE_PUNCHCARD, { refetchQueries: refetch });
+  // console.log(punchCard);
+  if (punchCard) {
     createPunchCard = {
       userID: punchCard.user.id,
       timeRoleID: punchCard.timeRole.id,
@@ -113,7 +114,7 @@ const EditPunchCard: React.FC<IProps> = props => {
     actions: FormikActions<IFormOpts>
   ) => {
     const newValues = {
-      id: props.id,
+      id: punchCard.id,
       userId: userID,
       timeRoleId: timeRoleID,
       punchIn: moment(punchDateIn!)
@@ -136,10 +137,10 @@ const EditPunchCard: React.FC<IProps> = props => {
       }
     });
     actions.setSubmitting(false);
-    if (rtn) props.handleClose();
+    if (rtn) changeScreen!("");
   };
 
-  if (loading || punchLoading) return <MyLoading />;
+  if (loading) return <MyLoading />;
 
   return (
     <Formik
@@ -148,7 +149,7 @@ const EditPunchCard: React.FC<IProps> = props => {
       validationSchema={SignupSchema}
     >
       {(payload: FormikProps<IFormOpts>) => {
-        props.formHandle(payload.submitForm);
+        formHandle(payload.submitForm);
         return (
           <Form>
             <Grid container>
@@ -224,4 +225,4 @@ const EditPunchCard: React.FC<IProps> = props => {
   );
 };
 
-export default EditPunchCard;
+export default EditPunchCard2;
