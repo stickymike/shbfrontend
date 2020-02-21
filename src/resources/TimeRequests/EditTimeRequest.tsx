@@ -2,7 +2,7 @@ import React from "react";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { useMutation, useQuery } from "react-apollo";
-import { PERSONAL_UPDATE_TIMEREQUEST } from "../../../gql/mutations/timeRequestMut";
+import { PERSONAL_UPDATE_TIMEREQUEST } from "../../gql/mutations/timeRequestMut";
 
 import { TextField, Box, Grid } from "@material-ui/core";
 import {
@@ -16,20 +16,20 @@ import {
   addHours
 } from "date-fns/esm";
 
-import FormikTimePicker from "../../../components/formikFields/FormikTimePicker";
-import FormikTextBox from "../../../components/formikFields/FormikTextBox";
-import { GetTimeRequestsIDandDates_timeRequests } from "../../../generated/GetTimeRequestsIDandDates";
-import { Me_me } from "../../../generated/Me";
-import FormikDatePicker from "../../../components/formikFields/FormikDatePicker";
-import FormikCheckBox from "../../../components/formikFields/FormikCheckBox";
+import FormikTimePicker from "../../components/formikFields/FormikTimePicker";
+import FormikTextBox from "../../components/formikFields/FormikTextBox";
+import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
+import { Me_me } from "../../generated/Me";
+import FormikDatePicker from "../../components/formikFields/FormikDatePicker";
+import FormikCheckBox from "../../components/formikFields/FormikCheckBox";
 import {
   PersonalUpdateTimeRequest,
   PersonalUpdateTimeRequestVariables
-} from "../../../generated/PersonalUpdateTimeRequest";
-import FormikClearableRadio from "../../../components/formikFields/FormikClearableRadio";
-import { GET_USERS } from "../../../gql/queries/userQuery";
-import FormikSingleSelect from "../../../components/formikFields/FormikSingleSelect";
-import MyLoading from "../../../components/MyLoading";
+} from "../../generated/PersonalUpdateTimeRequest";
+import FormikClearableRadio from "../../components/formikFields/FormikClearableRadio";
+import { GET_USERS } from "../../gql/queries/userQuery";
+import FormikSingleSelect from "../../components/formikFields/FormikSingleSelect";
+import MyLoading from "../../components/MyLoading";
 
 interface Props {
   formHandle: any;

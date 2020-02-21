@@ -1,13 +1,14 @@
 import React from "react";
-import moment from "moment";
 
-import { query } from "./TimeReportFilter";
-import { useQuery } from "react-apollo";
-import { useCtx } from "../../components/FilterComp/NewFilterHeader";
-import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
-import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
-
+import {
+  useTimeReportFilterCtx,
+  qGenerator
+} from "../../../resources/punchcards/PersonalTimeReportFilter/TimeReportFilter";
 import TimeReportTable from "./TimeReportTable";
+import moment from "moment";
+import { PunchCardsWhereQ_punchCards } from "../../../generated/PunchCardsWhereQ";
+import { useQuery } from "react-apollo";
+import { PUNCHCARDS_WHEREQ } from "../../../gql/queries/punchCardQuery";
 
 interface morphData {
   id: string;
@@ -67,46 +68,42 @@ const totals = (data: any) => {
   return totals;
 };
 
-const header = [
-  {
-    id: "date",
-    label: "Date",
-    orderBy: "dateMS"
-  },
-  {
-    id: "punchIn",
-    label: "Clock In",
-    cellProps: { align: "right" },
-    orderBy: "startSort"
-  },
-  {
-    id: "punchOut",
-    label: "Clock Out",
-    cellProps: { align: "right" },
-    orderBy: "endSort"
-  },
-  {
-    id: "timeRole",
-    label: "Role",
-    cellProps: { align: "right" }
-  },
+const TimeReportTableLoader: React.FC = () => {
+  const header = [
+    {
+      id: "date",
+      label: "Date",
+      orderBy: "dateMS"
+    },
+    {
+      id: "punchIn",
+      label: "Clock In",
+      cellProps: { align: "right" },
+      orderBy: "startSort"
+    },
+    {
+      id: "punchOut",
+      label: "Clock Out",
+      cellProps: { align: "right" },
+      orderBy: "endSort"
+    },
+    {
+      id: "timeRole",
+      label: "Role",
+      cellProps: { align: "right" }
+    },
 
-  {
-    id: "hours",
-    label: "Hours",
-    cellProps: { align: "right" }
-  }
-];
+    {
+      id: "hours",
+      label: "Hours",
+      cellProps: { align: "right" }
+    }
+  ];
 
-interface IProps {
-  returnFunction: (arg: any) => JSX.Element | undefined;
-}
-
-const TableReportWrapper: React.FC<IProps> = ({ returnFunction }) => {
-  const { qParams } = useCtx();
+  const { qParams, myReturnFnc } = useTimeReportFilterCtx();
 
   const { data, ...qResults } = useQuery(PUNCHCARDS_WHEREQ, {
-    variables: { query: query(qParams) },
+    variables: { query: qGenerator(qParams) },
     notifyOnNetworkStatusChange: true
   });
 
@@ -114,7 +111,7 @@ const TableReportWrapper: React.FC<IProps> = ({ returnFunction }) => {
   if (data) timeCards = morphData(data.punchCards);
 
   return (
-    returnFunction(qResults) || (
+    myReturnFnc(qResults) || (
       <TimeReportTable
         header={header}
         data={timeCards}
@@ -124,4 +121,4 @@ const TableReportWrapper: React.FC<IProps> = ({ returnFunction }) => {
   );
 };
 
-export default TableReportWrapper;
+export default TimeReportTableLoader;

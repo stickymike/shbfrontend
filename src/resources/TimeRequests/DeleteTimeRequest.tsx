@@ -1,6 +1,6 @@
 import React from "react";
 import { useMutation } from "react-apollo";
-import { DELETE_TIMEREQUEST } from "../../../gql/mutations/timeRequestMut";
+import { DELETE_TIMEREQUEST } from "../../gql/mutations/timeRequestMut";
 
 interface IProps {
   changeScreen: (a: string) => void;

@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import Button from "@material-ui/core/Button";
 import createCtx from "../../helpers/createCtx";
-import TimeRoleTableWrapper from "./TimeRoleTableWrapper";
+import TimeRoleTableWrapper from "./components/TimeRoleTableWrapper";
 import TimeRoleHandler from "./TimeRoleHandler";
 import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
 import NewPaper from "../../components/NewPaper";
@@ -85,6 +85,7 @@ const TimeRolePage: React.FC = () => {
           <Button
             color="primary"
             variant="outlined"
+            fullWidth
             onClick={e => {
               changeScreen("CREATE");
             }}

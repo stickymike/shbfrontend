@@ -1,11 +1,11 @@
 import React from "react";
 
-import TableWrapper from "../../components/Table/TableWrapper";
+import TableWrapper from "../../../components/Table/TableWrapper";
 import EnhancedTableHead, {
   headerCell
-} from "../../components/Table/EnhancedTableHead";
-import DerivedTableBody from "../../components/Table/DerivedTableBody";
-import { useTimeRoleCtx } from "./TimeRolePage";
+} from "../../../components/Table/EnhancedTableHead";
+import DerivedTableBody from "../../../components/Table/DerivedTableBody";
+import { useTimeRoleCtx } from "./../TimeRolePage";
 
 interface IProps {
   header: headerCell<any>[];

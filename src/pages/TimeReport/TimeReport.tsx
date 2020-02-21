@@ -1,33 +1,33 @@
 import React from "react";
-import TimeReportFilter from "./TimeReportFilter";
 
 import { useQuery } from "react-apollo";
 import { NEW_GET_ME } from "../../gql/queries/userQuery";
-import MyLoading from "../../components/MyLoading";
-import TableReportWrapper from "./TableReportWrapper";
-import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
+
 import NewPaper from "../../components/NewPaper";
+import TimeReportFilter2 from "../../resources/punchcards/PersonalTimeReportFilter/TimeReportFilter";
+import FilterDisplayer from "../../components/FilterComp/FilterDisplayer";
+import TimeReportDisplayWrapper from "../../resources/punchcards/PersonalTimeReportFilter/TimeReportDisplayWrapper";
+import TimeReportPaperWrapper from "../../resources/punchcards/PersonalTimeReportFilter/TimeReportPaperWrapper";
+import TimeReportTableLoader from "./Components/TimeReportTableLoader";
 
 const TimeReport: React.FC = () => {
-  const [myReturnFnc, actionIcon] = useRefreshLoader();
-
   const { loading, data } = useQuery(NEW_GET_ME);
 
   const id: string = data && data.me ? data.me.id : "";
 
-  const content = () => {
-    if (loading) return <MyLoading />;
-    return (
-      <TimeReportFilter id={id}>
-        <TableReportWrapper returnFunction={myReturnFnc} />
-      </TimeReportFilter>
-    );
-  };
+  if (loading) return <></>;
 
   return (
-    <NewPaper size={8} title="Time Report" actionIcons={[actionIcon]}>
-      {content()}
-    </NewPaper>
+    <TimeReportFilter2 id={id}>
+      <TimeReportPaperWrapper as={NewPaper} size={8} title="Time Report">
+        <TimeReportDisplayWrapper
+          as={FilterDisplayer}
+          boxProps={{ marginTop: "-8px", marginBottom: "8px" }}
+          chipProps={{ color: "primary" }}
+        />
+        <TimeReportTableLoader />
+      </TimeReportPaperWrapper>
+    </TimeReportFilter2>
   );
 };
 

@@ -93,6 +93,7 @@ const NewUserPage: React.FC = () => {
         >
           <Button
             color="primary"
+            fullWidth
             variant="outlined"
             onClick={e => {
               changeScreen("CREATE");

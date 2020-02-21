@@ -11,17 +11,16 @@ import { useMutation, useQuery } from "react-apollo";
 import Grid from "@material-ui/core/Grid";
 
 import * as Yup from "yup";
-import { GET_USERS } from "../../../gql/queries/userQuery";
+import { GET_USERS } from "../../gql/queries/userQuery";
 
 import moment from "moment";
-import { useCtx } from "../../../components/FilterComp/NewFilterHeader";
-import { paramFunc } from "../NewTimeCardFilter";
-import { NEW_PUNCHCARD } from "../../../gql/mutations/punchCardMut";
-import MyLoading from "../../../components/MyLoading";
-import SingleSelectField from "../Fields/SingleSelectField";
-import DatePickerField from "../Fields/DatePickerField";
-import TimePickerField from "../Fields/TimePickerField";
-import { PUNCHCARDS_WHEREQ } from "../../../gql/queries/punchCardQuery";
+
+import { UPDATE_PUNCHCARD } from "../../gql/mutations/punchCardMut";
+import MyLoading from "../../components/MyLoading";
+import SingleSelectField from "../../pages/TimeClock/Fields/SingleSelectField";
+import DatePickerField from "../../pages/TimeClock/Fields/DatePickerField";
+import TimePickerField from "../../pages/TimeClock/Fields/TimePickerField";
+import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 
 const SignupSchema = Yup.object().shape({
   punchDateIn: Yup.mixed().required("Required"),
@@ -33,11 +32,13 @@ const SignupSchema = Yup.object().shape({
 });
 
 interface IProps {
+  // handleClose: () => void;
   changeScreen: (a: string) => void;
   formHandle: (arg: () => void) => void;
+  punchCard: PunchCardsWhereQ_punchCards;
   refetch?: { query: any; variables: any }[];
 
-  // punchCard: PunchCardsWhereQ_punchCards;
+  // id: string;
 }
 
 export interface IFormOpts {
@@ -49,12 +50,13 @@ export interface IFormOpts {
   timeRoleID: string;
 }
 
-const CreatePunchCard2: React.FC<IProps> = ({
+const EditPunchCard: React.FC<IProps> = ({
   changeScreen,
+  punchCard,
   formHandle,
   refetch
 }) => {
-  const createPunchCard = {
+  let createPunchCard: IFormOpts = {
     punchDateIn: null,
     punchHoursIn: null,
     punchDateOut: null,
@@ -63,16 +65,43 @@ const CreatePunchCard2: React.FC<IProps> = ({
     timeRoleID: ""
   };
 
-  const [submit] = useMutation(NEW_PUNCHCARD, {
-    refetchQueries: refetch
-  });
+  const [submit] = useMutation(UPDATE_PUNCHCARD, { refetchQueries: refetch });
+  // console.log(punchCard);
+  if (punchCard) {
+    createPunchCard = {
+      userID: punchCard.user.id,
+      timeRoleID: punchCard.timeRole.id,
+      punchDateIn: moment(punchCard.punchIn)
+        .startOf("day")
+        .toISOString(),
+      punchDateOut: moment(punchCard.punchOut)
+        .startOf("day")
+        .toISOString(),
+      punchHoursIn: moment()
+        .startOf("day")
+        .add(
+          moment(punchCard.punchIn).diff(
+            moment(punchCard.punchIn).startOf("day")
+          )
+        )
+        .toISOString(),
+      punchHoursOut: moment()
+        .startOf("day")
+        .add(
+          moment(punchCard.punchOut).diff(
+            moment(punchCard.punchOut).startOf("day")
+          )
+        )
+        .toISOString()
+    };
+  }
 
   const { data, loading } = useQuery(GET_USERS);
 
   const findUser = (users: any, id: string) =>
     users.find((user: any) => user.id === id);
 
-  const formSubmit: any = async (
+  const formSubmit = async (
     {
       punchDateIn,
       punchHoursIn,
@@ -84,6 +113,7 @@ const CreatePunchCard2: React.FC<IProps> = ({
     actions: FormikActions<IFormOpts>
   ) => {
     const newValues = {
+      id: punchCard.id,
       userId: userID,
       timeRoleId: timeRoleID,
       punchIn: moment(punchDateIn!)
@@ -106,7 +136,7 @@ const CreatePunchCard2: React.FC<IProps> = ({
       }
     });
     actions.setSubmitting(false);
-    if (rtn) changeScreen("");
+    if (rtn) changeScreen!("");
   };
 
   if (loading) return <MyLoading />;
@@ -154,7 +184,6 @@ const CreatePunchCard2: React.FC<IProps> = ({
                       label="Punch-In Date"
                       name="punchDateIn"
                       format={"ddd, MMM DD"}
-                      adjust={["punchDateOut"]}
                       animateYearScrolling
                     />
                   </Grid>
@@ -163,7 +192,6 @@ const CreatePunchCard2: React.FC<IProps> = ({
                       component={TimePickerField}
                       label="Punch-In Time"
                       name="punchHoursIn"
-                      adjust={["punchHoursOut", 7.5]}
                       format={"hh:mm A"}
                     />
                   </Grid>
@@ -196,4 +224,4 @@ const CreatePunchCard2: React.FC<IProps> = ({
   );
 };
 
-export default CreatePunchCard2;
+export default EditPunchCard;

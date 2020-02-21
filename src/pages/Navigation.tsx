@@ -24,7 +24,7 @@ import Me from "../components/Me";
 import { GET_ME, NEW_GET_ME } from "../gql/queries/userQuery";
 import { PermHelper } from "../helpers/permhelper";
 import getAttribute from "../helpers/getAttribute";
-import { Divider, Theme } from "@material-ui/core";
+import { Divider, Theme, Container } from "@material-ui/core";
 
 //TODO Anys mucho
 
@@ -71,6 +71,7 @@ const appBarStyles = makeStyles((theme: Theme) => ({
     zIndex: 15,
     backgroundColor: "transparent"
   },
+
   movedAppBar: {
     backgroundColor: "#fafafa",
     borderBottom: "1px solid rgba(0, 0, 0, 1)"
@@ -125,39 +126,35 @@ const Navigation: React.FC<RouteComponentProps> = props => {
     props.history.push(`/${getAttribute(e.target, "data-link")}`);
   }
   return (
-    <>
-      <div className={classes.root}>
-        <AppBar
-          color="default"
-          elevation={0}
-          position="fixed"
-          className={[
-            classes.myAppBar,
-            elevation ? classes.movedAppBar : null
-          ].join(" ")}
-        >
-          <Toolbar>
-            <SHBName
-              data-link="Home"
-              onClick={() => props.history.push("/Home")}
-              className={classes.shbIcon}
-            />
-            <div className={classes.grow} />
-            <div>
-              <Me>
-                {({ me }: any) => {
-                  if (me)
-                    return (
-                      <LoggedInMenu me={me} linkClick={linkClick} {...props} />
-                    );
-                  return <NotLoggedInMenu linkClick={linkClick} {...props} />;
-                }}
-              </Me>
-            </div>
-          </Toolbar>
-        </AppBar>
-      </div>
-    </>
+    <AppBar
+      color="default"
+      elevation={0}
+      position="fixed"
+      className={[
+        classes.myAppBar,
+        elevation ? classes.movedAppBar : null
+      ].join(" ")}
+    >
+      <Toolbar>
+        <SHBName
+          data-link="Home"
+          onClick={() => props.history.push("/Home")}
+          className={classes.shbIcon}
+        />
+        <div className={classes.grow} />
+        <div>
+          <Me>
+            {({ me }: any) => {
+              if (me)
+                return (
+                  <LoggedInMenu me={me} linkClick={linkClick} {...props} />
+                );
+              return <NotLoggedInMenu linkClick={linkClick} {...props} />;
+            }}
+          </Me>
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 

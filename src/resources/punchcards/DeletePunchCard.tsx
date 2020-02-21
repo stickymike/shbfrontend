@@ -1,13 +1,10 @@
 import React from "react";
 
 import { useMutation } from "react-apollo";
-import { useCtx } from "../../../components/FilterComp/NewFilterHeader";
-import { paramFunc } from "../NewTimeCardFilter";
 
-import { DELETE_PUNCHCARD } from "../../../gql/mutations/punchCardMut";
+import { DELETE_PUNCHCARD } from "../../gql/mutations/punchCardMut";
 
-import { PUNCHCARDS_WHEREQ } from "../../../gql/queries/punchCardQuery";
-import { PunchCardsWhereQ_punchCards } from "../../../generated/PunchCardsWhereQ";
+import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 
 interface IProps {
   changeScreen: (a: string) => void;
@@ -18,7 +15,7 @@ interface IProps {
   // id: string;
 }
 
-const DeletePunchCard2: React.FC<IProps> = ({
+const DeletePunchCard: React.FC<IProps> = ({
   formHandle,
   punchCard,
   changeScreen
@@ -46,4 +43,4 @@ const DeletePunchCard2: React.FC<IProps> = ({
   );
 };
 
-export default DeletePunchCard2;
+export default DeletePunchCard;

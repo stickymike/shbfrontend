@@ -6,11 +6,11 @@ import { Typography } from "@material-ui/core";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import { GET_USERS } from "../../gql/queries/userQuery";
-import { UPDATE_TIMEROLE_USERS } from "../../gql/mutations/timeRoleMut";
-import useSimpleMenuProps from "../../components/Menu/useSimpleMenuProps";
-import EditDeleteField from "../../components/CustomFields/EditDeleteField";
-import SimpleMenu from "../../components/Menu/SimpleMenu";
+import { GET_USERS } from "../../../gql/queries/userQuery";
+import { UPDATE_TIMEROLE_USERS } from "../../../gql/mutations/timeRoleMut";
+import useSimpleMenuProps from "../../../components/Menu/useSimpleMenuProps";
+import EditDeleteField from "../../../components/CustomFields/EditDeleteField";
+import SimpleMenu from "../../../components/Menu/SimpleMenu";
 
 interface IProps {
   handleClose: (data: any) => void;

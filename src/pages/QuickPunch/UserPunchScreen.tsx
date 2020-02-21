@@ -19,6 +19,8 @@ import {
   punchcardsuseriddateVariables,
   punchcardsuseriddate_punchCards
 } from "../../generated/punchcardsuseriddate";
+import Box from "@material-ui/core/Box";
+import { Tooltip } from "@material-ui/core";
 
 interface IProps {
   user: Me_me;
@@ -66,27 +68,35 @@ const UserPunchScreen: React.FC<IProps> = ({ user, date, submitMyForm }) => {
         value={moment().startOf("isoWeek")}
         time={moment.duration(newtime)}
       />
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        marginBottom="24px"
+        marginTop="8px"
+      >
+        <Typography variant="h6">
+          {"\n"}
+          {user.timeRoles!.length === 0
+            ? "No Roles Available Talk to Manager"
+            : undefined}
+        </Typography>
 
-      <Typography variant="body1" gutterBottom>
-        {"\n"}
-        {user.timeRoles!.length === 0
-          ? "No Roles Available Talk to Manager"
-          : "Select Time Role"}
-        {"\n"}
-      </Typography>
-
-      <div style={{ marginBottom: "8px" }}>
+        {/* <div style={{ marginBottom: "8px" }}> */}
         {user.timeRoles!.map((opt: any) => (
-          <Chip
-            label={opt.shortName}
-            color={selectedTimeRole === opt.id ? "primary" : "default"}
-            onClick={
-              user.clockedIn ? undefined : () => setSelectedTimeRole(opt.id)
-            }
-            key={opt.id}
-          />
+          <Tooltip key={opt.id} title="Select Role">
+            <Chip
+              label={opt.shortName}
+              color={selectedTimeRole === opt.id ? "primary" : "default"}
+              onClick={
+                user.clockedIn ? undefined : () => setSelectedTimeRole(opt.id)
+              }
+              style={{ margin: "0px 0px 0px 8px" }}
+            />
+          </Tooltip>
         ))}
-      </div>
+        {/* </div> */}
+      </Box>
     </>
   );
 };

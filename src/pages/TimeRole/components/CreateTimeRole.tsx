@@ -1,13 +1,13 @@
 import React from "react";
 import { Mutation } from "react-apollo";
 import { Formik, Form } from "formik";
-import { GET_TIMEROLES } from "../../gql/queries/timeRoleQuery";
-import { CREATE_TIMEROLE } from "../../gql/mutations/timeRoleMut";
+import { GET_TIMEROLES } from "../../../gql/queries/timeRoleQuery";
+import { CREATE_TIMEROLE } from "../../../gql/mutations/timeRoleMut";
 
 import * as Yup from "yup";
 import { Grid } from "@material-ui/core";
 
-import FormikTextField from "../../components/FormikTextField";
+import FormikTextField from "../../../components/FormikTextField";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()

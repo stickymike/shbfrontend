@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/styles";
 import Box from "@material-ui/core/Box";
 
 import { SvgIconProps } from "@material-ui/core/SvgIcon";
-import { Theme } from "@material-ui/core";
+import { Theme, Container, ContainerProps } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => ({
   "@keyframes myspin": {
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-export interface IPaperProps {
+export interface IPaperProps extends ContainerProps {
   title: string;
   size?: any;
   actionIcons?: {
@@ -69,39 +69,69 @@ const NewPaper: React.FC<IPaperProps> = ({
   children,
   title,
   size = 5,
-  actionIcons = []
+  actionIcons = [],
+  maxWidth = "lg",
+  ...props
 }) => {
   const classes = useStyles();
 
   return (
-    <Grid container justify="center" className={classes.root}>
-      <Grid item xs={size}>
-        <Paper className={classes.paperStyles} elevation={0}>
-          <Box className={classes.container}>
-            <Typography variant="body2" className={classes.header}>
-              {title}
-            </Typography>
-            <div className={classes.grow} />
-            {actionIcons.map(({ icon: Icon, onClick, iClass }, i) => (
-              <IconButton
-                key={`button-${i}`}
-                className={[
-                  classes.actionButton,
-                  iClass
-                  // spinnerLoading ? classes.spin : null
-                ].join(" ")}
-                onClick={onClick}
-              >
-                <Icon />
-              </IconButton>
-            ))}
-          </Box>
-          {/* <MyDivider /> */}
-          {children}
-        </Paper>
-      </Grid>
-    </Grid>
+    <Container maxWidth={maxWidth}>
+      <Paper className={classes.paperStyles} elevation={0}>
+        <Box className={classes.container}>
+          <Typography variant="body2" className={classes.header}>
+            {title}
+          </Typography>
+          <div className={classes.grow} />
+          {actionIcons.map(({ icon: Icon, onClick, iClass }, i) => (
+            <IconButton
+              key={`button-${i}`}
+              className={[
+                classes.actionButton,
+                iClass
+                // spinnerLoading ? classes.spin : null
+              ].join(" ")}
+              onClick={onClick}
+            >
+              <Icon />
+            </IconButton>
+          ))}
+        </Box>
+        {/* <MyDivider /> */}
+        {children}
+      </Paper>
+    </Container>
   );
+
+  // return (
+  //   <Grid container justify="center" className={classes.root}>
+  //     <Grid item xs={12} md={size}>
+  //       <Paper className={classes.paperStyles} elevation={0}>
+  //         <Box className={classes.container}>
+  //           <Typography variant="body2" className={classes.header}>
+  //             {title}
+  //           </Typography>
+  //           <div className={classes.grow} />
+  //           {actionIcons.map(({ icon: Icon, onClick, iClass }, i) => (
+  //             <IconButton
+  //               key={`button-${i}`}
+  //               className={[
+  //                 classes.actionButton,
+  //                 iClass
+  //                 // spinnerLoading ? classes.spin : null
+  //               ].join(" ")}
+  //               onClick={onClick}
+  //             >
+  //               <Icon />
+  //             </IconButton>
+  //           ))}
+  //         </Box>
+  //         {/* <MyDivider /> */}
+  //         {children}
+  //       </Paper>
+  //     </Grid>
+  //   </Grid>
+  // );
 };
 
 export default NewPaper;

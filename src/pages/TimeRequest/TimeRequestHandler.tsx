@@ -5,12 +5,12 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import useSubmitPassBack from "../../helpers/hooks/useSubmitPassBack";
-import CreateTimeRequest from "./Components/CreateTimeRequest";
+import CreateTimeRequest from "../../resources/TimeRequests/CreateTimeRequest";
 import { Me_me } from "../../generated/Me";
 import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
-import DeleteTimeRequest from "./Components/DeleteTimeRequest";
+import DeleteTimeRequest from "../../resources/TimeRequests/DeleteTimeRequest";
 import usePrevious from "../../helpers/hooks/usePrevious";
-import EditTimeRequest from "./Components/EditTimeRequest";
+import EditTimeRequest from "../../resources/TimeRequests/EditTimeRequest";
 
 export interface TimeRequestHandlerProps {
   changeScreen: (a: string) => void;

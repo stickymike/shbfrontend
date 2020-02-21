@@ -1,7 +1,7 @@
 import React from "react";
 import { DatePicker } from "@material-ui/pickers";
 import { getIn, FieldProps } from "formik";
-import { IFormOpts } from "../Components/CreatePunchCard";
+import { IFormOpts } from "../../../resources/punchcards/CreatePunchCard";
 
 interface IProps extends FieldProps<IFormOpts> {
   label: string;

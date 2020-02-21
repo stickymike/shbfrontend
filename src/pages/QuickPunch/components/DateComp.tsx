@@ -6,6 +6,7 @@ import { withStyles } from "@material-ui/styles";
 import moment from "moment";
 import getWidthOfText from "../../../helpers/widthoftext";
 import { Theme } from "@material-ui/core";
+import number2Words from "../../../helpers/number2Words";
 
 const styles = (theme: Theme) => ({
   test: {
@@ -43,48 +44,32 @@ class DateComp extends Component<MyProps, MyState> {
     if (this.props.onChange) this.props.onChange(date);
   };
 
+  createweek = (string: string) => {
+    const newString = number2Words(Number(string));
+    return newString.charAt(0).toUpperCase() + newString.slice(1);
+  };
+
   render() {
     const { date } = this.state;
 
     return (
       <>
-        <Typography
-          style={{ transform: "translateY(-2px)" }}
-          variant="h6"
-          gutterBottom
-        >
-          Work Week <b> {date.format("WW")} </b>
-          {"\n"}
+        <Typography variant="h4" gutterBottom>
+          Work Week <b>{this.createweek(date.format("WW"))}</b>
         </Typography>
         <Typography
-          variant="body1"
+          variant="h6"
           style={{ marginTop: "" }}
           gutterBottom
           align="center"
         >
-          Worked <b>{this.props.time.hours() + this.props.time.days() * 24}</b>{" "}
-          Hours and <b>{this.props.time.minutes()} </b>
-          Minutes
+          {/* Work Week <b>{this.createweek(date.format("WW"))}</b> */}
+          <b>
+            {this.props.time.format("HH")}:
+            {("0" + this.props.time.get("minutes")).slice(-2)}
+          </b>{" "}
+          Currently Worked
         </Typography>
-        {/* <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            marginBottom: ".5rem",
-            justifyContent: "center",
-            width: "100%"
-          }}
-        >
-          <TimePickerInput
-            workedTime={this.state.workTime}
-            onChange={this.handlechange}
-          />
-
-          <Typography style={{ transform: "translateY(-2px)" }} variant="body1">
-            Shift ➡ <b>{displaytime.format("h:mm A")}</b>
-            <br />
-          </Typography>
-        </div> */}
       </>
     );
   }

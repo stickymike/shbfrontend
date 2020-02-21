@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldProps, getIn } from "formik";
 import SingleSelect from "../../../components/SingleSelect";
-import { IFormOpts } from "../Components/CreatePunchCard";
+import { IFormOpts } from "../../../resources/punchcards/CreatePunchCard";
 
 interface IProps extends FieldProps<IFormOpts> {
   options: any;

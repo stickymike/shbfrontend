@@ -93,6 +93,7 @@ const NewPunchPage: React.FC<RouterProps> = () => {
     <NewPaper
       title="Quick Punch"
       actionIcons={screen === "clockin" ? [actionIcon] : undefined}
+      maxWidth="xs"
     >
       {screenRender()}
 
@@ -101,8 +102,8 @@ const NewPunchPage: React.FC<RouterProps> = () => {
         color={user && buttonText() === "Punch Out" ? "secondary" : "primary"}
         size="large"
         onClick={handleSubmitMyForm}
-        style={{ width: "225px" }}
         disabled={isDisabled()}
+        fullWidth
       >
         {buttonText()}
       </Button>

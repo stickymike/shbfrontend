@@ -9,7 +9,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import { makeStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
 import { FormikErrors, FormikHandlers } from "formik";
-import { IFormOpts } from "../pages/TimeClock/Components/CreatePunchCard";
+import { IFormOpts } from "../resources/punchcards/CreatePunchCard";
 
 const useStyles = makeStyles((theme: Theme) => ({
   selected: {

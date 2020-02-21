@@ -2,11 +2,11 @@ import React from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 import { useMutation, useQuery } from "react-apollo";
-import { CREATE_TIMEREQUEST } from "../../../gql/mutations/timeRequestMut";
+import { CREATE_TIMEREQUEST } from "../../gql/mutations/timeRequestMut";
 import {
   CreateTimeRequest as CreateTimeRequest2,
   CreateTimeRequestVariables
-} from "../../../generated/CreateTimeRequest";
+} from "../../generated/CreateTimeRequest";
 import { TextField, Box, Grid } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -23,15 +23,15 @@ import {
   isSameDay
 } from "date-fns/esm";
 
-import FormikTimePicker from "../../../components/formikFields/FormikTimePicker";
-import FormikTextBox from "../../../components/formikFields/FormikTextBox";
-import { Me_me } from "../../../generated/Me";
-import FormikSingleSelect from "../../../components/formikFields/FormikSingleSelect";
-import { GET_USERS } from "../../../gql/queries/userQuery";
-import MyLoading from "../../../components/MyLoading";
-import FormikDatePicker from "../../../components/formikFields/FormikDatePicker";
-import FormikCheckBox from "../../../components/formikFields/FormikCheckBox";
-import FormikClearableRadio from "../../../components/formikFields/FormikClearableRadio";
+import FormikTimePicker from "../../components/formikFields/FormikTimePicker";
+import FormikTextBox from "../../components/formikFields/FormikTextBox";
+import { Me_me } from "../../generated/Me";
+import FormikSingleSelect from "../../components/formikFields/FormikSingleSelect";
+import { GET_USERS } from "../../gql/queries/userQuery";
+import MyLoading from "../../components/MyLoading";
+import FormikDatePicker from "../../components/formikFields/FormikDatePicker";
+import FormikCheckBox from "../../components/formikFields/FormikCheckBox";
+import FormikClearableRadio from "../../components/formikFields/FormikClearableRadio";
 
 interface Props {
   formHandle: any;

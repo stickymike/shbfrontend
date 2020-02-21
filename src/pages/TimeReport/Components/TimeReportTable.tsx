@@ -1,9 +1,9 @@
 import React from "react";
 
-import TableWrapper from "../../components/Table/TableWrapper";
-import TotalRow from "../../components/Table/TotalRow";
-import EnhancedTableHead from "../../components/Table/EnhancedTableHead";
-import DerivedTableBody from "../../components/Table/DerivedTableBody";
+import TableWrapper from "../../../components/Table/TableWrapper";
+import TotalRow from "../../../components/Table/TotalRow";
+import EnhancedTableHead from "../../../components/Table/EnhancedTableHead";
+import DerivedTableBody from "../../../components/Table/DerivedTableBody";
 
 interface IProps {
   header: any;
@@ -22,7 +22,7 @@ const TimeReportTable: React.FC<IProps> = ({ header, data, totals }) => {
   };
 
   return (
-    <TableWrapper>
+    <TableWrapper style={{ tableLayout: "auto" }}>
       <EnhancedTableHead
         order={order}
         orderBy={orderBy}

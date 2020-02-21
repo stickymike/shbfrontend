@@ -5,18 +5,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import useSubmitPassBack from "../../helpers/hooks/useSubmitPassBack";
-// import CreateTimeRequest from "./Components/CreateTimeRequest";
-import { Me_me } from "../../generated/Me";
-import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
-// import DeleteTimeRequest from "./Components/DeleteTimeRequest";
+
 import usePrevious from "../../helpers/hooks/usePrevious";
-import EditPunchCard2 from "./Components/EditPunchCard2";
+import EditPunchCard from "../../resources/punchcards/EditPunchCard";
 import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
-import DeletePunchCard2 from "./Components/DeletePunchCard2";
-import CreatePunchCard2 from "./Components/CreatePunchCard2";
-import { useTimeCLockCTX, qGenerator } from "./Filter/TimeCardFilter";
+import DeletePunchCard from "../../resources/punchcards/DeletePunchCard";
+import CreatePunchCard from "../../resources/punchcards/CreatePunchCard";
+import {
+  useTimeCLockCTX,
+  qGenerator
+} from "../../resources/punchcards/CrudTimeClockFilter/TimeCardFilter";
 import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
-// import EditTimeRequest from "./Components/EditTimeRequest";
 
 export interface TimeRequestHandlerProps {
   changeScreen: (a: string) => void;
@@ -24,7 +23,7 @@ export interface TimeRequestHandlerProps {
   punchCard?: PunchCardsWhereQ_punchCards;
 }
 
-const TimeClockHandler2: React.FC<TimeRequestHandlerProps> = ({
+const TimeClockHandler: React.FC<TimeRequestHandlerProps> = ({
   dialogueScreen,
   changeScreen,
   punchCard
@@ -52,13 +51,13 @@ const TimeClockHandler2: React.FC<TimeRequestHandlerProps> = ({
     const repeatProps = { changeScreen, formHandle, refetch };
     switch (newScreen) {
       default: {
-        return <CreatePunchCard2 {...repeatProps} />;
+        return <CreatePunchCard {...repeatProps} />;
       }
       case "EDIT": {
-        return <EditPunchCard2 {...repeatProps} punchCard={punchCard!} />;
+        return <EditPunchCard {...repeatProps} punchCard={punchCard!} />;
       }
       case "DELETE": {
-        return <DeletePunchCard2 {...repeatProps} punchCard={punchCard!} />;
+        return <DeletePunchCard {...repeatProps} punchCard={punchCard!} />;
       }
     }
   };
@@ -123,4 +122,4 @@ const title = (userScreen: string) => {
   }
 };
 
-export default TimeClockHandler2;
+export default TimeClockHandler;
