@@ -2,7 +2,10 @@ import React from "react";
 import TimeRequestHandler, {
   TimeRequestHandlerProps
 } from "../TimeRequest/TimeRequestHandler";
-import { useTRFilterCtx, whereGenerator } from "./Filter/AdminTRFilter";
+import {
+  useTRFilterCtx,
+  whereGenerator
+} from "../../resources/TimeRequests/CrudTimeRequestFilter/AdminTRFilter";
 import { Q_GET_TIMEREQUEST } from "../../gql/queries/timeRequestQuery";
 
 const AdminTRHandler: React.FC<Omit<

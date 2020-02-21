@@ -10,7 +10,7 @@ import { GET_TIMEROLES } from "../../../gql/queries/timeRoleQuery";
 import SimpleMenu from "../../../components/Menu/SimpleMenu";
 import { UPDATE_USER_TIMEROLES } from "../../../gql/mutations/userMut";
 import useSimpleMenuProps from "../../../components/Menu/useSimpleMenuProps";
-import { formatMoney } from "../../../helpers/formatMoney";
+import { formatMoney } from "../../../helpers/formatMonies";
 import EditDeleteField from "../../../components/CustomFields/EditDeleteField";
 
 interface IProps {

@@ -14,11 +14,11 @@ import useSubmitPassBack from "../../helpers/hooks/useSubmitPassBack";
 
 import SimpleMenu from "../../components/Menu/SimpleMenu";
 import useSimpleMenuProps from "../../components/Menu/useSimpleMenuProps";
-import CreateTimeRole from "./components/CreateTimeRole";
-import UpdateTimeRole from "./components/UpdateTimeRole";
+import CreateTimeRole from "../../resources/TimeRoles/CreateTimeRole";
+import UpdateTimeRole from "../../resources/TimeRoles/UpdateTimeRole";
 import { GET_TIMEROLES } from "../../gql/queries/timeRoleQuery";
 import { DELETE_TIMEROLE } from "../../gql/mutations/timeRoleMut";
-import TimeRoleUserSelector from "./field/TimeRoleUserSelector";
+import TimeRoleUserSelector from "./Fields/TimeRoleUserSelector";
 
 interface IUserHandler {
   open: boolean;

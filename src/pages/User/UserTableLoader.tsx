@@ -1,13 +1,13 @@
 import React from "react";
 
 import { useQuery } from "react-apollo";
-import { USERS_WHEREQ } from "../../../gql/queries/userQuery";
-import { UsersWhereQ_users } from "../../../generated/UsersWhereQ";
-import number2Words from "../../../helpers/number2Words";
-import MyChip from "../../../components/Table/MyChip";
-import { headerCell } from "../../../components/Table/EnhancedTableHead";
-import { TableProps } from "../../../components/Table/GenericTable";
-import { useUserCtx } from "../NewUserPage";
+import { USERS_WHEREQ } from "../../gql/queries/userQuery";
+import { UsersWhereQ_users } from "../../generated/UsersWhereQ";
+import number2Words from "../../helpers/number2Words";
+import MyChip from "../../components/Table/MyChip";
+import { headerCell } from "../../components/Table/EnhancedTableHead";
+import { TableProps } from "../../components/Table/GenericTable";
+import { useUserCtx } from "./NewUserPage";
 
 const morphData = (users: UsersWhereQ_users[]) => {
   if (users) {

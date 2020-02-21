@@ -1,6 +1,6 @@
 import React from "react";
 import { headerCell } from "./EnhancedTableHead";
-import { TRTableData } from "../../pages/TimeRequest/Components/TRTableLoader";
+import { TRTableData } from "../../pages/TimeRequest/TRTableLoader";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
 interface Props<M> {

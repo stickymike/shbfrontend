@@ -1,17 +1,17 @@
 import React from "react";
 
 import { useQuery } from "react-apollo";
-import number2Words from "../../../helpers/number2Words";
-import MyChip from "../../../components/Table/MyChip";
-import { headerCell } from "../../../components/Table/EnhancedTableHead";
-import { GET_TIMEROLES } from "../../../gql/queries/timeRoleQuery";
-import TimeRoleTable from "./TimeRoleTable";
+import number2Words from "../../helpers/number2Words";
+import MyChip from "../../components/Table/MyChip";
+import { headerCell } from "../../components/Table/EnhancedTableHead";
+import { GET_TIMEROLES } from "../../gql/queries/timeRoleQuery";
+import TimeRoleTable from "./Components/TimeRoleTable";
 import {
   GetTimeRoles,
   GetTimeRoles_timeRoles,
   GetTimeRoles_timeRoles_users
-} from "../../../generated/GetTimeRoles";
-import { formatMoney } from "../../../helpers/formatMoney";
+} from "../../generated/GetTimeRoles";
+import { formatMoney } from "../../helpers/formatMonies";
 
 const formatUserText = (users: GetTimeRoles_timeRoles_users[]) => {
   const getFullName = (user: GetTimeRoles_timeRoles_users) =>

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import AdminTRFilter from "./Filter/AdminTRFilter";
+import AdminTRFilter from "../../resources/TimeRequests/CrudTimeRequestFilter/AdminTRFilter";
 
 import NewPaper from "../../components/NewPaper";
-import TRPaperWrapper from "./Filter/TRPaperWrapper";
-import TRFDWrapper from "./Filter/TRFDWrapper";
+import TRPaperWrapper from "../../resources/TimeRequests/CrudTimeRequestFilter/TRPaperWrapper";
+import TRFDWrapper from "../../resources/TimeRequests/CrudTimeRequestFilter/TRFDWrapper";
 import FilterDisplayer from "../../components/FilterComp/FilterDisplayer";
-import AdminTRTableLoader from "./Components/AdminTRTableLoader";
+import AdminTRTableLoader from "./AdminTRTableLoader";
 import GenericTable from "../../components/Table/GenericTable";
 import { QGetTimeRequests_timeRequests } from "../../generated/QGetTimeRequests";
 import AdminTRHandler from "./AdminTRHandler";

@@ -20,7 +20,7 @@ import TimeRequestHandler from "./TimeRequestHandler";
 
 import useTimeRequestData from "./hooks/useTimeRequestData";
 import GenericTable from "../../components/Table/GenericTable";
-import TRTableLoader from "./Components/TRTableLoader";
+import TRTableLoader from "./TRTableLoader";
 import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
 import NewPaper from "../../components/NewPaper";
 import { GET_TIMEREQUEST_ID_DATES } from "../../gql/queries/timeRequestQuery";

@@ -5,7 +5,7 @@ import EnhancedTableHead, {
   headerCell
 } from "../../../components/Table/EnhancedTableHead";
 import DerivedTableBody from "../../../components/Table/DerivedTableBody";
-import { useTimeRoleCtx } from "./../TimeRolePage";
+import { useTimeRoleCtx } from "../TimeRolePage";
 
 interface IProps {
   header: headerCell<any>[];

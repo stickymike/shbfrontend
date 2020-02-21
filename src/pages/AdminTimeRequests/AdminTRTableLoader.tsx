@@ -1,18 +1,25 @@
 import React from "react";
 
-import { headerCell } from "../../../components/Table/EnhancedTableHead";
-import { TableProps } from "../../../components/Table/GenericTable";
-import { GetTimeRequestsIDandDates_timeRequests } from "../../../generated/GetTimeRequestsIDandDates";
+import { headerCell } from "../../components/Table/EnhancedTableHead";
+import { TableProps } from "../../components/Table/GenericTable";
+import { GetTimeRequestsIDandDates_timeRequests } from "../../generated/GetTimeRequestsIDandDates";
 import { format } from "date-fns/esm";
-import TRCell from "../../../components/Table/TRCell";
+import TRCell from "../../components/Table/TRCell";
 import { makeStyles } from "@material-ui/core/styles";
+import useAdminTRData from "./Hooks/useAdminTRData";
+import {
+  useTRFilterCtx,
+  whereGenerator
+} from "../../resources/TimeRequests/CrudTimeRequestFilter/AdminTRFilter";
+import { QGetTimeRequests_timeRequests } from "../../generated/QGetTimeRequests";
 
-const morphData = (timeRequests: GetTimeRequestsIDandDates_timeRequests[]) => {
+const morphData = (timeRequests: QGetTimeRequests_timeRequests[]) => {
   if (timeRequests) {
     return timeRequests.map(timeRequest => {
       return {
         date: format(new Date(timeRequest.startTime), "EEEE, M/d"),
         dateSort: Number(format(new Date(timeRequest.startTime), "t")),
+        userName: `${timeRequest.user.firstName} ${timeRequest.user.lastName}`,
         ...timeRequest
       };
     });
@@ -40,21 +47,17 @@ export interface TRTableData extends GetTimeRequestsIDandDates_timeRequests {
 }
 
 interface IProps<G> {
-  timeRequests: GetTimeRequestsIDandDates_timeRequests[];
-  returnFunction?: (arg: any) => JSX.Element | undefined;
   table: <G>(props: React.PropsWithChildren<TableProps<G>>) => JSX.Element;
-  changeScreen: (a: string) => void;
+  changeScreen: React.Dispatch<React.SetStateAction<string>>;
   changeTR: React.Dispatch<
-    React.SetStateAction<GetTimeRequestsIDandDates_timeRequests | undefined>
+    React.SetStateAction<QGetTimeRequests_timeRequests | undefined>
   >;
 }
 
 type TFC<G> = React.PropsWithChildren<IProps<G>> &
   Omit<TableProps<G>, "header" | "data" | "setScreenwithPayload">;
 
-const TRTableLoader = <G,>({
-  timeRequests,
-  returnFunction,
+const AdminTRTableLoader = <G,>({
   table: Table,
   changeTR,
   changeScreen,
@@ -63,6 +66,11 @@ const TRTableLoader = <G,>({
   const { fitContentCell, fillRestEllip } = useStyles();
 
   const header: headerCell<TRTableData>[] = [
+    {
+      id: "userName",
+      label: "User",
+      cellProps: { align: "left", className: fitContentCell }
+    },
     {
       id: "date",
       label: "Request",
@@ -82,14 +90,20 @@ const TRTableLoader = <G,>({
     changeScreen(screen);
   };
 
+  const { qParams, myReturnFnc } = useTRFilterCtx();
+
+  const [timeRequests, qResults] = useAdminTRData(whereGenerator(qParams));
+
   return (
-    <Table
-      header={header}
-      data={morphData(timeRequests)}
-      setScreenwithPayload={setScreenwithPayload}
-      {...tableProps}
-    />
+    myReturnFnc(qResults) || (
+      <Table
+        header={header}
+        data={morphData(timeRequests)}
+        setScreenwithPayload={setScreenwithPayload}
+        {...tableProps}
+      />
+    )
   );
 };
 
-export default TRTableLoader;
+export default AdminTRTableLoader;

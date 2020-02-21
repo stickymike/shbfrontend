@@ -9,7 +9,7 @@ import TimeCardFilter from "../../resources/punchcards/CrudTimeClockFilter/TimeC
 import TimeCardPapperWrapper from "../../resources/punchcards/CrudTimeClockFilter/TimeCardPapperWrapper";
 import TCFilterDisplayW from "../../resources/punchcards/CrudTimeClockFilter/TCFilterDisplayW";
 import FilterDisplayer from "../../components/FilterComp/FilterDisplayer";
-import TimeCardTableLoader from "./Components/TimeCardTableLoader";
+import TimeCardTableLoader from "./TimeCardTableLoader";
 import GenericTable from "../../components/Table/GenericTable";
 import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 import TimeClockHandler from "./TimeCardHandler";

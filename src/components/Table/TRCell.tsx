@@ -1,6 +1,6 @@
 import React from "react";
 import { headerCell } from "./EnhancedTableHead";
-import { TRTableData } from "../../pages/TimeRequest/Components/TRTableLoader";
+import { TRTableData } from "../../pages/TimeRequest/TRTableLoader";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import IndeterminateCheckBoxIcon from "@material-ui/icons/IndeterminateCheckBox";
 import { format, isSameDay, lightFormat } from "date-fns/esm";

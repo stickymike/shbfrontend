@@ -1,7 +1,7 @@
 import React from "react";
-import UpdateUser from "./Components/UpdateUser";
-import CreateUser from "./Components/CreateUser";
-import ResetPassUser from "./Components/ResetPassUser";
+import UpdateUser from "../../resources/Users/UpdateUser";
+import CreateUser from "../../resources/Users/CreateUser";
+import ResetPassUser from "../../resources/Users/ResetPassUser";
 
 import { Mutation } from "react-apollo";
 import { DELETE_USER } from "../../gql/mutations/userMut";
@@ -16,8 +16,8 @@ import IconButton from "@material-ui/core/IconButton";
 import MoreVert from "@material-ui/icons/MoreVert";
 
 import useSubmitPassBack from "../../helpers/hooks/useSubmitPassBack";
-import UserPermissionSelector from "./Components/UserPermissionSelector";
-import UserTimeRoleSelector from "./Components/UserTimeRoleSelector";
+import UserPermissionSelector from "./Fields/UserPermissionSelector";
+import UserTimeRoleSelector from "./Fields/UserTimeRoleSelector";
 import SimpleMenu from "../../components/Menu/SimpleMenu";
 import useSimpleMenuProps from "../../components/Menu/useSimpleMenuProps";
 

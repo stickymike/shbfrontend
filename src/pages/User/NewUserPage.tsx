@@ -1,7 +1,5 @@
 import React, { useReducer } from "react";
-import UserTableLoader from "./Components/UserTableLoader";
-import createUserCtx from "./createUserCtx";
-
+import UserTableLoader from "./UserTableLoader";
 import NewUserHandler from "./NewUserHandler";
 // import useLoadingTrigger from "../../helpers/hooks/useLoadingTrigger";
 
@@ -9,8 +7,9 @@ import Button from "@material-ui/core/Button";
 import GenericTable from "../../components/Table/GenericTable";
 import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
 import NewPaper from "../../components/NewPaper";
+import createCtx from "../../helpers/createCtx";
 
-const [useUserCtx, ContextProvider] = createUserCtx<any>();
+const [useUserCtx, ContextProvider] = createCtx<any>();
 
 type AppState = {
   open: boolean;

@@ -1,6 +1,6 @@
 import React from "react";
-import { headerCell } from "../../../components/Table/EnhancedTableHead";
-import { TableProps } from "../../../components/Table/GenericTable";
+import { headerCell } from "../../components/Table/EnhancedTableHead";
+import { TableProps } from "../../components/Table/GenericTable";
 import {
   format,
   differenceInMilliseconds,
@@ -12,10 +12,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   useTimeCLockCTX,
   qGenerator
-} from "../../../resources/punchcards/CrudTimeClockFilter/TimeCardFilter";
-import { PUNCHCARDS_WHEREQ } from "../../../gql/queries/punchCardQuery";
+} from "../../resources/punchcards/CrudTimeClockFilter/TimeCardFilter";
+import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
 import { useQuery } from "react-apollo";
-import { PunchCardsWhereQ_punchCards } from "../../../generated/PunchCardsWhereQ";
+import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 
 const morphData = (punchCards: PunchCardsWhereQ_punchCards[]) => {
   if (punchCards) {
