@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { UserWhereUniqueInput, Permissions } from "./globalTypes";
+import { UserWhereUniqueInput, Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: Update_TimeRoles_Users
@@ -18,7 +19,7 @@ export interface Update_TimeRoles_Users_updateTimeRole_users {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
 }

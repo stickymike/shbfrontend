@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { TimeRequestWhereInput, Permissions } from "./globalTypes";
+import { TimeRequestWhereInput, Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: QGetTimeRequests
@@ -18,7 +19,7 @@ export interface QGetTimeRequests_timeRequests_user {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
 }

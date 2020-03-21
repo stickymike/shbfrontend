@@ -4,7 +4,7 @@ import timeRequestFrags from "../fragments/timeRequestFrags";
 
 const CREATE_TIMEREQUEST = gql`
   mutation CreateTimeRequest(
-    $userId: ID!
+    $userId: String!
     $startTime: DateTime!
     $endTime: DateTime!
     $reason: String!
@@ -29,8 +29,8 @@ const CREATE_TIMEREQUEST = gql`
 
 const PERSONAL_UPDATE_TIMEREQUEST = gql`
   mutation PersonalUpdateTimeRequest(
-    $id: ID!
-    $userId: ID!
+    $id: String!
+    $userId: String!
     $startTime: DateTime!
     $endTime: DateTime!
     $reason: String!
@@ -55,7 +55,7 @@ const PERSONAL_UPDATE_TIMEREQUEST = gql`
 `;
 
 const DELETE_TIMEREQUEST = gql`
-  mutation DeleteTimeRequest($id: ID!) {
+  mutation DeleteTimeRequest($id: String!) {
     deleteTimeRequest(where: { id: $id }) {
       id
       ...allTimeRequestFields

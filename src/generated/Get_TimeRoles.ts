@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Permissions } from "./globalTypes";
+import { Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: Get_TimeRoles
@@ -18,7 +18,7 @@ export interface Get_TimeRoles_timeRoles_users {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
 }

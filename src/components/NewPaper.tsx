@@ -1,5 +1,4 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
@@ -77,7 +76,7 @@ const NewPaper: React.FC<IPaperProps> = ({
 
   return (
     <Container maxWidth={maxWidth}>
-      <Paper className={classes.paperStyles} elevation={0}>
+      <Paper className={classes.paperStyles} elevation={0} {...props}>
         <Box className={classes.container}>
           <Typography variant="body2" className={classes.header}>
             {title}

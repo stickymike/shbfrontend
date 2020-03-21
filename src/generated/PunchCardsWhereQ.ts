@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { PunchCardWhereInput, Permissions } from "./globalTypes";
+import { PunchCardWhereInput, Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: PunchCardsWhereQ
@@ -18,7 +19,7 @@ export interface PunchCardsWhereQ_punchCards_user {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
 }

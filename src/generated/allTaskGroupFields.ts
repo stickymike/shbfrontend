@@ -4,19 +4,11 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: SignIn
+// GraphQL fragment: allTaskGroupFields
 // ====================================================
 
-export interface SignIn_signin {
-  __typename: "User";
+export interface allTaskGroupFields {
+  __typename: "TaskGroup";
   id: string;
-}
-
-export interface SignIn {
-  signin: SignIn_signin;
-}
-
-export interface SignInVariables {
-  email: string;
-  password: string;
+  name: string;
 }

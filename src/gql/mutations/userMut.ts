@@ -32,7 +32,7 @@ const CODE_TO_USER = gql`
 `;
 
 const DELETE_USER = gql`
-  mutation Delete_User($id: ID!) {
+  mutation Delete_User($id: String!) {
     deleteUser(where: { id: $id }) {
       ...allUserFields
     }
@@ -41,7 +41,7 @@ const DELETE_USER = gql`
 `;
 
 const UPDATE_USER_PERMISSIONS = gql`
-  mutation Update_User_Permissions($id: ID!, $permissions: [Permissions!]) {
+  mutation Update_User_Permissions($id: String!, $permissions: [Permission!]) {
     updateUser(
       data: { permissions: { set: $permissions } }
       where: { id: $id }
@@ -54,7 +54,7 @@ const UPDATE_USER_PERMISSIONS = gql`
 
 const UPDATE_USER_TIMEROLES = gql`
   mutation Update_User_TimeRoles(
-    $id: ID!
+    $id: String!
     $timeID: [TimeRoleWhereUniqueInput!]
   ) {
     updateUser(data: { timeRoles: { set: $timeID } }, where: { id: $id }) {
@@ -106,7 +106,7 @@ const UPDATE_USER = gql`
     $lastName: String!
     $firstName: String!
     $code: Int!
-    $id: ID!
+    $id: String!
     $title: String
   ) {
     updateUser(

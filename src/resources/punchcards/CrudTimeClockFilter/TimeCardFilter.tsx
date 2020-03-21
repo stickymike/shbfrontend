@@ -80,14 +80,19 @@ export interface IQParams {
 
 const [useTimeCLockCTX, ContextProvider] = createFilterCtx<IQParams>();
 
-const TimeCardFilter: React.FC = ({ children }) => {
+const TimeCardFilter: React.FC<{ startParams?: initVals }> = ({
+  children,
+  startParams
+}) => {
   const [myReturnFnc, actionIcon] = useRefreshLoader();
 
-  const startValues: initVals = {
-    userIds: [],
-    startDate: null,
-    endDate: null
-  };
+  const startValues: initVals = startParams
+    ? startParams
+    : {
+        userIds: [],
+        startDate: null,
+        endDate: null
+      };
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );

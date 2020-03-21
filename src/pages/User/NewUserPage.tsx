@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import GenericTable from "../../components/Table/GenericTable";
 import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
 import NewPaper from "../../components/NewPaper";
-import createCtx from "../../helpers/createCtx";
+import createCtx from "../../helpers/hooks/createCtx";
 
 const [useUserCtx, ContextProvider] = createCtx<any>();
 

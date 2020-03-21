@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { Permissions } from "./globalTypes";
+import { Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: Create_User
@@ -18,7 +19,7 @@ export interface Create_User_createUser {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
 }

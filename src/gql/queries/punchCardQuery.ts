@@ -22,7 +22,7 @@ const PUNCHCARDS_USERID_DATE = gql`
 `;
 
 const PUNCHCARDS_BY_ID = gql`
-  query PunchCardById($id: ID!) {
+  query PunchCardById($id: String!) {
     punchCard(where: { id: $id }) {
       ...allPunchCardFields
       user {

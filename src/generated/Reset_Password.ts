@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { Permissions } from "./globalTypes";
+import { Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: Reset_Password
@@ -18,7 +19,7 @@ export interface Reset_Password_resetPassword {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
 }

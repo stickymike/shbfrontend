@@ -25,7 +25,7 @@ const CREATE_TIMEROLE = gql`
 
 const UPDATE_TIMEROLE = gql`
   mutation Update_TimeRole(
-    $id: ID!
+    $id: String!
     $name: String!
     $shortName: String!
     $description: String!
@@ -47,7 +47,10 @@ const UPDATE_TIMEROLE = gql`
 `;
 
 const UPDATE_TIMEROLE_USERS = gql`
-  mutation Update_TimeRoles_Users($id: ID!, $userID: [UserWhereUniqueInput!]) {
+  mutation Update_TimeRoles_Users(
+    $id: String!
+    $userID: [UserWhereUniqueInput!]
+  ) {
     updateTimeRole(data: { users: { set: $userID } }, where: { id: $id }) {
       ...allTimeRoleFields
       users {

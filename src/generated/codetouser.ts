@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { Permissions } from "./globalTypes";
+import { Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: codetouser
@@ -29,7 +30,7 @@ export interface codetouser_clockcodetouser {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
   timeRoles: codetouser_clockcodetouser_timeRoles[];

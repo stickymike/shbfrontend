@@ -4,8 +4,8 @@ import punchCard from "../fragments/punchCardFrags";
 
 const NEW_PUNCHCARD = gql`
   mutation newpunchcard(
-    $userId: ID!
-    $timeRoleId: ID!
+    $userId: String!
+    $timeRoleId: String!
     $punchIn: DateTime!
     $punchOut: DateTime!
   ) {
@@ -25,9 +25,9 @@ const NEW_PUNCHCARD = gql`
 
 const UPDATE_PUNCHCARD = gql`
   mutation UpdatePunchCard(
-    $id: ID!
-    $userId: ID!
-    $timeRoleId: ID!
+    $id: String!
+    $userId: String!
+    $timeRoleId: String!
     $punchIn: DateTime!
     $punchOut: DateTime!
   ) {
@@ -47,7 +47,7 @@ const UPDATE_PUNCHCARD = gql`
 `;
 
 const DELETE_PUNCHCARD = gql`
-  mutation DeletePunchCard($id: ID!) {
+  mutation DeletePunchCard($id: String!) {
     deletePunchCard(where: { id: $id }) {
       ...allPunchCardFields
     }
@@ -56,7 +56,7 @@ const DELETE_PUNCHCARD = gql`
 `;
 
 const PUNCHOUT_PUNCHCARD = gql`
-  mutation punchoutpunchcard($cardId: ID!, $punchOut: DateTime!) {
+  mutation punchoutpunchcard($cardId: String!, $punchOut: DateTime!) {
     updatePunchCard(where: { id: $cardId }, data: { punchOut: $punchOut }) {
       ...allPunchCardFields
     }

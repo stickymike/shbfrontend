@@ -8,13 +8,13 @@ import { Mutation } from "react-apollo";
 import { GET_ME } from "../gql/queries/userQuery";
 import { SIGN_IN } from "../gql/mutations/userMut";
 
-import PaperWrapper from "../components/PaperWrapper";
-import FormikTextField from "../components/FormikTextField";
+import FormikTextField from "../components/formikFields/FormikTextField";
 import { RouteComponentProps } from "react-router";
+import NewPaper from "../components/NewPaper";
 //TODO Any
 const Login: React.FC<RouteComponentProps> = props => {
   return (
-    <PaperWrapper title={"Login"}>
+    <NewPaper title="Login">
       <Mutation mutation={SIGN_IN} refetchQueries={[{ query: GET_ME }]}>
         {(submit: (arg: any) => Promise<any>) => (
           <Formik
@@ -71,7 +71,7 @@ const Login: React.FC<RouteComponentProps> = props => {
           </Formik>
         )}
       </Mutation>
-    </PaperWrapper>
+    </NewPaper>
   );
 };
 export default Login;

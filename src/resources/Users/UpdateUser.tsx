@@ -7,7 +7,7 @@ import { UPDATE_USER } from "../../gql/mutations/userMut";
 import * as Yup from "yup";
 
 import Grid from "@material-ui/core/Grid";
-import FormikTextField from "../../components/FormikTextField";
+import FormikTextField from "../../components/formikFields/FormikTextField";
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()

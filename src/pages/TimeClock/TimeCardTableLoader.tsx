@@ -1,13 +1,7 @@
 import React from "react";
 import { headerCell } from "../../components/Table/EnhancedTableHead";
 import { TableProps } from "../../components/Table/GenericTable";
-import {
-  format,
-  differenceInMilliseconds,
-  differenceInMinutes,
-  startOfDay,
-  differenceInHours
-} from "date-fns/esm";
+import { format, differenceInMinutes, startOfDay } from "date-fns/esm";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   useTimeCLockCTX,
@@ -16,6 +10,7 @@ import {
 import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
 import { useQuery } from "react-apollo";
 import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
+import minutesToDisplayString from "../../helpers/minutesToDisplayString";
 
 const morphData = (punchCards: PunchCardsWhereQ_punchCards[]) => {
   if (punchCards) {
@@ -31,92 +26,14 @@ const morphData = (punchCards: PunchCardsWhereQ_punchCards[]) => {
         clockOut: format(endTime, "h:mm a"),
         clockOutSort: differenceInMinutes(endTime, startOfDay(endTime)),
         durationSort: differenceInMinutes(endTime, startTime),
-        duration: `${(
-          "0" +
-          ((differenceInMinutes(endTime, startTime) / 60) | 0)
-        ).slice(-2)}:${(
-          "0" +
-          (differenceInMinutes(endTime, startTime) % 60 | 0)
-        ).slice(-2)}`,
+        duration: minutesToDisplayString(
+          differenceInMinutes(endTime, startTime)
+        ),
+
         timeRoleName: punchCard.timeRole.shortName,
         ...punchCard
       };
     });
-  }
-  return [];
-};
-
-type consolidatedType = {
-  userName: string;
-  userId: string;
-  time: number;
-  pay: number;
-  // hours: string;
-};
-
-const consolidateUsers = (punchCards: PunchCardsWhereQ_punchCards[]) => {
-  const midSort = punchCards;
-  // const userCards: consolidatedType[] = [];
-  if (midSort) {
-    const userCards: consolidatedType[] = [
-      ...new Set(midSort.map(({ user: { id } }) => id))
-    ].map(id => ({
-      userId: id,
-      userName: midSort.find(s => s.user.id === id)?.user.firstName!,
-      time: 0,
-      pay: 0
-    }));
-    midSort.forEach(punchCard => {
-      const index = userCards.findIndex(
-        ({ userId }) => punchCard.user.id === userId
-      );
-      userCards[index].time += differenceInMinutes(
-        new Date(punchCard.punchOut),
-        new Date(punchCard.punchIn)
-      );
-      userCards[index].pay +=
-        ((differenceInMinutes(
-          new Date(punchCard.punchOut),
-          new Date(punchCard.punchIn)
-        ) /
-          60) *
-          punchCard.timeRole.payRate) /
-        100;
-    });
-
-    // midSort.map(({ user: { id, firstName } }) => ({
-    //   userId: id,
-    //   userName: firstName
-    // }));
-    // // .filter((val, index, self) => self.indexOf(val) === index);
-
-    console.log(userCards);
-
-    // midSort
-    //   .sort(({ user: { code: idA } }, { user: { code: idB } }) => idA - idB)
-    //   .forEach(punchCard => {
-    //     if (
-    //       userCards.length === 0 ||
-    //       userCards.slice(-1)[0].userId !== punchCard.user.id
-    //     )
-    //       userCards.push({
-    //         userName: punchCard.user.firstName,
-    //         userId: punchCard.user.id,
-    //         time: differenceInMinutes(
-    //           new Date(punchCard.punchOut),
-    //           new Date(punchCard.punchIn)
-    //         )
-    //       });
-    //     else if (userCards.slice(-1)[0].userId === punchCard.user.id)
-    //       userCards.slice(-1)[0].time += differenceInMinutes(
-    //         new Date(punchCard.punchOut),
-    //         new Date(punchCard.punchIn)
-    //       );
-    //   });
-
-    // console.log([...new Set([1, 1, 2])]);
-
-    // console.log(userCards);
   }
   return [];
 };
@@ -221,10 +138,6 @@ const TimeCardTableLoader = <G,>({
 
   let punchCards: PunchCardsWhereQ_punchCards[] = [];
   if (data) punchCards = data.punchCards;
-
-  consolidateUsers(punchCards);
-
-  // console.log();
 
   return (
     myReturnFnc(qResults) || (

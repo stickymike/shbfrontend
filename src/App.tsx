@@ -35,6 +35,7 @@ import TimeRolePage from "./pages/TimeRole/TimeRolePage";
 import TimeRequestFns from "./pages/TimeRequest/TimeRequestFns";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AdminTR from "./pages/AdminTimeRequests/AdminTR";
+import AdminTimeReport from "./pages/AdminTimeReport/AdminTimeReport";
 
 class App extends Component {
   render() {
@@ -70,6 +71,11 @@ class App extends Component {
                       exact
                       path="/Admin/TimeRequest"
                       component={AdminTR}
+                    />
+                    <Route
+                      exact
+                      path="/Admin/TimeReport"
+                      component={AdminTimeReport}
                     />
 
                     <Route exact path="/login" component={Login} />

@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { Permissions } from "./globalTypes";
+import { Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: Update_User_Permissions
@@ -18,7 +19,7 @@ export interface Update_User_Permissions_updateUser {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
 }
@@ -29,5 +30,5 @@ export interface Update_User_Permissions {
 
 export interface Update_User_PermissionsVariables {
   id: string;
-  permissions?: Permissions[] | null;
+  permissions?: Permission[] | null;
 }

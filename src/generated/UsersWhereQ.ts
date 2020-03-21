@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { UserWhereInput, Permissions } from "./globalTypes";
+import { UserWhereInput, Permission } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: UsersWhereQ
@@ -29,7 +30,7 @@ export interface UsersWhereQ_users {
   email: string;
   updatedAt: MyDateTime;
   createdAt: MyDateTime;
-  permissions: Permissions[];
+  permissions: Permission[];
   clockedIn: string;
   recentTimeRoleId: string;
   timeRoles: UsersWhereQ_users_timeRoles[];

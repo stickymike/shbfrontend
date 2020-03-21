@@ -24,7 +24,7 @@ import Me from "../components/Me";
 import { GET_ME, NEW_GET_ME } from "../gql/queries/userQuery";
 import { PermHelper } from "../helpers/permhelper";
 import getAttribute from "../helpers/getAttribute";
-import { Divider, Theme, Container } from "@material-ui/core";
+import { Divider, Theme } from "@material-ui/core";
 
 //TODO Anys mucho
 
@@ -379,6 +379,18 @@ const LoggedInMenu: React.FC<ILoggedInMenu> = ({ me, linkClick }) => {
           className={classes.menuItems}
         >
           Time Requests
+        </MenuItem>
+      )
+    },
+    {
+      node: (
+        <MenuItem
+          key="adminTimeReport"
+          data-link="Admin/TimeReport"
+          onClick={wrappedLinkClick}
+          className={classes.menuItems}
+        >
+          Time Report
         </MenuItem>
       )
     }
