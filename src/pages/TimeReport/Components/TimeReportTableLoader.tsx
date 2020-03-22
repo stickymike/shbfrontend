@@ -9,6 +9,7 @@ import moment from "moment";
 import { PunchCardsWhereQ_punchCards } from "../../../generated/PunchCardsWhereQ";
 import { useQuery } from "react-apollo";
 import { PUNCHCARDS_WHEREQ } from "../../../gql/queries/punchCardQuery";
+import MyLoading from "../../../components/MyLoading";
 
 interface morphData {
   id: string;
@@ -100,24 +101,26 @@ const TimeReportTableLoader: React.FC = () => {
     }
   ];
 
-  const { qParams, myReturnFnc } = useTimeReportFilterCtx();
+  const { qParams, resultsFunc, onCompleted } = useTimeReportFilterCtx();
 
   const { data, ...qResults } = useQuery(PUNCHCARDS_WHEREQ, {
     variables: { query: qGenerator(qParams) },
-    notifyOnNetworkStatusChange: true
+    notifyOnNetworkStatusChange: true,
+    onCompleted
   });
+  resultsFunc(qResults);
 
   let timeCards: morphData[] = [];
   if (data) timeCards = morphData(data.punchCards);
+  if (qResults?.networkStatus === 1 || qResults?.networkStatus === 2)
+    return <MyLoading />;
 
   return (
-    myReturnFnc(qResults) || (
-      <TimeReportTable
-        header={header}
-        data={timeCards}
-        totals={totals(timeCards)}
-      />
-    )
+    <TimeReportTable
+      header={header}
+      data={timeCards}
+      totals={totals(timeCards)}
+    />
   );
 };
 

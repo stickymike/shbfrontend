@@ -18,6 +18,7 @@ import { NetworkStatus } from "apollo-client";
 import useRefreshLoader from "../../../helpers/hooks/useRefreshLoader";
 import { PunchCardsWhereQVariables } from "../../../generated/PunchCardsWhereQ";
 import { startOfWeek, addWeeks } from "date-fns/esm";
+import useRLoader from "../../../helpers/hooks/useRLoader";
 
 // const useStyles = makeStyles((theme: Theme) => ({
 //   filterMenu: {
@@ -54,7 +55,9 @@ export interface IQParams {
     onClick: (arg: any) => void;
     iClass?: string;
   }[];
-  myReturnFnc: (qResults: qResults) => JSX.Element | undefined;
+
+  resultsFunc: (qResults: qResults) => void;
+  onCompleted: () => void;
 }
 
 type qResults = {
@@ -65,7 +68,7 @@ type qResults = {
 };
 
 const TimeReportFilter2: React.FC<{ id: string }> = ({ children, id }) => {
-  const [myReturnFnc, actionIcon] = useRefreshLoader();
+  const [resultsFunc, onCompleted, actionIcon] = useRLoader();
 
   const startValues: initVals = {
     startDate: addWeeks(startOfWeek(new Date()), -2),
@@ -94,7 +97,16 @@ const TimeReportFilter2: React.FC<{ id: string }> = ({ children, id }) => {
   const [qParams, setParams] = useState(startValues);
 
   return (
-    <ContextProvider value={{ qParams, setParams, actionIcons, myReturnFnc }}>
+    <ContextProvider
+      value={{
+        qParams,
+        setParams,
+        actionIcons,
+
+        resultsFunc,
+        onCompleted
+      }}
+    >
       <Popover
         open={!!anchorEl}
         anchorEl={anchorEl}

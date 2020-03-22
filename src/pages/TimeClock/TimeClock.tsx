@@ -25,7 +25,9 @@ const TimeClock: React.FC<RouterProps> = () => {
   // console.log(location.state.filter);
 
   return (
-    <TimeCardFilter startParams={location.state?.filter}>
+    <TimeCardFilter
+    // startParams={location.state?.filter}
+    >
       <TimeCardPapperWrapper title="Time Cards" size={8} as={NewPaper}>
         <TCFilterDisplayW
           as={FilterDisplayer}
