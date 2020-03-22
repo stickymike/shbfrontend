@@ -12,6 +12,7 @@ import {
   whereGenerator
 } from "../../resources/TimeRequests/CrudTimeRequestFilter/AdminTRFilter";
 import { QGetTimeRequests_timeRequests } from "../../generated/QGetTimeRequests";
+import MyLoading from "../../components/MyLoading";
 
 const morphData = (timeRequests: QGetTimeRequests_timeRequests[]) => {
   if (timeRequests) {
@@ -90,19 +91,23 @@ const AdminTRTableLoader = <G,>({
     changeScreen(screen);
   };
 
-  const { qParams, myReturnFnc } = useTRFilterCtx();
+  const { qParams, resultsFunc, onCompleted } = useTRFilterCtx();
 
-  const [timeRequests, qResults] = useAdminTRData(whereGenerator(qParams));
+  const [timeRequests, qResults] = useAdminTRData(
+    whereGenerator(qParams),
+    onCompleted
+  );
+  resultsFunc(qResults);
+  if (qResults?.networkStatus === 1 || qResults?.networkStatus === 2)
+    return <MyLoading />;
 
   return (
-    myReturnFnc(qResults) || (
-      <Table
-        header={header}
-        data={morphData(timeRequests)}
-        setScreenwithPayload={setScreenwithPayload}
-        {...tableProps}
-      />
-    )
+    <Table
+      header={header}
+      data={morphData(timeRequests)}
+      setScreenwithPayload={setScreenwithPayload}
+      {...tableProps}
+    />
   );
 };
 

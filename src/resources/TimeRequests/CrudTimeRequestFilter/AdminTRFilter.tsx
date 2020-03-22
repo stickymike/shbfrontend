@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Popover from "@material-ui/core/Popover";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 
 import { SvgIconProps, Typography } from "@material-ui/core";
 
@@ -19,7 +19,7 @@ import FormikClearButton from "../../../components/formikFields/FormikClearButto
 import { QGetTimeRequestsVariables } from "../../../generated/QGetTimeRequests";
 import FormikClearableRadio from "../../../components/formikFields/FormikClearableRadio";
 import { NetworkStatus } from "apollo-client";
-import useRefreshLoader from "../../../helpers/hooks/useRefreshLoader";
+import useRLoader from "../../../helpers/hooks/useRLoader";
 
 // const useStyles = makeStyles((theme: Theme) => ({
 //   filterMenu: {
@@ -109,7 +109,8 @@ export interface IQParams {
     onClick: (arg: any) => void;
     iClass?: string;
   }[];
-  myReturnFnc: (qResults: qResults) => JSX.Element | undefined;
+  resultsFunc: (qResults: qResults) => void;
+  onCompleted: () => void;
 }
 
 type qResults = {
@@ -120,7 +121,7 @@ type qResults = {
 };
 
 const AdminTRFilter: React.FC = ({ children }) => {
-  const [myReturnFnc, actionIcon] = useRefreshLoader();
+  const [resultsFunc, onCompleted, actionIcon] = useRLoader();
 
   const startValues: initVals = {
     userIds: [],
@@ -148,7 +149,9 @@ const AdminTRFilter: React.FC = ({ children }) => {
   if (data) users = data.users;
 
   return (
-    <ContextProvider value={{ qParams, setParams, actionIcons, myReturnFnc }}>
+    <ContextProvider
+      value={{ qParams, setParams, actionIcons, resultsFunc, onCompleted }}
+    >
       <Popover
         open={!!anchorEl}
         anchorEl={anchorEl}

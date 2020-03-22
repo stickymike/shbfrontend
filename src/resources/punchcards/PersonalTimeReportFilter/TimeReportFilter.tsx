@@ -15,7 +15,6 @@ import FormikDatePicker from "../../../components/formikFields/FormikDatePicker"
 import FormikClearButton from "../../../components/formikFields/FormikClearButton";
 
 import { NetworkStatus } from "apollo-client";
-import useRefreshLoader from "../../../helpers/hooks/useRefreshLoader";
 import { PunchCardsWhereQVariables } from "../../../generated/PunchCardsWhereQ";
 import { startOfWeek, addWeeks } from "date-fns/esm";
 import useRLoader from "../../../helpers/hooks/useRLoader";

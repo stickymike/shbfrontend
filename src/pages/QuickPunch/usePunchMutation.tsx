@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import moment, { Moment } from "moment";
 
 import { PUNCHCARDS_USERID_DATE } from "../../gql/queries/punchCardQuery";

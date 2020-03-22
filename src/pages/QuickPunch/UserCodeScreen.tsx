@@ -2,7 +2,7 @@ import React from "react";
 
 import { Formik, Form, Field, FormikProps } from "formik";
 import { FormikHelpers as FormikActions } from "formik";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 
 import Button from "@material-ui/core/Button";
 
@@ -28,7 +28,7 @@ const UserCodeScreen: React.FC<IProps> = ({ setUser, submitMyForm }) => {
   ) => {
     await getCode({ variables: { code: parseInt(code) } }).then(
       ({ data = {} }) => {
-        const user = data.clockcodetouser;
+        const user = data?.clockcodetouser;
         if (user) {
           setUser(user);
           return actions.setSubmitting(false);

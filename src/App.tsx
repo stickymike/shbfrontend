@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ApolloProvider, useQuery } from "react-apollo";
+import { ApolloProvider, useQuery } from "@apollo/client";
 
 import "./App.css";
 import Login from "./pages/Login";
@@ -12,7 +12,7 @@ import MomentUtils from "@date-io/moment";
 
 import { ThemeProvider } from "@material-ui/styles";
 
-import client from "./config/apollo";
+import client2 from "./config/apollo3";
 import theme from "./config/theme";
 
 import {
@@ -40,10 +40,10 @@ import AdminTimeReport from "./pages/AdminTimeReport/AdminTimeReport";
 class App extends Component {
   render() {
     return (
-      <ThemeProvider theme={theme}>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-          <CssBaseline />
-          <ApolloProvider client={client}>
+      <ApolloProvider client={client2}>
+        <ThemeProvider theme={theme}>
+          <MuiPickersUtilsProvider utils={MomentUtils}>
+            <CssBaseline />
             <Router>
               <>
                 <div className="background" />
@@ -53,7 +53,6 @@ class App extends Component {
                 <div style={{ padding: "12px" }}>
                   <Switch>
                     <Route exact path="/timeclock" component={NewPunchPage} />
-
                     <Route exact path="/TimeReport" component={TimeReport} />
                     <Route
                       exact
@@ -92,15 +91,16 @@ class App extends Component {
                 </div>
               </>
             </Router>
-          </ApolloProvider>
-        </MuiPickersUtilsProvider>
-      </ThemeProvider>
+          </MuiPickersUtilsProvider>
+        </ThemeProvider>
+      </ApolloProvider>
     );
   }
 }
 
 const RedirectLoggedIn: React.FC<{ pathNot: string[] }> = ({ pathNot }) => {
   const { loading, data } = useQuery(NEW_GET_ME);
+
   if (loading) return null;
   return (
     <Route

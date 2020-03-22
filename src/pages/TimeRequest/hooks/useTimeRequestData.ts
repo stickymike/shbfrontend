@@ -1,4 +1,4 @@
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { NEW_GET_ME } from "../../../gql/queries/userQuery";
 import { Me, Me_me } from "../../../generated/Me";
 import {

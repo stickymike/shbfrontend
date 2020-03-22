@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_TIMEREQUEST } from "../../gql/mutations/timeRequestMut";
 import {
   CreateTimeRequest as CreateTimeRequest2,

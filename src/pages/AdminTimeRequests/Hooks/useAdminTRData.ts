@@ -1,4 +1,4 @@
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { Q_GET_TIMEREQUEST } from "../../../gql/queries/timeRequestQuery";
 import {
   QGetTimeRequests,
@@ -6,13 +6,17 @@ import {
   QGetTimeRequestsVariables
 } from "../../../generated/QGetTimeRequests";
 
-const useAdminTRData = (where: QGetTimeRequestsVariables) => {
+const useAdminTRData = (
+  where: QGetTimeRequestsVariables,
+  onCompleted: () => void
+) => {
   const { data: timeData, ...qResults } = useQuery<
     QGetTimeRequests,
     QGetTimeRequestsVariables
   >(Q_GET_TIMEREQUEST, {
     variables: where,
-    notifyOnNetworkStatusChange: true
+    notifyOnNetworkStatusChange: true,
+    onCompleted
   });
 
   let timeRequests = [] as QGetTimeRequests_timeRequests[];

@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import user from "../fragments/userFrags";
 import timeRole from "../fragments/timeRoleFrags";
 // import timeCard from "../fragments/timeCardFrags";
@@ -34,9 +34,8 @@ const CODE_TO_USER = gql`
 const DELETE_USER = gql`
   mutation Delete_User($id: String!) {
     deleteUser(where: { id: $id }) {
-      ...allUserFields
+      id
     }
-    ${user.fragments.allUserFields}
   }
 `;
 

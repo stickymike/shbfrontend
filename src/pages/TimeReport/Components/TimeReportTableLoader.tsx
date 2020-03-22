@@ -7,7 +7,7 @@ import {
 import TimeReportTable from "./TimeReportTable";
 import moment from "moment";
 import { PunchCardsWhereQ_punchCards } from "../../../generated/PunchCardsWhereQ";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { PUNCHCARDS_WHEREQ } from "../../../gql/queries/punchCardQuery";
 import MyLoading from "../../../components/MyLoading";
 

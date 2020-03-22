@@ -2,12 +2,11 @@ import React, { useState } from "react";
 
 import createFilterCtx from "../../../components/FilterComp/createFilterCtx";
 import { NetworkStatus } from "apollo-client";
-import useRefreshLoader from "../../../helpers/hooks/useRefreshLoader";
 
 import Popover from "@material-ui/core/Popover";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 
 import { SvgIconProps, Typography } from "@material-ui/core";
 
@@ -19,15 +18,6 @@ import { Get_Users, Get_Users_users } from "../../../generated/Get_Users";
 import FormikMSelector from "../../../components/formikFields/FormikMSelect";
 import FormikClearButton from "../../../components/formikFields/FormikClearButton";
 import useRLoader from "../../../helpers/hooks/useRLoader";
-
-// const useStyles = makeStyles((theme: Theme) => ({
-//   filterMenu: {
-//     display: "flex",
-//     marginTop: "-.5em",
-//     marginBottom: ".5em"
-//   },
-//   flex: { display: "flex" }
-// }));
 
 function qGenerator({ startDate, endDate, userIds }: any): {} {
   const punchTime_gt = startDate;
@@ -76,7 +66,8 @@ export interface IQParams {
     onClick: (arg: any) => void;
     iClass?: string;
   }[];
-  myReturnFnc: (qResults: qResults) => JSX.Element | undefined;
+  resultsFunc: (qResults: qResults) => void;
+  onCompleted: () => void;
 }
 
 const [useTimeCLockCTX, ContextProvider] = createFilterCtx<IQParams>();
@@ -85,7 +76,8 @@ const TimeCardFilter: React.FC<{ startParams?: initVals }> = ({
   children,
   startParams
 }) => {
-  const [myReturnFnc, actionIcon] = useRefreshLoader();
+  // const [myReturnFnc, actionIcon] = useRefreshLoader();
+  const [resultsFunc, onCompleted, actionIcon] = useRLoader();
 
   const startValues: initVals = startParams
     ? startParams
@@ -115,7 +107,9 @@ const TimeCardFilter: React.FC<{ startParams?: initVals }> = ({
   if (data) users = data.users;
 
   return (
-    <ContextProvider value={{ qParams, setParams, actionIcons, myReturnFnc }}>
+    <ContextProvider
+      value={{ qParams, setParams, actionIcons, resultsFunc, onCompleted }}
+    >
       <Popover
         open={!!anchorEl}
         anchorEl={anchorEl}

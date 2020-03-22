@@ -21,7 +21,7 @@ import produce, { Draft } from "immer";
 import { v4 as uuidv4 } from "uuid";
 import { number } from "yup";
 import TaskComp from "./TaskComp";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { GET_TASKGROUPS } from "../gql/queries/tasksQuery";
 
 type tasks = {

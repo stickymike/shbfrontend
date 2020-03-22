@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { NEW_GET_ME } from "../../gql/queries/userQuery";
 
 import NewPaper from "../../components/NewPaper";

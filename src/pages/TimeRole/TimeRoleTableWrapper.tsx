@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import number2Words from "../../helpers/number2Words";
 import MyChip from "../../components/Table/MyChip";
 import { headerCell } from "../../components/Table/EnhancedTableHead";
@@ -12,6 +12,8 @@ import {
   GetTimeRoles_timeRoles_users
 } from "../../generated/GetTimeRoles";
 import { formatMoney } from "../../helpers/formatMonies";
+import MyLoading from "../../components/MyLoading";
+import { typeQResults } from "../../helpers/hooks/useRLoader";
 
 const formatUserText = (users: GetTimeRoles_timeRoles_users[]) => {
   const getFullName = (user: GetTimeRoles_timeRoles_users) =>
@@ -91,22 +93,26 @@ const header: headerCell<any>[] = [
 ];
 
 interface IProps {
-  returnFunction: (arg: any) => JSX.Element | undefined;
+  resultsFunc: (qResults: typeQResults) => void;
+  onCompleted: () => void;
 }
 
-const TimeRoleTableWrapper: React.FC<IProps> = ({ returnFunction }) => {
+const TimeRoleTableWrapper: React.FC<IProps> = ({
+  resultsFunc,
+  onCompleted
+}) => {
   const { data, ...qResults } = useQuery<GetTimeRoles>(GET_TIMEROLES, {
-    notifyOnNetworkStatusChange: true
+    notifyOnNetworkStatusChange: true,
+    onCompleted
   });
+  resultsFunc(qResults);
 
   let timeRoles: morphData[] = [] as morphData[];
   if (data) timeRoles = morphData(data.timeRoles);
+  if (qResults?.networkStatus === 1 || qResults?.networkStatus === 2)
+    return <MyLoading />;
 
-  return (
-    returnFunction(qResults) || (
-      <TimeRoleTable header={header} data={timeRoles} />
-    )
-  );
+  return <TimeRoleTable header={header} data={timeRoles} />;
 };
 
 export default TimeRoleTableWrapper;

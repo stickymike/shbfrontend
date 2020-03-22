@@ -7,7 +7,7 @@ import Refresh from "@material-ui/icons/Refresh";
 
 import { RouterProps } from "react-router";
 import { NEW_GET_ME } from "../../gql/queries/userQuery";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import UserCodeScreen from "./UserCodeScreen";
 import { Me, Me_me } from "../../generated/Me";
 import UserPunchScreen from "./UserPunchScreen";

@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import Menu from "@material-ui/core/Menu";
 
 import MenuItem from "@material-ui/core/MenuItem";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/react-components";
 
 import { GET_USERS } from "../../gql/queries/userQuery";
 import { Theme } from "@material-ui/core";

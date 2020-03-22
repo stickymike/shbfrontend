@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Mutation } from "react-apollo";
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -19,6 +17,7 @@ import UpdateTimeRole from "../../resources/TimeRoles/UpdateTimeRole";
 import { GET_TIMEROLES } from "../../gql/queries/timeRoleQuery";
 import { DELETE_TIMEROLE } from "../../gql/mutations/timeRoleMut";
 import TimeRoleUserSelector from "./Fields/TimeRoleUserSelector";
+import { useMutation } from "@apollo/client";
 
 interface IUserHandler {
   open: boolean;
@@ -60,6 +59,13 @@ const TimeRoleHandler: React.FC<IUserHandler> = ({
       })),
     changeScreen
   );
+
+  const [fire, { data }] = useMutation(DELETE_TIMEROLE, {
+    variables: { id: timeRole?.id },
+    refetchQueries: [{ query: GET_TIMEROLES }],
+    onCompleted: handleClose
+  });
+
   const content = () => {
     const actionProps = { formHandle, handleClose, timeRole };
     switch (timeRoleScreen) {
@@ -74,9 +80,12 @@ const TimeRoleHandler: React.FC<IUserHandler> = ({
       }
 
       case "DELETE": {
+        formHandle(fire);
         return (
           <div style={{ paddingTop: "24px" }}>
-            <Mutation
+            {data.error && data.error.graphQLErrors[0].message}
+            `You sure you want to Delete ${timeRole.shortName}?!?`;
+            {/* <Mutation
               mutation={DELETE_TIMEROLE}
               variables={{ id: timeRole.id }}
               refetchQueries={[{ query: GET_TIMEROLES }]}
@@ -88,7 +97,7 @@ const TimeRoleHandler: React.FC<IUserHandler> = ({
                 if (data.error) return data.error.graphQLErrors[0].message;
                 return `You sure you want to Delete ${timeRole.shortName}?!?`;
               }}
-            </Mutation>
+            </Mutation> */}
           </div>
         );
       }

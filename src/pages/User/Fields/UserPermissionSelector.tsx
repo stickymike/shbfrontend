@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USER_PERMISSIONS } from "../../../gql/mutations/userMut";
 import makeStyles from "@material-ui/styles/makeStyles";
 // import gql from "graphql-tag";

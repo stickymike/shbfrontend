@@ -6,7 +6,7 @@ import {
   Field,
   FormikProps
 } from "formik";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 
 import Grid from "@material-ui/core/Grid";
 

@@ -14,20 +14,23 @@ import GenericTable from "../../components/Table/GenericTable";
 import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 import TimeClockHandler from "./TimeCardHandler";
 
+type state = {
+  filter: any;
+};
+
 const TimeClock: React.FC<RouterProps> = () => {
   const [dialogueScreen, setdialogueScreen] = useState("");
   const [punchCard, setPunchCard] = useState<
     PunchCardsWhereQ_punchCards | undefined
   >(undefined);
 
-  const location = useLocation();
-
-  // console.log(location.state.filter);
+  const location = useLocation<state | undefined>();
+  let startParams: any = undefined;
+  if (location.state && location.state.filter)
+    startParams = location.state.filter;
 
   return (
-    <TimeCardFilter
-    // startParams={location.state?.filter}
-    >
+    <TimeCardFilter startParams={startParams}>
       <TimeCardPapperWrapper title="Time Cards" size={8} as={NewPaper}>
         <TCFilterDisplayW
           as={FilterDisplayer}

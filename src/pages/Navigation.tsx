@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/styles";
 import { withRouter, RouteComponentProps } from "react-router";
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -25,6 +24,7 @@ import { GET_ME, NEW_GET_ME } from "../gql/queries/userQuery";
 import { PermHelper } from "../helpers/permhelper";
 import getAttribute from "../helpers/getAttribute";
 import { Divider, Theme } from "@material-ui/core";
+import { useMutation } from "@apollo/client";
 
 //TODO Anys mucho
 
@@ -218,6 +218,10 @@ const LoggedInMenu: React.FC<ILoggedInMenu> = ({ me, linkClick }) => {
 
   const anchorEl = React.useRef<HTMLElement | undefined>(undefined);
 
+  const [fire] = useMutation(LOG_OUT, {
+    refetchQueries: [{ query: GET_ME }, { query: NEW_GET_ME }]
+  });
+
   const UserMenu = [
     {
       node: (
@@ -235,17 +239,13 @@ const LoggedInMenu: React.FC<ILoggedInMenu> = ({ me, linkClick }) => {
     },
     {
       node: (
-        <Mutation
-          key="Logout"
-          mutation={LOG_OUT}
-          refetchQueries={[{ query: GET_ME }, { query: NEW_GET_ME }]}
+        <MenuItem
+          onClick={() => fire()}
+          className={classes.menuItems}
+          key="logout"
         >
-          {(fnc: (e: any) => Promise<any>) => (
-            <MenuItem onClick={fnc} className={classes.menuItems}>
-              Log Out
-            </MenuItem>
-          )}
-        </Mutation>
+          Log Out
+        </MenuItem>
       )
     },
     {

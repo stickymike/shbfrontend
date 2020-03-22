@@ -3,8 +3,8 @@ import Button from "@material-ui/core/Button";
 import createCtx from "../../helpers/hooks/createCtx";
 import TimeRoleTableWrapper from "./TimeRoleTableWrapper";
 import TimeRoleHandler from "./TimeRoleHandler";
-import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
 import NewPaper from "../../components/NewPaper";
+import useRLoader from "../../helpers/hooks/useRLoader";
 
 const [useTimeRoleCtx, ContextProvider] = createCtx<any>();
 
@@ -55,9 +55,7 @@ const reducer = (state: AppState, action: Action): AppState => {
 };
 
 const TimeRolePage: React.FC = () => {
-  // const [returnFunction, loadingElement] = useUpdatedLoading();
-
-  const [myReturnFnc, actionIcon] = useRefreshLoader();
+  const [resultsFunc, onCompleted, actionIcon] = useRLoader();
 
   const [{ open, formData, userScreen }, dispatch] = useReducer(
     reducer,
@@ -75,7 +73,10 @@ const TimeRolePage: React.FC = () => {
   return (
     <NewPaper size={8} title="Time Roles" actionIcons={[actionIcon]}>
       <ContextProvider value={dispatch}>
-        <TimeRoleTableWrapper returnFunction={myReturnFnc} />
+        <TimeRoleTableWrapper
+          resultsFunc={resultsFunc}
+          onCompleted={onCompleted}
+        />
         <div
           style={{
             display: "flex",

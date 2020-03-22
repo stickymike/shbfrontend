@@ -1,5 +1,4 @@
 import React from "react";
-import { Mutation } from "react-apollo";
 import { Formik, Form } from "formik";
 import { GET_TIMEROLES } from "../../gql/queries/timeRoleQuery";
 import { UPDATE_TIMEROLE } from "../../gql/mutations/timeRoleMut";
@@ -8,6 +7,7 @@ import * as Yup from "yup";
 import { Grid } from "@material-ui/core";
 
 import FormikTextField from "../../components/formikFields/FormikTextField";
+import { useMutation } from "@apollo/client";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -45,73 +45,65 @@ const UpdateTimeRole: React.FC<IProps> = ({
     payRate: timeRole.payRate
   };
 
+  const [fire] = useMutation(UPDATE_TIMEROLE, {
+    refetchQueries: [{ query: GET_TIMEROLES }]
+  });
   return (
-    <Mutation
-      mutation={UPDATE_TIMEROLE}
-      refetchQueries={[{ query: GET_TIMEROLES }]}
-    >
-      {(submit: (arg: any) => Promise<any>) => (
-        <Formik
-          initialValues={createTimeRole}
-          onSubmit={async (values, actions) => {
-            const rtn = await submit({
-              variables: {
-                ...values
-              }
-            }).catch(e => {
-              if (e.graphQLErrors) {
-                e.graphQLErrors.map(({ code, message }: any) => {
-                  actions.setErrors({ [code]: message });
-                  return actions.setSubmitting(false);
-                });
-              }
+    <Formik
+      initialValues={createTimeRole}
+      onSubmit={async (values, actions) => {
+        const rtn = await fire({
+          variables: {
+            ...values
+          }
+        }).catch(e => {
+          if (e.graphQLErrors) {
+            e.graphQLErrors.map(({ code, message }: any) => {
+              actions.setErrors({ [code]: message });
+              return actions.setSubmitting(false);
             });
-            actions.setSubmitting(false);
-            if (rtn) handleClose();
-          }}
-          validationSchema={SignupSchema}
-        >
-          {payload => {
-            formHandle(payload.submitForm);
-            return (
-              <>
-                <Form>
-                  <Grid container spacing={2}>
-                    <Grid item xs={8}>
-                      <FormikTextField
-                        id="name"
-                        payload={payload}
-                        label="Name*"
-                      />
-                    </Grid>
-                    <Grid item xs={4}>
-                      <FormikTextField
-                        id="shortName"
-                        payload={payload}
-                        label="Short Name*"
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <FormikTextField
-                        id="description"
-                        payload={payload}
-                        label="Description"
-                      />
-                      <FormikTextField
-                        id="payRate"
-                        payload={payload}
-                        label="Pay Rate"
-                        type="number"
-                      />
-                    </Grid>
-                  </Grid>
-                </Form>
-              </>
-            );
-          }}
-        </Formik>
-      )}
-    </Mutation>
+          }
+        });
+        actions.setSubmitting(false);
+        if (rtn) handleClose();
+      }}
+      validationSchema={SignupSchema}
+    >
+      {payload => {
+        formHandle(payload.submitForm);
+        return (
+          <>
+            <Form>
+              <Grid container spacing={2}>
+                <Grid item xs={8}>
+                  <FormikTextField id="name" payload={payload} label="Name*" />
+                </Grid>
+                <Grid item xs={4}>
+                  <FormikTextField
+                    id="shortName"
+                    payload={payload}
+                    label="Short Name*"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormikTextField
+                    id="description"
+                    payload={payload}
+                    label="Description"
+                  />
+                  <FormikTextField
+                    id="payRate"
+                    payload={payload}
+                    label="Pay Rate"
+                    type="number"
+                  />
+                </Grid>
+              </Grid>
+            </Form>
+          </>
+        );
+      }}
+    </Formik>
   );
 };
 

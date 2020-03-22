@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { USERS_WHEREQ } from "../../gql/queries/userQuery";
 import { UsersWhereQ_users } from "../../generated/UsersWhereQ";
 import number2Words from "../../helpers/number2Words";
@@ -8,6 +8,8 @@ import MyChip from "../../components/Table/MyChip";
 import { headerCell } from "../../components/Table/EnhancedTableHead";
 import { TableProps } from "../../components/Table/GenericTable";
 import { useUserCtx } from "./NewUserPage";
+import { typeQResults } from "../../helpers/hooks/useRLoader";
+import MyLoading from "../../components/MyLoading";
 
 const morphData = (users: UsersWhereQ_users[]) => {
   if (users) {
@@ -99,18 +101,24 @@ export interface morphData extends UsersWhereQ_users {
 }
 
 interface IProps<G> {
-  returnFunction: (arg: any) => JSX.Element | undefined;
+  resultsFunc: (qResults: typeQResults) => void;
+  onCompleted: () => void;
   table: <G>(props: React.PropsWithChildren<TableProps<G>>) => JSX.Element;
 }
 
 type TFC<G> = React.PropsWithChildren<IProps<G>>;
 
-const UserTableLoader = <G,>({ returnFunction, table: Table }: TFC<G>) => {
+const UserTableLoader = <G,>({
+  resultsFunc,
+  onCompleted,
+  table: Table
+}: TFC<G>) => {
   const { data, ...qResults } = useQuery(USERS_WHEREQ, {
     variables: { query: {} },
-    notifyOnNetworkStatusChange: true
+    notifyOnNetworkStatusChange: true,
+    onCompleted
   });
-
+  resultsFunc(qResults);
   const dispatch = useUserCtx();
 
   const setScreenwithPayload = (screen: string, payload: morphData) => {
@@ -119,15 +127,15 @@ const UserTableLoader = <G,>({ returnFunction, table: Table }: TFC<G>) => {
 
   let users: morphData[] = [] as morphData[];
   if (data) users = morphData(data.users);
+  if (qResults?.networkStatus === 1 || qResults?.networkStatus === 2)
+    return <MyLoading />;
 
   return (
-    returnFunction(qResults) || (
-      <Table
-        header={header}
-        data={users}
-        setScreenwithPayload={setScreenwithPayload}
-      />
-    )
+    <Table
+      header={header}
+      data={users}
+      setScreenwithPayload={setScreenwithPayload}
+    />
   );
 };
 

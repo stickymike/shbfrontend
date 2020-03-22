@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 import { PERSONAL_UPDATE_TIMEREQUEST } from "../../gql/mutations/timeRequestMut";
 
 import { TextField, Box, Grid } from "@material-ui/core";

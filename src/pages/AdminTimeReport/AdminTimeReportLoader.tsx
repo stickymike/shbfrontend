@@ -1,18 +1,19 @@
 import React from "react";
 import { headerCell } from "../../components/Table/EnhancedTableHead";
 import { TableProps } from "../../components/Table/GenericTable";
-import { format, differenceInMinutes, startOfDay } from "date-fns/esm";
+import { differenceInMinutes } from "date-fns/esm";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   useTimeCLockCTX,
   qGenerator
 } from "../../resources/punchcards/CrudTimeClockFilter/TimeCardFilter";
 import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 import minutesToDisplayString from "../../helpers/minutesToDisplayString";
 import { formatMoney } from "../../helpers/formatMonies";
 import { useHistory } from "react-router";
+import MyLoading from "../../components/MyLoading";
 
 type consolidatedType = {
   userName: string;
@@ -143,35 +144,29 @@ const AdminTimeReportLoader = <G,>({
     history.push("/Admin/TimeCards", {
       filter: { ...qParams, userIds: [payload.id] }
     });
-
-    // console.log(payload);
-    // changePC(payload);
-    // changeScreen(screen);
   };
 
-  const { qParams, myReturnFnc } = useTimeCLockCTX();
+  const { qParams, resultsFunc, onCompleted } = useTimeCLockCTX();
 
   const { data, ...qResults } = useQuery(PUNCHCARDS_WHEREQ, {
     variables: { query: qGenerator(qParams) },
-    notifyOnNetworkStatusChange: true
+    notifyOnNetworkStatusChange: true,
+    onCompleted
   });
+  resultsFunc(qResults);
 
   let punchCards: PunchCardsWhereQ_punchCards[] = [];
   if (data) punchCards = data.punchCards;
-
-  // consolidateUsers(punchCards);
-
-  // console.log();
+  if (qResults?.networkStatus === 1 || qResults?.networkStatus === 2)
+    return <MyLoading />;
 
   return (
-    myReturnFnc(qResults) || (
-      <Table
-        header={header}
-        data={consolidateUsers(punchCards)}
-        setScreenwithPayload={setScreenwithPayload}
-        {...tableProps}
-      />
-    )
+    <Table
+      header={header}
+      data={consolidateUsers(punchCards)}
+      setScreenwithPayload={setScreenwithPayload}
+      {...tableProps}
+    />
   );
 };
 

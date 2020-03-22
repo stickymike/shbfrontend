@@ -8,9 +8,10 @@ import {
   qGenerator
 } from "../../resources/punchcards/CrudTimeClockFilter/TimeCardFilter";
 import { PUNCHCARDS_WHEREQ } from "../../gql/queries/punchCardQuery";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 import minutesToDisplayString from "../../helpers/minutesToDisplayString";
+import MyLoading from "../../components/MyLoading";
 
 const morphData = (punchCards: PunchCardsWhereQ_punchCards[]) => {
   if (punchCards) {
@@ -129,25 +130,27 @@ const TimeCardTableLoader = <G,>({
     changeScreen(screen);
   };
 
-  const { qParams, myReturnFnc } = useTimeCLockCTX();
+  const { qParams, resultsFunc, onCompleted } = useTimeCLockCTX();
 
   const { data, ...qResults } = useQuery(PUNCHCARDS_WHEREQ, {
     variables: { query: qGenerator(qParams) },
-    notifyOnNetworkStatusChange: true
+    notifyOnNetworkStatusChange: true,
+    onCompleted
   });
+  resultsFunc(qResults);
 
   let punchCards: PunchCardsWhereQ_punchCards[] = [];
   if (data) punchCards = data.punchCards;
+  if (qResults?.networkStatus === 1 || qResults?.networkStatus === 2)
+    return <MyLoading />;
 
   return (
-    myReturnFnc(qResults) || (
-      <Table
-        header={header}
-        data={morphData(punchCards)}
-        setScreenwithPayload={setScreenwithPayload}
-        {...tableProps}
-      />
-    )
+    <Table
+      header={header}
+      data={morphData(punchCards)}
+      setScreenwithPayload={setScreenwithPayload}
+      {...tableProps}
+    />
   );
 };
 

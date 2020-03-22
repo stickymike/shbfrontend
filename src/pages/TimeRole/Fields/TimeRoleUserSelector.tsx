@@ -5,7 +5,7 @@ import { Typography } from "@material-ui/core";
 
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/client";
 import { GET_USERS } from "../../../gql/queries/userQuery";
 import { UPDATE_TIMEROLE_USERS } from "../../../gql/mutations/timeRoleMut";
 import useSimpleMenuProps from "../../../components/Menu/useSimpleMenuProps";

@@ -3,7 +3,7 @@ import UpdateUser from "../../resources/Users/UpdateUser";
 import CreateUser from "../../resources/Users/CreateUser";
 import ResetPassUser from "../../resources/Users/ResetPassUser";
 
-import { Mutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { DELETE_USER } from "../../gql/mutations/userMut";
 import { GET_USERS } from "../../gql/queries/userQuery";
 
@@ -62,6 +62,12 @@ const NewUserHandler: React.FC<IUserHandler> = ({
       })),
     changeScreen
   );
+  const [fire] = useMutation(DELETE_USER, {
+    variables: { id: user?.id },
+    refetchQueries: [{ query: GET_USERS }],
+    onCompleted: handleClose
+  });
+
   const content = () => {
     const actionProps = { formHandle, handleClose, user };
     switch (userScreen) {
@@ -81,18 +87,21 @@ const NewUserHandler: React.FC<IUserHandler> = ({
         return <UserTimeRoleSelector {...actionProps} />;
       }
       case "DELETE": {
+        formHandle(fire);
         return (
-          <Mutation
-            mutation={DELETE_USER}
-            variables={{ id: user.id }}
-            refetchQueries={[{ query: GET_USERS }]}
-            onCompleted={handleClose}
-          >
-            {(fnc: () => void) => {
-              formHandle(fnc);
-              return <>{`You sure you want to Delete ${user.firstName}?!?`}</>;
-            }}
-          </Mutation>
+          <>{`You sure you want to Delete ${user.firstName}?!?`}</>
+
+          // <Mutation
+          //   mutation={DELETE_USER}
+          //   variables={{ id: user.id }}
+          //   refetchQueries={[{ query: GET_USERS }]}
+          //   onCompleted={handleClose}
+          // >
+          //   {(fnc: () => void) => {
+          //     formHandle(fire);
+          //     return <>{`You sure you want to Delete ${user.firstName}?!?`}</>;
+          //   }}
+          // </Mutation>
         );
       }
     }

@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-
-import Button from "@material-ui/core/Button";
+import React from "react";
 
 import { RouterProps } from "react-router";
 
@@ -10,15 +8,9 @@ import TimeCardPapperWrapper from "../../resources/punchcards/CrudTimeClockFilte
 import TCFilterDisplayW from "../../resources/punchcards/CrudTimeClockFilter/TCFilterDisplayW";
 import FilterDisplayer from "../../components/FilterComp/FilterDisplayer";
 import GenericTable from "../../components/Table/GenericTable";
-import { PunchCardsWhereQ_punchCards } from "../../generated/PunchCardsWhereQ";
 import AdminTimeReportLoader from "./AdminTimeReportLoader";
 
 const AdminTimeReport: React.FC<RouterProps> = () => {
-  const [dialogueScreen, setdialogueScreen] = useState("");
-  const [punchCard, setPunchCard] = useState<
-    PunchCardsWhereQ_punchCards | undefined
-  >(undefined);
-
   return (
     <TimeCardFilter>
       <TimeCardPapperWrapper title="Time Report" size={8} as={NewPaper}>
@@ -33,15 +25,6 @@ const AdminTimeReport: React.FC<RouterProps> = () => {
           tableWrapperStyles={{ tableLayout: "auto" }}
           // changePC={setPunchCard}
         />
-        {/* <Button
-          color="primary"
-          variant="outlined"
-          fullWidth
-          style={{ marginTop: "16px" }}
-          onClick={() => setdialogueScreen("CREATE")}
-        >
-          Create New Timecard
-        </Button> */}
       </TimeCardPapperWrapper>
     </TimeCardFilter>
   );

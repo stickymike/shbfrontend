@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import makeStyles from "@material-ui/styles/makeStyles";
 import Refresh from "@material-ui/icons/Refresh";
 import { NetworkStatus } from "apollo-client";
-import MyLoading from "../../components/MyLoading";
 
 const useStyles = makeStyles(() => ({
   "@keyframes myspin": {
@@ -34,7 +33,7 @@ const useRLoader = () => {
 
   const outClass = spinnerLoading ? classes.spin : undefined;
 
-  const resultsFunction = (qResults: qResults) => {
+  const resultsFunction = (qResults: typeQResults) => {
     ref.current = qResults;
   };
 
@@ -54,7 +53,7 @@ const useRLoader = () => {
   return [resultsFunction, onCompleted, actionIcon] as const;
 };
 
-type qResults = {
+export type typeQResults = {
   loading: boolean;
   networkStatus: NetworkStatus;
   refetch: any;

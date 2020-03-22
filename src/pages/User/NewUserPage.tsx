@@ -5,9 +5,9 @@ import NewUserHandler from "./NewUserHandler";
 
 import Button from "@material-ui/core/Button";
 import GenericTable from "../../components/Table/GenericTable";
-import useRefreshLoader from "../../helpers/hooks/useRefreshLoader";
 import NewPaper from "../../components/NewPaper";
 import createCtx from "../../helpers/hooks/createCtx";
+import useRLoader from "../../helpers/hooks/useRLoader";
 
 const [useUserCtx, ContextProvider] = createCtx<any>();
 
@@ -58,7 +58,9 @@ const reducer = (state: AppState, action: Action): AppState => {
 };
 
 const NewUserPage: React.FC = () => {
-  const [myReturnFnc, actionIcon] = useRefreshLoader();
+  // const [myReturnFnc, actionIcon] = useRefreshLoader();
+
+  const [resultsFunc, onCompleted, actionIcon] = useRLoader();
 
   const [{ open, formData, userScreen }, dispatch] = useReducer(
     reducer,
@@ -76,7 +78,11 @@ const NewUserPage: React.FC = () => {
   return (
     <NewPaper size={8} title="Users" actionIcons={[actionIcon]}>
       <ContextProvider value={dispatch}>
-        <UserTableLoader returnFunction={myReturnFnc} table={GenericTable} />
+        <UserTableLoader
+          resultsFunc={resultsFunc}
+          onCompleted={onCompleted}
+          table={GenericTable}
+        />
         <NewUserHandler
           handleClose={handleClose}
           open={open}

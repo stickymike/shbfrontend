@@ -1,5 +1,4 @@
 import React from "react";
-import { Mutation } from "react-apollo";
 import { Formik, Form } from "formik";
 import { GET_USERS } from "../../gql/queries/userQuery";
 import { UPDATE_USER } from "../../gql/mutations/userMut";
@@ -8,6 +7,7 @@ import * as Yup from "yup";
 
 import Grid from "@material-ui/core/Grid";
 import FormikTextField from "../../components/formikFields/FormikTextField";
+import { useMutation } from "@apollo/client";
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -41,77 +41,77 @@ const CreateUser: React.FC<IProps> = props => {
     title: user.title ? user.title : undefined
   };
 
-  return (
-    <Mutation mutation={UPDATE_USER} refetchQueries={[{ query: GET_USERS }]}>
-      {(submit: (a: {}) => Promise<any>) => (
-        <Formik
-          initialValues={updateuser}
-          onSubmit={async (values, actions) => {
-            const rtn = await submit({
-              variables: {
-                ...values
-              }
-            }).catch(e => {
-              if (e.graphQLErrors) {
-                e.graphQLErrors.map(({ code, message }: any) => {
-                  actions.setErrors({ [code]: message });
-                  return actions.setSubmitting(false);
-                });
-              }
-            });
-            actions.setSubmitting(false);
-            if (rtn) props.handleClose();
-          }}
-          validationSchema={SignupSchema}
-        >
-          {payload => {
-            props.formHandle(payload.submitForm);
-            return (
-              <>
-                <Form>
-                  <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                      <FormikTextField
-                        id="firstName"
-                        payload={payload}
-                        label="First Name*"
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <FormikTextField
-                        id="lastName"
-                        payload={payload}
-                        label="Last Name*"
-                      />
-                    </Grid>
-                    <Grid item xs={8}>
-                      <FormikTextField
-                        id="email"
-                        payload={payload}
-                        label="Email*"
-                      />
-                      <FormikTextField
-                        id="title"
-                        payload={payload}
-                        label="Job Title"
-                      />
-                    </Grid>
+  const [fire] = useMutation(UPDATE_USER, {
+    refetchQueries: [{ query: GET_USERS }]
+  });
 
-                    <Grid item xs={3}>
-                      <FormikTextField
-                        id="code"
-                        payload={payload}
-                        label="PIN Code*"
-                      />
-                    </Grid>
-                  </Grid>
-                </Form>
-              </>
-            );
-          }}
-        </Formik>
-      )}
-    </Mutation>
+  return (
+    <Formik
+      initialValues={updateuser}
+      onSubmit={async (values, actions) => {
+        const rtn = await fire({
+          variables: {
+            ...values
+          }
+        }).catch(e => {
+          if (e.graphQLErrors) {
+            e.graphQLErrors.map(({ code, message }: any) => {
+              actions.setErrors({ [code]: message });
+              return actions.setSubmitting(false);
+            });
+          }
+        });
+        actions.setSubmitting(false);
+        if (rtn) props.handleClose();
+      }}
+      validationSchema={SignupSchema}
+    >
+      {payload => {
+        props.formHandle(payload.submitForm);
+        return (
+          <>
+            <Form>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <FormikTextField
+                    id="firstName"
+                    payload={payload}
+                    label="First Name*"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormikTextField
+                    id="lastName"
+                    payload={payload}
+                    label="Last Name*"
+                  />
+                </Grid>
+                <Grid item xs={8}>
+                  <FormikTextField
+                    id="email"
+                    payload={payload}
+                    label="Email*"
+                  />
+                  <FormikTextField
+                    id="title"
+                    payload={payload}
+                    label="Job Title"
+                  />
+                </Grid>
+
+                <Grid item xs={3}>
+                  <FormikTextField
+                    id="code"
+                    payload={payload}
+                    label="PIN Code*"
+                  />
+                </Grid>
+              </Grid>
+            </Form>
+          </>
+        );
+      }}
+    </Formik>
   );
 };
 

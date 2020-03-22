@@ -1,11 +1,11 @@
 import React from "react";
-import { Mutation } from "react-apollo";
 import { Formik, Form } from "formik";
 import { GET_USERS } from "../../gql/queries/userQuery";
 import { RESET_PASSWORD } from "../../gql/mutations/userMut";
 
 import * as Yup from "yup";
 import FormikTextField from "../../components/formikFields/FormikTextField";
+import { useMutation } from "@apollo/client";
 
 const SignupSchema = Yup.object().shape({
   password: Yup.string()
@@ -33,54 +33,54 @@ const ResetPassUser: React.FC<IProps> = ({ user, handleClose, formHandle }) => {
     confirmpassword: ""
   };
 
+  const [fire] = useMutation(RESET_PASSWORD, {
+    refetchQueries: [{ query: GET_USERS }]
+  });
+
   return (
-    <Mutation mutation={RESET_PASSWORD} refetchQueries={[{ query: GET_USERS }]}>
-      {(submit: (a: {}) => Promise<any>) => (
-        <Formik
-          initialValues={password}
-          onSubmit={async ({ id, password }, actions) => {
-            const rtn = await submit({
-              variables: {
-                id,
-                password
-              }
-            }).catch(e => {
-              if (e.graphQLErrors) {
-                e.graphQLErrors.map(({ code, message }: any) => {
-                  actions.setErrors({ [code]: message });
-                  return actions.setSubmitting(false);
-                });
-              }
+    <Formik
+      initialValues={password}
+      onSubmit={async ({ id, password }, actions) => {
+        const rtn = await fire({
+          variables: {
+            id,
+            password
+          }
+        }).catch(e => {
+          if (e.graphQLErrors) {
+            e.graphQLErrors.map(({ code, message }: any) => {
+              actions.setErrors({ [code]: message });
+              return actions.setSubmitting(false);
             });
-            actions.setSubmitting(false);
-            if (rtn) handleClose();
-          }}
-          validationSchema={SignupSchema}
-        >
-          {payload => {
-            formHandle(payload.submitForm);
-            return (
-              <>
-                <Form>
-                  <FormikTextField
-                    id="password"
-                    payload={payload}
-                    label="Password"
-                    type="password"
-                  />
-                  <FormikTextField
-                    id="confirmpassword"
-                    payload={payload}
-                    label="Confirm Password"
-                    type="password"
-                  />
-                </Form>
-              </>
-            );
-          }}
-        </Formik>
-      )}
-    </Mutation>
+          }
+        });
+        actions.setSubmitting(false);
+        if (rtn) handleClose();
+      }}
+      validationSchema={SignupSchema}
+    >
+      {payload => {
+        formHandle(payload.submitForm);
+        return (
+          <>
+            <Form>
+              <FormikTextField
+                id="password"
+                payload={payload}
+                label="Password"
+                type="password"
+              />
+              <FormikTextField
+                id="confirmpassword"
+                payload={payload}
+                label="Confirm Password"
+                type="password"
+              />
+            </Form>
+          </>
+        );
+      }}
+    </Formik>
   );
 };
 
